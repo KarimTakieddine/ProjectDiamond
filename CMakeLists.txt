@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
+
+project(ProjectDiamond)
+
+set(CMAKE_CXX_STANDARD 17)
+
+# Diamond Engine:
+
+set(DIAMOND_ENGINE_DIR diamondengine)
+
+add_subdirectory(${DIAMOND_ENGINE_DIR} DiamondEngine)
+
+set(SOURCES
+    ${SRC_DIR}/ProjectDiamond.cpp)
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+target_include_directories(${PROJECT_NAME} PRIVATE "${DIAMOND_ENGINE_DIR}/include" ${INCLUDE_DIR})
+
+target_link_libraries(ProjectDiamond PRIVATE DiamondEngine)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${GLEW_BINARY_DIR}/glew32.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${SHADERS_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SHADERS_DIR}
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${SHADERS_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SHADERS_DIR}
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${SCENES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SCENES_DIR}
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${SCENES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SCENES_DIR}
+)
