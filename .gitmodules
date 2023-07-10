@@ -1,0 +1,3 @@
+[submodule "diamondengine"]
+	path = diamondengine
+	url = git@bitbucket.org:oddbandit/diamondengine.git
