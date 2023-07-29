@@ -15,7 +15,7 @@ set(SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE "${DIAMOND_ENGINE_DIR}/include" ${INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR} ${DIAMOND_ENGINE_DIR}/include)
 
 target_link_libraries(ProjectDiamond PRIVATE DiamondEngine)
 

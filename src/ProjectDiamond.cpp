@@ -1,8 +1,9 @@
 #pragma once
 
-#include <diamond_engine/GraphicsContext.h>
-#include <diamond_engine/LogManager.h>
-#include <diamond_engine/SceneLoader.h>
+#include <diamond_engine/engine/GraphicsContext.h>
+#include <diamond_engine/utility/LogManager.h>
+#include <diamond_engine/scene/SceneLoader.h>
+#include <diamond_engine/shader/SharedShaderStore.h>
 
 int main(int argc, char** argv) {
 	try {
