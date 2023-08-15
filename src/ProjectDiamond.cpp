@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 		sharedShaderStore->Load("shaders");
 
 		std::shared_ptr<diamond_engine::TextureLoader> sharedTextureLoader = std::make_shared<diamond_engine::TextureLoader>();
-		//sharedTextureLoader->Load("textures");
+		sharedTextureLoader->Load("textures");
 
 		std::shared_ptr<diamond_engine::SceneLoader> sceneLoader = std::make_shared<diamond_engine::SceneLoader>();
 		sceneLoader->SetSharedShaderStore(sharedShaderStore);
