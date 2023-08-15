@@ -9,8 +9,11 @@
 				<TextureOffset x="0.0" y="0.0"/>
 			</Material>
 			<Components>
-				<MeshRenderer meshType="quad" drawMode="dynamic"/>
+				<MeshRenderer meshType="cube" drawMode="dynamic"/>
 			</Components>
+			<Behaviours>
+				<RotateBehaviour xAnglePerSec="90" yAnglePerSec="-90" zAnglePerSec="0"/>
+			</Behaviours>
 		</GameObject>
 	</GameObjects>
 </Scene>
