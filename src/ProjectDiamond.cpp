@@ -4,6 +4,7 @@
 #include <diamond_engine/utility/LogManager.h>
 #include <diamond_engine/scene/SceneLoader.h>
 #include <diamond_engine/shader/SharedShaderStore.h>
+#include <diamond_engine/texture/TextureLoader.h>
 
 int main(int argc, char** argv) {
 	try {
@@ -14,8 +15,12 @@ int main(int argc, char** argv) {
 		std::shared_ptr<diamond_engine::SharedShaderStore> sharedShaderStore = std::make_shared<diamond_engine::SharedShaderStore>();
 		sharedShaderStore->Load("shaders");
 
+		std::shared_ptr<diamond_engine::TextureLoader> sharedTextureLoader = std::make_shared<diamond_engine::TextureLoader>();
+		//sharedTextureLoader->Load("textures");
+
 		std::shared_ptr<diamond_engine::SceneLoader> sceneLoader = std::make_shared<diamond_engine::SceneLoader>();
 		sceneLoader->SetSharedShaderStore(sharedShaderStore);
+		sceneLoader->SetSharedTextureLoader(sharedTextureLoader);
 		sceneLoader->LoadScenes("scenes");
 
 		diamond_engine::Scene* sampleScene = sceneLoader->FindScene("sample_scene");
