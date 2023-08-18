@@ -6,6 +6,20 @@
 			<Material>
 				<Color r="1.0" g="1.0" b="1.0"/>
 				<Texture name="cat"/>
+				<TextureOffset x="2.0" y="2.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="cube" drawMode="dynamic"/>
+			</Components>
+			<Behaviours>
+				<RotateBehaviour xAnglePerSec="90" yAnglePerSec="-90" zAnglePerSec="0"/>
+			</Behaviours>
+		</GameObject>
+		<GameObject type="sprite">
+			<Position x="3.0" y="3.0" z="0.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="cat"/>
 				<TextureOffset x="0.0" y="0.0"/>
 			</Material>
 			<Components>
