@@ -2,19 +2,22 @@
 <Scene maxObjects="256">
 	<GameObjects>
 		<GameObject type="sprite">
-			<Position x="0.0" y="0.0" z="0.0"/>
+			<Position x="3.0" y="0.0" z="0.0"/>
 			<Material>
 				<Color r="1.0" g="1.0" b="1.0"/>
-				<Texture name="red"/>
+				<Texture name="cat"/>
 				<TextureOffset x="0.0" y="0.0"/>
 			</Material>
 			<Components>
 				<MeshRenderer meshType="quad" drawMode="dynamic"/>
-				<Collider2D width="1" height="1"/>
+				<Collider2D width="1" height="1" type="character"/>
 			</Components>
+			<Behaviours>
+				<RotateBehaviour xAnglePerSec="0" yAnglePerSec="0" zAnglePerSec="90"/>
+			</Behaviours>
 		</GameObject>
 		<GameObject type="sprite">
-			<Position x="2.0" y="1.0" z="0.0"/>
+			<Position x="0.0" y="0.0" z="0.0"/>
 			<Material>
 				<Color r="1.0" g="1.0" b="1.0"/>
 				<Texture name="red"/>
