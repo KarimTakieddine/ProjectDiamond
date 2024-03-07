@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 		sceneLoader->SetSharedTextureLoader(sharedTextureLoader);
 		sceneLoader->LoadScenes("scenes");
 
-		diamond_engine::Scene* sampleScene = sceneLoader->FindScene("collider2DTestScene");
+		diamond_engine::Scene* sampleScene = sceneLoader->FindScene("textureTestScene");
 		graphicsContext->SetScene(sampleScene);
 
 		graphicsContext->Execute();
