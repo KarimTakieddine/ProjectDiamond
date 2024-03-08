@@ -1,14 +1,21 @@
 #pragma once
 
+#include <diamond_engine/behaviour/BehaviourRegistry.h>
 #include <diamond_engine/engine/GraphicsContext.h>
-#include <diamond_engine/utility/LogManager.h>
+#include <diamond_engine/parser/EngineConfigParser.h>
 #include <diamond_engine/scene/SceneLoader.h>
 #include <diamond_engine/shader/SharedShaderStore.h>
 #include <diamond_engine/texture/TextureLoader.h>
-#include <diamond_engine/parser/EngineConfigParser.h>
+#include <diamond_engine/utility/LogManager.h>
+
+#include "behaviour/CharacterController2DBehaviour.h"
+#include "builder/CharacterController2DBehaviourBuilder.h"
+#include "parser/CharacterController2DBehaviourConfigParser.h"
 
 int main(int argc, char** argv) {
 	try {
+		diamond_engine::RegisterBehaviour("CharacterController2DBehaviour", &CharacterController2DBehaviourConfigParser::Parse, &CharacterController2DBehaviourBuilder::Build);
+
 		std::unique_ptr<diamond_engine::GraphicsContext> graphicsContext = std::make_unique<diamond_engine::GraphicsContext>();
 		graphicsContext->Initialize(diamond_engine::EngineConfigParser::ParseFromFile("config/engineConfig.xml"));
 

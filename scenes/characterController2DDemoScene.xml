@@ -47,8 +47,8 @@
 			</Behaviours>
 		</GameObject>
 		<GameObject type="sprite">
-			<Position x="0.0" y="-4.0" z="0.0"/>
-			<Scale x="16.0" y="1.0" z="1.0"/>
+			<Position x="0.0" y="-4.5" z="0.0"/>
+			<Scale x="17.0" y="1.0" z="1.0"/>
 			<Material>
 				<Color r="1.0" g="1.0" b="1.0"/>
 				<Texture name="pink"/>
@@ -56,12 +56,12 @@
 			</Material>
 			<Components>
 				<MeshRenderer meshType="quad" drawMode="static"/>
-				<Collider2D width="16.0" height="1.0" type="obstacle"/>
+				<Collider2D width="17.0" height="1.0" type="obstacle"/>
 			</Components>
 		</GameObject>
 		<GameObject type="sprite">
-			<Position x="7.5" y="0.0" z="0.0"/>
-			<Scale x="1.0" y="7.0" z="1.0"/>
+			<Position x="7.75" y="0.0" z="0.0"/>
+			<Scale x="1.0" y="8.0" z="1.0"/>
 			<Material>
 				<Color r="1.0" g="1.0" b="1.0"/>
 				<Texture name="pink"/>
@@ -69,12 +69,12 @@
 			</Material>
 			<Components>
 				<MeshRenderer meshType="quad" drawMode="static"/>
-				<Collider2D width="10.0" height="1.0" type="obstacle"/>
+				<Collider2D width="1.0" height="8.0" type="obstacle"/>
 			</Components>
 		</GameObject>
 		<GameObject type="sprite">
-			<Position x="-7.5" y="0.0" z="0.0"/>
-			<Scale x="1.0" y="7.0" z="1.0"/>
+			<Position x="-7.75" y="0.0" z="0.0"/>
+			<Scale x="1.0" y="8.0" z="1.0"/>
 			<Material>
 				<Color r="1.0" g="1.0" b="1.0"/>
 				<Texture name="pink"/>
@@ -82,12 +82,12 @@
 			</Material>
 			<Components>
 				<MeshRenderer meshType="quad" drawMode="static"/>
-				<Collider2D width="10.0" height="1.0" type="obstacle"/>
+				<Collider2D width="1.0" height="8.0" type="obstacle"/>
 			</Components>
 		</GameObject>
 		<GameObject type="sprite">
-			<Position x="0.0" y="4.0" z="0.0"/>
-			<Scale x="16.0" y="1.0" z="1.0"/>
+			<Position x="0.0" y="4.5" z="0.0"/>
+			<Scale x="17.0" y="1.0" z="1.0"/>
 			<Material>
 				<Color r="1.0" g="1.0" b="1.0"/>
 				<Texture name="pink"/>
@@ -95,8 +95,24 @@
 			</Material>
 			<Components>
 				<MeshRenderer meshType="quad" drawMode="static"/>
-				<Collider2D width="16.0" height="1.0" type="obstacle"/>
+				<Collider2D width="17.0" height="1.0" type="obstacle"/>
 			</Components>
+		</GameObject>
+		<GameObject type="sprite">
+			<Position x="0.0" y="0.0" z="0.0"/>
+			<Scale x="0.5" y="0.5" z="1.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="red"/>
+				<TextureOffset x="0.0" y="0.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="quad" drawMode="dynamic"/>
+				<Collider2D width="0.5" height="0.5" type="character"/>
+			</Components>
+			<Behaviours>
+				<CharacterController2DBehaviour/>
+			</Behaviours>
 		</GameObject>
 	</GameObjects>
 </Scene>

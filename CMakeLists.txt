@@ -11,11 +11,21 @@ set(DIAMOND_ENGINE_DIR diamondengine)
 add_subdirectory(${DIAMOND_ENGINE_DIR} DiamondEngine)
 
 set(SOURCES
+    ${SRC_DIR}/behaviour/CharacterController2DBehaviour.cpp
+    ${SRC_DIR}/builder/CharacterController2DBehaviourBuilder.cpp
+    ${SRC_DIR}/config/CharacterController2DBehaviourConfig.cpp
+    ${SRC_DIR}/parser/CharacterController2DBehaviourConfigParser.cpp
     ${SRC_DIR}/ProjectDiamond.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR} ${DIAMOND_ENGINE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${DIAMOND_ENGINE_DIR}/${INCLUDE_DIR}
+    ${INCLUDE_DIR}
+    ${INCLUDE_DIR}/behaviour
+    ${INCLUDE_DIR}/builder
+    ${INCLUDE_DIR}/config
+    ${INCLUDE_DIR}/parser)
 
 target_link_libraries(ProjectDiamond PRIVATE DiamondEngine)
 
