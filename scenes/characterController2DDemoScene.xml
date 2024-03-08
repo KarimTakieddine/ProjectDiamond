@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Scene maxObjects="256">
+	<GameObjects>
+		<GameObject type="sprite">
+			<Position x="0.0" y="0.0" z="-3.0"/>
+			<Scale x="22.5" y="10.0" z="1.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="testBackground2"/>
+				<TextureOffset x="0.0" y="0.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="quad" drawMode="static"/>
+			</Components>
+			<Behaviours>
+				<ScrollingBackgroundBehaviour x="0.0625" y="0.0"/>
+			</Behaviours>
+		</GameObject>
+		<GameObject type="sprite">
+			<Position x="0.0" y="0.0" z="-2.0"/>
+			<Scale x="20.0" y="10.0" z="1.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="testBackground1"/>
+				<TextureOffset x="0.0" y="0.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="quad" drawMode="static"/>
+			</Components>
+			<Behaviours>
+				<ScrollingBackgroundBehaviour x="0.125" y="0.0"/>
+			</Behaviours>
+		</GameObject>
+		<GameObject type="sprite">
+			<Position x="0.0" y="0.0" z="-1.0"/>
+			<Scale x="17.0" y="10.0" z="1.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="testBackground0"/>
+				<TextureOffset x="0.0" y="0.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="quad" drawMode="static"/>
+			</Components>
+			<Behaviours>
+				<ScrollingBackgroundBehaviour x="0.225" y="0.0"/>
+			</Behaviours>
+		</GameObject>
+		<GameObject type="sprite">
+			<Position x="0.0" y="-4.0" z="0.0"/>
+			<Scale x="16.0" y="1.0" z="1.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="pink"/>
+				<TextureOffset x="0.0" y="0.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="quad" drawMode="static"/>
+				<Collider2D width="16.0" height="1.0" type="obstacle"/>
+			</Components>
+		</GameObject>
+		<GameObject type="sprite">
+			<Position x="7.5" y="0.0" z="0.0"/>
+			<Scale x="1.0" y="7.0" z="1.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="pink"/>
+				<TextureOffset x="0.0" y="0.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="quad" drawMode="static"/>
+				<Collider2D width="10.0" height="1.0" type="obstacle"/>
+			</Components>
+		</GameObject>
+		<GameObject type="sprite">
+			<Position x="-7.5" y="0.0" z="0.0"/>
+			<Scale x="1.0" y="7.0" z="1.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="pink"/>
+				<TextureOffset x="0.0" y="0.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="quad" drawMode="static"/>
+				<Collider2D width="10.0" height="1.0" type="obstacle"/>
+			</Components>
+		</GameObject>
+		<GameObject type="sprite">
+			<Position x="0.0" y="4.0" z="0.0"/>
+			<Scale x="16.0" y="1.0" z="1.0"/>
+			<Material>
+				<Color r="1.0" g="1.0" b="1.0"/>
+				<Texture name="pink"/>
+				<TextureOffset x="0.0" y="0.0"/>
+			</Material>
+			<Components>
+				<MeshRenderer meshType="quad" drawMode="static"/>
+				<Collider2D width="16.0" height="1.0" type="obstacle"/>
+			</Components>
+		</GameObject>
+	</GameObjects>
+</Scene>

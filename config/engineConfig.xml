@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Engine>
+	<Window title="Hello World!" width="1920" height="1080"/>
+	<Keyboard>
+		<Key name="Space" code="SPACE"/>
+		<Key name="Escape" code="ESCAPE"/>
+		<Key name="Up" code="UP"/>
+		<Key name="Down" code="DOWN"/>
+		<Key name="Left" code="LEFT"/>
+		<Key name="Right" code="RIGHT"/>
+	</Keyboard>
+	<Controller joystickDeadzone="0.25">
+		<Buttons>
+			<Button name="A" button="BUTTON_0"/>
+			<Button name="X" button="BUTTON_1"/>
+			<Button name="Y" button="BUTTON_2"/>
+			<Button name="B" button="BUTTON_3"/>
+			<Button name="LB" button="BUTTON_4"/>
+			<Button name="RB" button="BUTTON_5"/>
+			<Button name="Start" button="BUTTON_6"/>
+			<Button name="Select" button="BUTTON_7"/>
+			<Button name="DPad_up" button="BUTTON_8"/>
+			<Button name="DPad_down" button="BUTTON_9"/>
+			<Button name="DPad_left" button="BUTTON_10"/>
+			<Button name="DPad_right" button="BUTTON_11"/>
+		</Buttons>
+		<Joysticks>
+			<Joystick name="LeftStick" joystick="LEFT"/>
+		</Joysticks>
+	</Controller>
+</Engine>
