@@ -19,6 +19,26 @@ set(SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
+function(collect_files_recursively result directory)
+    file(GLOB_RECURSE all_files LIST_DIRECTORIES false "${directory}/*")
+    foreach(file ${all_files})
+        list(APPEND ${result} ${file})
+    endforeach()
+    set(${result} ${${result}} PARENT_SCOPE)
+endfunction()
+
+collect_files_recursively(GAME_ASSETS ${CONFIG_DIR})
+collect_files_recursively(GAME_ASSETS "${DIAMOND_ENGINE_DIR}/${CONFIG_DIR}")
+collect_files_recursively(GAME_ASSETS ${SCENES_DIR})
+collect_files_recursively(GAME_ASSETS "${DIAMOND_ENGINE_DIR}/${SCENES_DIR}")
+collect_files_recursively(GAME_ASSETS ${SHADERS_DIR})
+collect_files_recursively(GAME_ASSETS "${DIAMOND_ENGINE_DIR}/${SHADERS_DIR}")
+
+list(APPEND GAME_ASSETS "${TEXTURES_DIR}/textureMetadata.xml")
+list(APPEND GAME_ASSETS "${DIAMOND_ENGINE_DIR}/${TEXTURES_DIR}/textureMetadata.xml")
+
+add_custom_target(GameAssets ALL DEPENDS ${GAME_ASSETS})
+
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${DIAMOND_ENGINE_DIR}/${INCLUDE_DIR}
     ${INCLUDE_DIR}
@@ -27,40 +47,18 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${INCLUDE_DIR}/config
     ${INCLUDE_DIR}/parser)
 
-target_link_libraries(ProjectDiamond PRIVATE DiamondEngine)
+target_link_libraries(${PROJECT_NAME} PRIVATE DiamondEngine)
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+add_custom_command(TARGET GameAssets POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${GLEW_BINARY_DIR}/glew32.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${SHADERS_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SHADERS_DIR}
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${SHADERS_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SHADERS_DIR}
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${TEXTURES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${TEXTURES_DIR}
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${TEXTURES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${TEXTURES_DIR}
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${SCENES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SCENES_DIR}
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${SCENES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SCENES_DIR}
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${CONFIG_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${CONFIG_DIR}
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${CONFIG_DIR}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/${CONFIG_DIR}"
-)
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${SCENES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SCENES_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${SCENES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SCENES_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${SHADERS_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SHADERS_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${SHADERS_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${SHADERS_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${TEXTURES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${TEXTURES_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/${TEXTURES_DIR}" $<TARGET_FILE_DIR:${PROJECT_NAME}>/${TEXTURES_DIR}
+    VERBATIM)
+
+add_dependencies(${PROJECT_NAME} GameAssets)
