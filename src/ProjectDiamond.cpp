@@ -1,5 +1,6 @@
 #pragma once
 
+#include <diamond_engine/audio/AudioEngine.h>
 #include <diamond_engine/behaviour/BehaviourRegistry.h>
 #include <diamond_engine/engine/GraphicsContext.h>
 #include <diamond_engine/parser/EngineConfigParser.h>
@@ -15,6 +16,8 @@
 int main(int argc, char** argv) {
 	try {
 		diamond_engine::RegisterBehaviour("CharacterController2DBehaviour", &CharacterController2DBehaviourConfigParser::Parse, &CharacterController2DBehaviourBuilder::Build);
+
+		diamond_engine::AudioEngine::instance()->initialize("audio");
 
 		std::unique_ptr<diamond_engine::GraphicsContext> graphicsContext = std::make_unique<diamond_engine::GraphicsContext>();
 		graphicsContext->Initialize(diamond_engine::EngineConfigParser::ParseFromFile("config/engineConfig.xml"));
