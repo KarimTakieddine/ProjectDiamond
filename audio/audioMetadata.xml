@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Audio>
-	<Sound name="jump_character" path="character_jump.mp3" defaultVolume="25" preload="true"/>
+	<Sound name="jump_character" path="character_jump.mp3" defaultVolume="10" preload="true"/>
 </Audio>
