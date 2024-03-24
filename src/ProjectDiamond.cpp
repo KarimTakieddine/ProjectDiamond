@@ -1,5 +1,6 @@
 #pragma once
 
+#include <diamond_engine/animation/SpriteSheetLoader.h>
 #include <diamond_engine/audio/AudioEngine.h>
 #include <diamond_engine/behaviour/BehaviourRegistry.h>
 #include <diamond_engine/engine/GraphicsContext.h>
@@ -28,9 +29,14 @@ int main(int argc, char** argv) {
 		std::shared_ptr<diamond_engine::TextureLoader> sharedTextureLoader = std::make_shared<diamond_engine::TextureLoader>();
 		sharedTextureLoader->Load("textures");
 
+		std::shared_ptr<diamond_engine::SpriteSheetLoader> sharedSpriteSheetLoader = std::make_shared<diamond_engine::SpriteSheetLoader>();
+		sharedSpriteSheetLoader->setSharedTextureLoader(sharedTextureLoader);
+		sharedSpriteSheetLoader->load("spriteSheets");
+
 		std::shared_ptr<diamond_engine::SceneLoader> sceneLoader = std::make_shared<diamond_engine::SceneLoader>();
 		sceneLoader->SetSharedShaderStore(sharedShaderStore);
 		sceneLoader->SetSharedTextureLoader(sharedTextureLoader);
+		sceneLoader->setSharedSpriteSheetLoader(sharedSpriteSheetLoader);
 		sceneLoader->LoadScenes("scenes");
 
 		diamond_engine::Scene* sampleScene = sceneLoader->FindScene("characterController2DDemoScene");

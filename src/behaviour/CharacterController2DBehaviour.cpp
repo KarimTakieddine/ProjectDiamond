@@ -1,5 +1,6 @@
 #include <diamond_engine/audio/AudioEngine.h>
 #include <diamond_engine/gameobject/GameObject.h>
+#include <diamond_engine/component/SpriteAnimationPlayer.h>
 #include <diamond_engine/input/Input.h>
 
 #include "behaviour/CharacterController2DBehaviour.h"
@@ -20,6 +21,12 @@ void CharacterController2DBehaviour::Update(GLfloat deltaTime)
 			m_jumpTimer = 0.0f;
 			m_gravity = gravity;
 			m_initialJumpVelocity = initialJumpVelocity;
+
+			diamond_engine::SpriteAnimationPlayer* spriteAnimationPlayer = m_gameObject->GetComponent<diamond_engine::SpriteAnimationPlayer>("AnimationPlayer");
+			if (spriteAnimationPlayer)
+			{
+				spriteAnimationPlayer->playAnimation("jumpSpriteSheet");
+			}
 
 			diamond_engine::AudioEngine::instance()->playSound2D("jump_character");
 		}

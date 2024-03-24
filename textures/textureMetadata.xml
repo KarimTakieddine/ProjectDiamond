@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<TextureCollection>
+<TextureCollection maxTextureCount="128">
 	<Texture name="cat" path="cat.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="red" path="red.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="green" path="green.png" wrapModeS="repeat" wrapModeT="repeat"/>

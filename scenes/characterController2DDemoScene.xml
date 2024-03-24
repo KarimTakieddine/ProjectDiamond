@@ -148,6 +148,9 @@
 			<Components>
 				<MeshRenderer meshType="quad" drawMode="dynamic"/>
 				<Collider2D width="0.5" height="0.5" type="character"/>
+				<SpriteAnimationPlayer>
+					<Animation name="jumpSpriteSheet" duration="1.2" delayBetweenFrames="0"/>
+				</SpriteAnimationPlayer>
 			</Components>
 			<Behaviours>
 				<CharacterController2DBehaviour/>
