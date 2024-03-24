@@ -7,4 +7,5 @@
 	<Texture name="testBackground0" path="testBackground0.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="testBackground1" path="testBackground1.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="testBackground2" path="testBackground2.png" wrapModeS="repeat" wrapModeT="repeat"/>
+	<Texture name="jumpSpriteSheet" path="spriteSheets/jumpSpriteSheet.png" wrapModeS="repeat" wrapModeT="repeat"/>
 </TextureCollection>

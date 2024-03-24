@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SpriteSheets>
+	<SpriteSheet name="jumpSpriteSheet" width="768" height="64">
+		<Frame name="jump_0" width="64" height="64"/>
+		<Frame name="jump_1" width="64" height="64"/>
+		<Frame name="jump_2" width="64" height="64"/>
+		<Frame name="jump_3" width="64" height="64"/>
+		<Frame name="jump_4" width="64" height="64"/>
+		<Frame name="jump_5" width="64" height="64"/>
+		<Frame name="jump_6" width="64" height="64"/>
+		<Frame name="jump_7" width="64" height="64"/>
+		<Frame name="jump_8" width="64" height="64"/>
+		<Frame name="jump_9" width="64" height="64"/>
+		<Frame name="jump_10" width="64" height="64"/>
+		<Frame name="jump_11" width="64" height="64"/>
+	</SpriteSheet>
+</SpriteSheets>
