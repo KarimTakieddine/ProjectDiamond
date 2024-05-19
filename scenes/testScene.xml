@@ -1,38 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Scene maxInstanceCount="256">
-	<BackgroundColor r="1.0f" g="0.5f" b="1.0f"/>
+<Scene>
+	<BackgroundColor r="1.0f" g="0.5f" b="0.75f"/>
 	<Instances>
 		<Instance type="sprite">
-			<MeshRender type="quad" drawMode="dynamic"/>
-			<Material texture="cat"/>
+			<RenderComponents>
+				<Transform>
+					<Position x="0.0f" y ="0.0f" z="-3.0f"/>
+					<LocalScale x="26.0f" y="12.5f" z="1.0f"/>
+				</Transform>
+				<Material texture="testBackground2"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<ScrollingBackground>
+					<Speed x="0.05625f"/>
+				</ScrollingBackground>
+			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
-			<MeshRender type="quad" drawMode="dynamic"/>
-			<Material texture="red"/>
-			<Transform>
-				<Position x="3.0f" y ="1.0f" z="0.0f"/>
-			</Transform>
+			<RenderComponents>
+				<Transform>
+					<Position x="0.0f" y ="0.0f" z="-2.0f"/>
+					<LocalScale x="24.0f" y="12.5f" z="1.0f"/>
+				</Transform>
+				<Material texture="testBackground1"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<ScrollingBackground>
+					<Speed x="0.1225f"/>
+				</ScrollingBackground>
+			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
-			<MeshRender type="quad" drawMode="dynamic"/>
-			<Material texture="purple"/>
-			<Transform>
-				<Position x="-3.0f" y ="-2.0f" z="0.0f"/>
-			</Transform>
+			<RenderComponents>
+				<Transform>
+					<Position x="0.0f" y ="0.0f" z="-1.0f"/>
+					<LocalScale x="22.0f" y="12.5f" z="1.0f"/>
+				</Transform>
+				<Material texture="testBackground0"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<ScrollingBackground>
+					<Speed x="0.225f"/>
+				</ScrollingBackground>
+			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
-			<MeshRender type="quad" drawMode="dynamic"/>
-			<Material texture="duck"/>
-			<Transform>
-				<Position x="4.0f" y ="3.0f" z="0.0f"/>
-			</Transform>
+			<RenderComponents>
+				<Transform>
+					<Position x="0.0f" y ="0.5f" z="0.0f"/>
+					<LocalScale x="1.0f" y="1.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="red"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="1" height="1" type="character"/>
+				<SpriteAnimationPlayer>
+					<Animation name="jumpSpriteSheet" duration="1.2" delayBetweenFrames="0"/>
+				</SpriteAnimationPlayer>
+				<Character2D/>
+			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
-			<MeshRender type="quad" drawMode="dynamic"/>
-			<Material texture="duck"/>
-			<Transform>
-				<Position x="-4.0f" y ="-3.0f" z="0.0f"/>
-			</Transform>
+			<RenderComponents>
+				<Transform>
+					<Position x="0.0f" y ="-6.0f" z="0.0f"/>
+					<LocalScale x="21.5f" y="1.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="1" height="1" type="obstacle"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
+					<Position x="-10.5f" y ="0.0f" z="0.0f"/>
+					<LocalScale x="1.0f" y="11.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="1" height="1" type="obstacle"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
+					<Position x="10.5f" y ="0.0f" z="0.0f"/>
+					<LocalScale x="1.0f" y="11.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="1" height="1" type="obstacle"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
+					<Position x="0.0f" y ="6.0f" z="0.0f"/>
+					<LocalScale x="21.5f" y="1.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="1" height="1" type="obstacle"/>
+			</BehaviourComponents>
 		</Instance>
 	</Instances>
 </Scene>

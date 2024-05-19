@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Engine shadersDirectory="shaders" texturesDirectory="textures">
+<Engine shadersDirectory="shaders" texturesDirectory="textures" audioDirectory="audio" spriteSheetsDirectory="spriteSheets">
 	<Window title="Hello World!" width="1920" height="1080"/>
 	<Keyboard>
 		<Key name="Space" code="SPACE"/>
