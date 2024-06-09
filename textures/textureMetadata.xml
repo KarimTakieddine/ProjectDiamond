@@ -11,4 +11,5 @@
 	<Texture name="testBackground2" path="testBackground2.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="jumpSpriteSheet" path="spriteSheets/jumpSpriteSheet.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="enemyAimSpriteSheet" path="spriteSheets/enemyAimSpriteSheet.png" wrapModeS="repeat" wrapModeT="repeat"/>
+	<Texture name="ascii_fonts_green" path="ascii_fonts_green.png" wrapModeS="repeat" wrapModeT="repeat"/>
 </TextureCollection>
