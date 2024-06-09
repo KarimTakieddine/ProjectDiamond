@@ -12,4 +12,6 @@
 	<Texture name="jumpSpriteSheet" path="spriteSheets/jumpSpriteSheet.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="enemyAimSpriteSheet" path="spriteSheets/enemyAimSpriteSheet.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="ascii_fonts_green" path="ascii_fonts_green.png" wrapModeS="repeat" wrapModeT="repeat"/>
+	<Texture name="duck_right" path="duck_right.png" wrapModeS="repeat" wrapModeT="repeat"/>
+	<Texture name="duck_peck_right" path="spriteSheets/duck_peck_right.png" wrapModeS="repeat" wrapModeT="repeat"/>
 </TextureCollection>

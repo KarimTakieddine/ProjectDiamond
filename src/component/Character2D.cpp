@@ -3,6 +3,7 @@
 #include <Input.h>
 
 #include "Character2D.h"
+#include "Character2DConfig.h"
 
 namespace project_diamond
 {
@@ -20,28 +21,38 @@ namespace project_diamond
 
 		m_animationPlayer = m_gameInstance->getBehaviourComponent<diamond_engine::SpriteAnimationPlayer>("SpriteAnimationPlayer");
 
+		const Character2DConfig* characterConfig = dynamic_cast<const Character2DConfig*>(config);
+		if (!characterConfig)
+			return { "Failed to configure Character2D instance. Could not convert to target type", true };
+
+		m_restingState.gravity		= characterConfig->getGravity();
+		m_restingState.jumpVelocity = characterConfig->getJumpVelocity();
+		m_restingState.xVelocity	= characterConfig->getXVelocity();
+
+		m_dynamicState.gravity = m_restingState.gravity;
+
 		return { };
 	}
 
 	void Character2D::update(GLfloat deltaTime)
 	{
-		const float horizontalSpeed = 3.5f;
-		const float gravity = -6.5f;
-		const float initialJumpVelocity = 5.0f;
+		/*if (diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("X"))
+		{
+			if (m_animationPlayer)
+				m_animationPlayer->playAnimation("duck_peck_right");
+		}*/
 
-		m_velocity = glm::vec2{ horizontalSpeed, 0.0f } * diamond_engine::input::StateMonitor::GetInstance().getJoystickInput("LeftStick");
+		m_velocity.x = m_restingState.xVelocity * diamond_engine::input::StateMonitor::GetInstance().getJoystickInput("LeftStick").x;
 
 		if (diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("A"))
 		{
 			if ((m_state & CharacterState::COLLIDING_WITH_GROUND) == CharacterState::COLLIDING_WITH_GROUND)
 			{
 				m_state |= CharacterState::JUMPING;
-				m_jumpTimer = 0.0f;
-				m_gravity = gravity;
-				m_initialJumpVelocity = initialJumpVelocity;
 
-				if (m_animationPlayer)
-					m_animationPlayer->playAnimation("jumpSpriteSheet");
+				m_dynamicState.gravity		= m_restingState.gravity;
+				m_dynamicState.jumpVelocity = m_restingState.jumpVelocity;
+				m_jumpTimer					= 0.0f;
 
 				diamond_engine::AudioEngine::getInstance()->playSound2D("jump_character");
 			}
@@ -63,7 +74,7 @@ namespace project_diamond
 			}
 		}
 
-		m_velocity.y = m_jumpTimer * m_gravity + m_initialJumpVelocity;
+		m_velocity.y = m_jumpTimer * m_dynamicState.gravity + m_dynamicState.jumpVelocity;
 
 		m_transform->translate(m_velocity * deltaTime);
 
@@ -80,9 +91,9 @@ namespace project_diamond
 			m_state |= CharacterState::COLLIDING_WITH_GROUND;
 			m_state &= ~CharacterState::JUMPING;
 
-			m_gravity = 0.0f;
-			m_initialJumpVelocity = 0.0f;
-			m_jumpTimer = 0.0f;
+			m_dynamicState.gravity		= 0.0f;
+			m_dynamicState.jumpVelocity = 0.0f;
+			m_jumpTimer					= 0.0f;
 		}
 		else if (resolutionAxis.y > 0.0f)
 		{
@@ -117,9 +128,10 @@ namespace project_diamond
 
 			if ((m_state & CharacterState::JUMPING) == CharacterState::NONE)
 			{
-				m_initialJumpVelocity = 0.0f;
-				m_gravity = -6.5f;
-				m_jumpTimer = 0.0f;
+				m_dynamicState.jumpVelocity	= 0.0f;
+				m_jumpTimer					= 0.0f;
+				m_dynamicState.gravity		= m_restingState.gravity;
+
 				m_state |= CharacterState::JUMPING;
 			}
 		}

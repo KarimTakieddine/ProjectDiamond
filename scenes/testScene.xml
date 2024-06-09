@@ -50,14 +50,14 @@
 					<Position x="0.0f" y ="0.5f" z="0.0f"/>
 					<LocalScale x="1.0f" y="1.0f" z="1.0f"/>
 				</Transform>
-				<Material texture="red"/>
+				<Material texture="duck_right"/>
 			</RenderComponents>
 			<BehaviourComponents>
 				<Collider2D width="1" height="1" type="character"/>
 				<SpriteAnimationPlayer>
-					<Animation name="jumpSpriteSheet" duration="1.2" delayBetweenFrames="0"/>
+					<Animation name="duck_peck_right" duration="1.2" delayBetweenFrames="0"/>
 				</SpriteAnimationPlayer>
-				<Character2D/>
+				<Character2D xVelocity="3.5" jumpVelocity="5.0" gravity="-6.5"/>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">

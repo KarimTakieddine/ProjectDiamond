@@ -54,6 +54,13 @@ namespace project_diamond
 	class Character2D : public diamond_engine::BehaviourComponent
 	{
 	public:
+		struct PhysicsState
+		{
+			GLfloat gravity		{ 0.0f };
+			GLfloat jumpVelocity{ 0.0f };
+			GLfloat xVelocity	{ 0.0f };
+		};
+
 		~Character2D() final override = default;
 
 		const char* getName() const final override;
@@ -65,11 +72,11 @@ namespace project_diamond
 
 	private:
 		std::unordered_map<std::string, glm::vec2> m_collisionResolutionMap;
+		PhysicsState m_restingState{ };
+		PhysicsState m_dynamicState{ };
 		glm::vec2 m_velocity{ 0.0f, 0.0f };
 		diamond_engine::TransformRenderComponent* m_transform{ nullptr };
 		diamond_engine::SpriteAnimationPlayer* m_animationPlayer{ nullptr };
-		GLfloat m_gravity{ -6.5f };
-		GLfloat m_initialJumpVelocity{ 0.0f };
 		float m_jumpTimer{ 0.0f };
 		CharacterState m_state{ CharacterState::JUMPING };
 	};
