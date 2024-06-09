@@ -36,12 +36,6 @@ namespace project_diamond
 
 	void Character2D::update(GLfloat deltaTime)
 	{
-		/*if (diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("X"))
-		{
-			if (m_animationPlayer)
-				m_animationPlayer->playAnimation("duck_peck_right");
-		}*/
-
 		m_velocity.x = m_restingState.xVelocity * diamond_engine::input::StateMonitor::GetInstance().getJoystickInput("LeftStick").x;
 
 		if (diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("A"))

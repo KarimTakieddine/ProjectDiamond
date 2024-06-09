@@ -61,17 +61,16 @@ namespace project_diamond
 			GLfloat xVelocity	{ 0.0f };
 		};
 
-		~Character2D() final override = default;
+		virtual ~Character2D() override = default;
 
-		const char* getName() const final override;
-		void update(GLfloat deltaTime) final override;
+		virtual const char* getName() const override;
+		virtual void update(GLfloat deltaTime) override;
 		diamond_engine::EngineStatus initialize(const diamond_engine::BehaviourComponentConfig* config) final override;
 
 		void onCollisionEnter2D(const glm::vec2& resolutionAxis, const std::string& name) final override;
 		void onCollisionExit2D(const std::string& name) final override;
 
-	private:
-		std::unordered_map<std::string, glm::vec2> m_collisionResolutionMap;
+	protected:
 		PhysicsState m_restingState{ };
 		PhysicsState m_dynamicState{ };
 		glm::vec2 m_velocity{ 0.0f, 0.0f };
@@ -79,5 +78,8 @@ namespace project_diamond
 		diamond_engine::SpriteAnimationPlayer* m_animationPlayer{ nullptr };
 		float m_jumpTimer{ 0.0f };
 		CharacterState m_state{ CharacterState::JUMPING };
+
+	private:
+		std::unordered_map<std::string, glm::vec2> m_collisionResolutionMap;
 	};
 }

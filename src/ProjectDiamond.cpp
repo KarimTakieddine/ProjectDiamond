@@ -10,6 +10,8 @@
 
 #include "Character2D.h"
 #include "Character2DConfigParser.h"
+#include "DuckCharacter.h"
+#include "DuckCharacterConfigParser.h"
 #include "ScrollingBackground.h"
 #include "ScrollingBackgroundConfigParser.h"
 
@@ -22,6 +24,14 @@ int main(int argc, char** argv) {
 		diamond_engine::ComponentFactory::registerBehaviourComponent(
 			"Character2D",
 			[]() { return std::make_unique<project_diamond::Character2D>(); });
+
+		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
+			"DuckCharacter",
+			&project_diamond::DuckCharacterConfigParser::parse);
+
+		diamond_engine::ComponentFactory::registerBehaviourComponent(
+			"DuckCharacter",
+			[]() { return std::make_unique<project_diamond::DuckCharacter>(); });
 
 		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
 			"ScrollingBackground",

@@ -32,4 +32,20 @@
 		<Frame x="384" y="0" width="64" height="64"/>
 		<Frame x="448" y="0" width="64" height="64"/>
 	</SpriteSheet>
+	<SpriteSheet name="duck_peck_left" spriteSheet="duck_peck_left" width="512" height="64">
+		<Frame x="0" y="0" width="64" height="64"/>
+		<Frame x="64" y="0" width="64" height="64"/>
+		<Frame x="128" y="0" width="64" height="64"/>
+		<Frame x="192" y="0" width="64" height="64"/>
+		<Frame x="256" y="0" width="64" height="64"/>
+		<Frame x="320" y="0" width="64" height="64"/>
+		<Frame x="384" y="0" width="64" height="64"/>
+		<Frame x="448" y="0" width="64" height="64"/>
+	</SpriteSheet>
+	<SpriteSheet name="duck_left" spriteSheet="duck_left" width="64" height="64">
+		<Frame x="0" y="0" width="64" height="64"/>
+	</SpriteSheet>
+	<SpriteSheet name="duck_right" spriteSheet="duck_right" width="64" height="64">
+		<Frame x="0" y="0" width="64" height="64"/>
+	</SpriteSheet>
 </SpriteSheets>

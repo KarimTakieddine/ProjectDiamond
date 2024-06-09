@@ -56,8 +56,11 @@
 				<Collider2D width="1" height="1" type="character"/>
 				<SpriteAnimationPlayer>
 					<Animation name="duck_peck_right" duration="1.2" delayBetweenFrames="0"/>
+					<Animation name="duck_peck_left" duration="1.2" delayBetweenFrames="0"/>
+					<Animation name="duck_left" duration="0" delayBetweenFrames="0"/>
+					<Animation name="duck_right" duration="0" delayBetweenFrames="0"/>
 				</SpriteAnimationPlayer>
-				<Character2D xVelocity="3.5" jumpVelocity="5.0" gravity="-6.5"/>
+				<DuckCharacter xVelocity="3.5" jumpVelocity="5.0" gravity="-6.5"/>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
