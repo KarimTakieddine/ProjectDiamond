@@ -52,6 +52,7 @@ namespace project_diamond
 	private:
 		void updateMovementState();
 		std::string getPeckAnimationName() const;
+		std::string getQuackAnimationName() const;
 
 		MovementState m_current	{ MovementState::NEUTRAL };
 		MovementState m_previous{ MovementState::NEUTRAL };
