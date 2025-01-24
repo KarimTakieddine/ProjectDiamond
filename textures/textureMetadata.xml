@@ -17,4 +17,7 @@
 	<Texture name="duck_quack_right" path="spriteSheets/duck_quack_right.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="duck_left" path="spriteSheets/duck_left.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="duck_peck_left" path="spriteSheets/duck_peck_left.png" wrapModeS="repeat" wrapModeT="repeat"/>
+	<Texture name="duck_sprite_right" path="duck_sprite_right.png" wrapModeS="repeat" wrapModeT="repeat"/>
+	<Texture name="duck_sprite_left" path="spriteSheets/duck_sprite_left.png" wrapModeS="repeat" wrapModeT="repeat"/>
+	<Texture name="duck_sprite_wing_strike_right" path="spriteSheets/duck_sprite_wing_strike_right.png" wrapModeS="repeat" wrapModeT="repeat"/>
 </TextureCollection>

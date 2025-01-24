@@ -1,4 +1,6 @@
+#include <Collider2DComponent.h>
 #include <EngineMacros.h>
+#include <GameInstanceManager.h>
 #include <SpriteAnimationPlay.h>
 
 #include "Input.h"
@@ -12,8 +14,28 @@ namespace project_diamond
 		return "DuckCharacter";
 	}
 
+	void DuckCharacter::initializeCollider()
+	{
+		if (m_collider)
+			return;
+
+		auto gameInstance = diamond_engine::GameInstanceManager::getInstance()->findGameInstance("duck_character_collider");
+
+		if (!gameInstance)
+			return;
+
+		m_collider = gameInstance->getBehaviourComponent<diamond_engine::Collider2DComponent>("Collider2D");
+
+		if (!m_collider)
+			return;
+
+		m_colliderOffset = m_collider->getOffset();
+	}
+
 	void DuckCharacter::update(GLfloat deltaTime)
 	{
+		initializeCollider();
+
 		Character2D::update(deltaTime);
 
 		updateMovementState();
@@ -23,8 +45,11 @@ namespace project_diamond
 
 		if (((m_current & MovementState::LEFT) == MovementState::LEFT) && m_previous != MovementState::LEFT)
 		{
-			m_animationPlayer->playAnimation("duck_left", true);
+			m_animationPlayer->playAnimation("duck_sprite_left", true);
 			m_previous = MovementState::LEFT;
+
+			if (m_collider)
+				m_collider->setOffset({ -m_colliderOffset.x, m_colliderOffset.y });
 
 			DEBUG_EXEC(diamond_engine::Debugger::getInstance()->debugEvent(
 				diamond_engine::DebugEvent::Type::SPRITE_ANIMATION_PLAY,
@@ -32,8 +57,11 @@ namespace project_diamond
 		}
 		else if ((m_current & MovementState::RIGHT) == MovementState::RIGHT && m_previous != MovementState::RIGHT)
 		{
-			m_animationPlayer->playAnimation("duck_right", true);
+			m_animationPlayer->playAnimation("duck_sprite_right", true);
 			m_previous = MovementState::RIGHT;
+
+			if (m_collider)
+				m_collider->setOffset({ m_colliderOffset.x, m_colliderOffset.y });
 
 			DEBUG_EXEC(diamond_engine::Debugger::getInstance()->debugEvent(
 				diamond_engine::DebugEvent::Type::SPRITE_ANIMATION_PLAY,
@@ -42,24 +70,24 @@ namespace project_diamond
 
 		if (diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("Y"))
 		{
-			const std::string peckAnimationName = getPeckAnimationName();
+			const std::string wingStrikeAnimationName = getWingStrikeAnimationName();
 			DEBUG_EXEC(
-				if (peckAnimationName == "duck_peck_right")
+				if (wingStrikeAnimationName == "duck_sprite_wing_strike_right")
 				{
 					DEBUG_EXEC(diamond_engine::Debugger::getInstance()->debugEvent(
 						diamond_engine::DebugEvent::Type::SPRITE_ANIMATION_PLAY,
-						std::make_unique<diamond_engine::SpriteAnimationPlay>("duck peck right", true)));
+						std::make_unique<diamond_engine::SpriteAnimationPlay>("duck wing right", true)));
 				}
 
-				if (peckAnimationName == "duck_peck_left")
+				if (wingStrikeAnimationName == "duck_sprite_wing_strike_left")
 				{
 					DEBUG_EXEC(diamond_engine::Debugger::getInstance()->debugEvent(
 						diamond_engine::DebugEvent::Type::SPRITE_ANIMATION_PLAY,
-						std::make_unique<diamond_engine::SpriteAnimationPlay>("duck peck left", true)));
+						std::make_unique<diamond_engine::SpriteAnimationPlay>("duck wing left", true)));
 				}
 			);
 
-			m_animationPlayer->playAnimation(peckAnimationName, true);
+			m_animationPlayer->playAnimation(wingStrikeAnimationName, true);
 		}
 		else if (diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("X"))
 		{
@@ -130,6 +158,30 @@ namespace project_diamond
 		else
 		{
 			return "duck_quack_right";
+		}
+	}
+
+	std::string DuckCharacter::getWingStrikeAnimationName() const
+	{
+		if ((m_current & MovementState::RIGHT) == MovementState::RIGHT)
+		{
+			return "duck_sprite_wing_strike_right";
+		}
+		else if ((m_current & MovementState::LEFT) == MovementState::LEFT)
+		{
+			return "duck_sprite_wing_strike_right";
+		}
+		else if ((m_previous & MovementState::LEFT) == MovementState::LEFT)
+		{
+			return "duck_sprite_wing_strike_right";
+		}
+		else if ((m_previous & MovementState::RIGHT) == MovementState::RIGHT)
+		{
+			return "duck_sprite_wing_strike_right";
+		}
+		else
+		{
+			return "duck_sprite_wing_strike_right";
 		}
 	}
 }

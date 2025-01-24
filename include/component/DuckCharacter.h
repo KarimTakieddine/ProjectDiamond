@@ -2,6 +2,8 @@
 
 #include "Character2D.h"
 
+namespace diamond_engine { class Collider2DComponent; }
+
 namespace project_diamond
 {
 	enum class MovementState : GLubyte
@@ -51,9 +53,12 @@ namespace project_diamond
 
 	private:
 		void updateMovementState();
+		void initializeCollider();
 		std::string getPeckAnimationName() const;
+		std::string getWingStrikeAnimationName() const;
 		std::string getQuackAnimationName() const;
-
+		glm::vec2 m_colliderOffset{ 0.0f, 0.0f };
+		diamond_engine::Collider2DComponent* m_collider{ nullptr };
 		MovementState m_current	{ MovementState::NEUTRAL };
 		MovementState m_previous{ MovementState::NEUTRAL };
 	};

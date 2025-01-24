@@ -8,6 +8,8 @@
 #include <GameSceneConfigParser.h>
 #include <LogManager.h>
 
+#include "BoxCharacter2D.h"
+#include "BoxCharacter2DConfigParser.h"
 #include "Character2D.h"
 #include "Character2DConfigParser.h"
 #include "DuckCharacter.h"
@@ -41,16 +43,20 @@ int main(int argc, char** argv) {
 			"ScrollingBackground",
 			[]() { return std::make_unique<project_diamond::ScrollingBackground>(); });
 
+		diamond_engine::ComponentFactory::registerBehaviourComponent(
+			"BoxCharacter2D",
+			[]() { return std::make_unique<project_diamond::BoxCharacter2D>(); });
+
+		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
+			"BoxCharacter2D",
+			&project_diamond::BoxCharacter2DConfigParser::parse);
+
 		diamond_engine::EngineStatus status;
 		auto sceneConfig = diamond_engine::parseSceneFile("./scenes/testScene.xml", &status);
 
 		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
 		gameEngine->initialize(diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml"));
-		gameEngine->addScene("testScene", "./scenes/testScene.xml");
-		gameEngine->loadScene("testScene");
-		gameEngine->loadScene("testScene");
-		gameEngine->loadScene("testScene");
-		gameEngine->loadScene("testScene");
+		gameEngine->addScene("testScene", "./scenes/characterController2DDemoScene.xml");
 		gameEngine->loadScene("testScene");
 		gameEngine->run();
 	}

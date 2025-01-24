@@ -1,69 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Scene>
-	<BackgroundColor r="1.0f" g="0.5f" b="0.75f"/>
+	<BackgroundColor r="1.0f" g="1.0f" b="1.0f"/>
 	<Instances>
-		<Instance type="sprite">
-			<RenderComponents>
-				<Transform>
-					<Position x="0.0f" y ="0.0f" z="-3.0f"/>
-					<LocalScale x="26.0f" y="12.5f" z="1.0f"/>
-				</Transform>
-				<Material texture="testBackground2"/>
-			</RenderComponents>
-			<BehaviourComponents>
-				<ScrollingBackground>
-					<Speed x="0.05625f"/>
-				</ScrollingBackground>
-			</BehaviourComponents>
-		</Instance>
-		<Instance type="sprite">
-			<RenderComponents>
-				<Transform>
-					<Position x="0.0f" y ="0.0f" z="-2.0f"/>
-					<LocalScale x="24.0f" y="12.5f" z="1.0f"/>
-				</Transform>
-				<Material texture="testBackground1"/>
-			</RenderComponents>
-			<BehaviourComponents>
-				<ScrollingBackground>
-					<Speed x="0.1225f"/>
-				</ScrollingBackground>
-			</BehaviourComponents>
-		</Instance>
-		<Instance type="sprite">
-			<RenderComponents>
-				<Transform>
-					<Position x="0.0f" y ="0.0f" z="-1.0f"/>
-					<LocalScale x="22.0f" y="12.5f" z="1.0f"/>
-				</Transform>
-				<Material texture="testBackground0"/>
-			</RenderComponents>
-			<BehaviourComponents>
-				<ScrollingBackground>
-					<Speed x="0.225f"/>
-				</ScrollingBackground>
-			</BehaviourComponents>
-		</Instance>
-		<Instance type="sprite">
-			<RenderComponents>
-				<Transform>
-					<Position x="0.0f" y ="0.5f" z="0.0f"/>
-					<LocalScale x="1.0f" y="1.0f" z="1.0f"/>
-				</Transform>
-				<Material texture="duck_right"/>
-			</RenderComponents>
-			<BehaviourComponents>
-				<Collider2D width="1" height="1" type="character"/>
-				<SpriteAnimationPlayer>
-					<Animation name="duck_peck_right" duration="8.0" interFrameDelay="0"/>
-					<Animation name="duck_quack_right" duration="8.0" interFrameDelay="0"/>
-					<Animation name="duck_peck_left" duration="8.0" interFrameDelay="0"/>
-					<Animation name="duck_left" duration="0" interFrameDelay="0"/>
-					<Animation name="duck_right" duration="0" interFrameDelay="0"/>
-				</SpriteAnimationPlayer>
-				<DuckCharacter xVelocity="3.5" jumpVelocity="5.0" gravity="-6.5"/>
-			</BehaviourComponents>
-		</Instance>
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
@@ -73,43 +11,30 @@
 				<Material texture="purple"/>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="1" height="1" type="obstacle"/>
+				<Collider2D width="21.5f" height="1" type="obstacle"/>
 			</BehaviourComponents>
 		</Instance>
-		<Instance type="sprite">
+		<Instance type="sprite" name="duck_character">
 			<RenderComponents>
 				<Transform>
-					<Position x="-10.5f" y ="0.0f" z="0.0f"/>
-					<LocalScale x="1.0f" y="11.0f" z="1.0f"/>
+					<Position x="0.0f" y ="0.5f" z="0.0f"/>
+					<LocalScale x="2.0f" y="2.0f" z="1.0f"/>
 				</Transform>
-				<Material texture="purple"/>
+				<Material texture="duck_sprite_right"/>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="1" height="1" type="obstacle"/>
-			</BehaviourComponents>
-		</Instance>
-		<Instance type="sprite">
-			<RenderComponents>
-				<Transform>
-					<Position x="10.5f" y ="0.0f" z="0.0f"/>
-					<LocalScale x="1.0f" y="11.0f" z="1.0f"/>
-				</Transform>
-				<Material texture="purple"/>
-			</RenderComponents>
-			<BehaviourComponents>
-				<Collider2D width="1" height="1" type="obstacle"/>
-			</BehaviourComponents>
-		</Instance>
-		<Instance type="sprite">
-			<RenderComponents>
-				<Transform>
-					<Position x="0.0f" y ="6.0f" z="0.0f"/>
-					<LocalScale x="21.5f" y="1.0f" z="1.0f"/>
-				</Transform>
-				<Material texture="purple"/>
-			</RenderComponents>
-			<BehaviourComponents>
-				<Collider2D width="1" height="1" type="obstacle"/>
+				<Collider2D width="1" height="1.5" xOffset="-0.5f" yOffset="-0.25f" type="character"/>
+				<SpriteAnimationPlayer>
+					<!--
+					<Animation name="duck_peck_right" duration="8.0" interFrameDelay="0"/>
+					<Animation name="duck_quack_right" duration="8.0" interFrameDelay="0"/>
+					<Animation name="duck_peck_left" duration="8.0" interFrameDelay="0"/>
+					-->
+					<Animation name="duck_sprite_left" duration="0" interFrameDelay="0"/>
+					<Animation name="duck_sprite_right" duration="0" interFrameDelay="0"/>
+					<Animation name="duck_sprite_wing_strike_right" duration="0.9" interFrameDelay="0"/>
+				</SpriteAnimationPlayer>
+				<DuckCharacter xVelocity="3.5" jumpVelocity="5.0" gravity="-6.5"/>
 			</BehaviourComponents>
 		</Instance>
 	</Instances>

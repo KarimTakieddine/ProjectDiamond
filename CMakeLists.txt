@@ -20,6 +20,7 @@ set(TEXTURES_DIR textures)
 set(SHADERS_DIR shaders)
 
 set(SOURCES
+    "${SRC_DIR}/component/BoxCharacter2D.cpp"
     "${SRC_DIR}/component/Character2D.cpp"
     "${SRC_DIR}/component/DuckCharacter.cpp"
     "${SRC_DIR}/component/ScrollingBackground.cpp"
