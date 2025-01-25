@@ -12,46 +12,84 @@
 
 namespace project_diamond
 {
-	/*
-	enum class CharacterState : unsigned short
+	enum class CollisionState : unsigned short
 	{
-		NONE = 0,
-		COLLIDING_WITH_GROUND = 1,
-		COLLIDING_WITH_LEFT_WALL = 1 << 1,
-		COLLIDING_WITH_RIGHT_WALL = 1 << 2,
-		COLLDING_WITH_CEILING = 1 << 3,
-		JUMPING = 1 << 4
+		NONE	= 0,
+		GROUND	= 1
 	};
 
-	inline CharacterState operator|(CharacterState a, CharacterState b)
+	inline CollisionState operator|(CollisionState a, CollisionState b)
 	{
-		return static_cast<CharacterState>(static_cast<std::underlying_type_t<CharacterState>>(a) | static_cast<std::underlying_type_t<CharacterState>>(b));
+		return static_cast<CollisionState>(
+			static_cast<std::underlying_type_t<CollisionState>>(a) |
+			static_cast<std::underlying_type_t<CollisionState>>(b));
 	}
 
-	inline CharacterState& operator|=(CharacterState& a, CharacterState b)
+	inline CollisionState& operator|=(CollisionState& a, CollisionState b)
 	{
 		a = (a | b);
 
 		return a;
 	}
 
-	inline CharacterState operator&(CharacterState a, CharacterState b)
+	inline CollisionState operator&(CollisionState a, CollisionState b)
 	{
-		return static_cast<CharacterState>(static_cast<std::underlying_type_t<CharacterState>>(a) & static_cast<std::underlying_type_t<CharacterState>>(b));
+		return static_cast<CollisionState>(
+			static_cast<std::underlying_type_t<CollisionState>>(a) &
+			static_cast<std::underlying_type_t<CollisionState>>(b));
 	}
 
-	inline CharacterState& operator&=(CharacterState& a, CharacterState b)
+	inline CollisionState& operator&=(CollisionState& a, CollisionState b)
 	{
 		a = (a & b);
 
 		return a;
 	}
 
-	inline CharacterState operator~(CharacterState a)
+	inline CollisionState operator~(CollisionState a)
 	{
-		return static_cast<CharacterState>(~(static_cast<std::underlying_type_t<CharacterState>>(a)));
+		return static_cast<CollisionState>(~(static_cast<std::underlying_type_t<CollisionState>>(a)));
 	}
-	*/
+
+	enum class CharacterMovementState : unsigned short
+	{
+		NONE	= 0,
+		LEFT	= 1,
+		RIGHT	= 1 << 1
+	};
+
+	inline CharacterMovementState operator|(CharacterMovementState a, CharacterMovementState b)
+	{
+		return static_cast<CharacterMovementState>(
+			static_cast<std::underlying_type_t<CharacterMovementState>>(a) |
+			static_cast<std::underlying_type_t<CharacterMovementState>>(b));
+	}
+
+	inline CharacterMovementState& operator|=(CharacterMovementState& a, CharacterMovementState b)
+	{
+		a = (a | b);
+
+		return a;
+	}
+
+	inline CharacterMovementState operator&(CharacterMovementState a, CharacterMovementState b)
+	{
+		return static_cast<CharacterMovementState>(
+			static_cast<std::underlying_type_t<CharacterMovementState>>(a) &
+			static_cast<std::underlying_type_t<CharacterMovementState>>(b));
+	}
+
+	inline CharacterMovementState& operator&=(CharacterMovementState& a, CharacterMovementState b)
+	{
+		a = (a & b);
+
+		return a;
+	}
+
+	inline CharacterMovementState operator~(CharacterMovementState a)
+	{
+		return static_cast<CharacterMovementState>(~(static_cast<std::underlying_type_t<CharacterMovementState>>(a)));
+	}
 
 	class BoxCharacter2D : public diamond_engine::BehaviourComponent
 	{
@@ -69,14 +107,24 @@ namespace project_diamond
 		std::unordered_map<std::string, glm::vec2> m_collisionResolutionMap;
 		diamond_engine::TransformRenderComponent* m_transform{ nullptr };
 
+		CollisionState m_collisionState{ CollisionState::NONE };
+		CharacterMovementState m_movementState{ CharacterMovementState::NONE };
+
 		float m_accelerationX{ 0.0f };
 		float m_velocityX{ 0.0f };
 		float m_accelerationForce{ 0.0f };
 		float m_deccelerationForce{ 0.0f };
+		float m_turnaroundForce{ 0.0f };
 		float m_maxVelocityX{ 6.5f };
 		float m_accelerationInterpolantX{ 0.5f };
 		float m_deccelerationInterpolantX{ 0.0f };
-		bool m_movingLeft{ false };
-		bool m_movingRight{ false };
+
+		float m_velocityY{ 0.0f };
+		float m_gravity{ 9.8f };
+		float m_jumpTimer{ 0.0f };
+		float m_timeToJumpHeight{ 1.0f };
+		float m_jumpHeight{ 5.0f };
+		float m_initialJumpVelocity{ 0.0f };
+		float m_jumpGravityReduction{ 0.0f };
 	};
 }

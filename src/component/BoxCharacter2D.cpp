@@ -5,6 +5,8 @@
 #include "BoxCharacter2D.h"
 #include "BoxCharacter2DConfig.h"
 
+#include <iostream>
+
 namespace project_diamond
 {
 	const char* BoxCharacter2D::getName() const
@@ -28,42 +30,97 @@ namespace project_diamond
 
 	void BoxCharacter2D::update(GLfloat deltaTime)
 	{
-		const float inputX = diamond_engine::input::StateMonitor::GetInstance().getJoystickInput("LeftStick").x;
+		if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND )
+		{
+			m_accelerationForce		= 1.0f;
+			m_deccelerationForce	= 2.0f;
+			m_turnaroundForce		= 3.0f;
 
-		m_accelerationForce		= 1.0f;
-		m_deccelerationForce	= 1.0f;
+			if ( diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("A") )
+			{
+				m_jumpTimer				= 0.0f;
+				m_initialJumpVelocity	= ( ( 2 * m_jumpHeight ) / m_timeToJumpHeight );
+			}
+		}
+		else
+		{
+			if ( diamond_engine::input::StateMonitor::GetInstance().IsButtonPressed("A") )
+			{
+				m_jumpGravityReduction = 0.10f;
+			}
+			else
+			{
+				m_jumpGravityReduction = 0.0f;
+			}
+
+			m_jumpTimer += deltaTime * ( 1.0f - m_jumpGravityReduction );
+
+			m_gravity = 9.8f * ( 1.0f - m_jumpGravityReduction );
+
+			m_accelerationForce		= 0.5f;
+			m_deccelerationForce	= 1.0f;
+			m_turnaroundForce		= 1.5f;
+		}
+
+		m_velocityY = ( -m_gravity * m_jumpTimer ) + m_initialJumpVelocity;
+
+		const float inputX = diamond_engine::input::StateMonitor::GetInstance().getJoystickInput("LeftStick").x;
 
 		if (inputX < 0.0f)
 		{
-			if (m_movingRight)
+			float reverseForce = 0.0f;
+
+			if ( ( m_movementState & CharacterMovementState::RIGHT ) == CharacterMovementState::RIGHT )
 			{
 				if (m_accelerationInterpolantX > 1.0f)
 				{
 					m_accelerationInterpolantX = 1.0f;
 				}
+
+				reverseForce = m_turnaroundForce;
+
+				if (m_accelerationInterpolantX < 0.5f)
+				{
+					m_movementState &= ~CharacterMovementState::RIGHT;
+				}
+			}
+			else
+			{
+				reverseForce = m_accelerationForce;
 			}
 
-			m_accelerationInterpolantX -= m_accelerationForce * deltaTime;
+			m_movementState |= CharacterMovementState::LEFT;
+
+			m_accelerationInterpolantX -= reverseForce * deltaTime;
 			m_deccelerationInterpolantX = 0.0f;
-			
-			m_movingLeft	= true;
-			m_movingRight	= false;
 		}
 		else if (inputX > 0.0f)
 		{
-			if (m_movingLeft)
+			float reverseForce = 0.0f;
+
+			if ( ( m_movementState & CharacterMovementState::LEFT ) == CharacterMovementState::LEFT )
 			{
 				if (m_accelerationInterpolantX < 0.0f)
 				{
 					m_accelerationInterpolantX = 0.0f;
 				}
+
+				reverseForce = m_turnaroundForce;
+
+				if (m_accelerationInterpolantX > 0.5f)
+				{
+					m_movementState &= ~CharacterMovementState::LEFT;
+				}
+			}
+			else
+			{
+				reverseForce = m_accelerationForce;
 			}
 
-			m_accelerationInterpolantX += m_accelerationForce * deltaTime;
-			m_deccelerationInterpolantX = 0.0f;
+			m_movementState |= CharacterMovementState::RIGHT;
 
-			m_movingLeft	= false;
-			m_movingRight	= true;
+			m_accelerationInterpolantX += reverseForce * deltaTime;
+			m_deccelerationInterpolantX = 0.0f;
 		}
 		else
 		{
@@ -73,9 +130,9 @@ namespace project_diamond
 		}
 
 		m_accelerationX = glm::mix(-1.0f, 1.0f, glm::clamp(m_accelerationInterpolantX, 0.0f, 1.0f));
-		m_velocityX = m_maxVelocityX * m_accelerationX;
+		m_velocityX		= m_maxVelocityX * m_accelerationX;
 		
-		m_transform->translate(glm::vec2{ m_velocityX, 0.0f } * deltaTime);
+		m_transform->translate(glm::vec2{ m_velocityX, m_velocityY } * deltaTime);
 
 		/*m_velocity.x = m_restingState.xVelocity * diamond_engine::input::StateMonitor::GetInstance().getJoystickInput("LeftStick").x;
 
@@ -121,11 +178,41 @@ namespace project_diamond
 
 	void BoxCharacter2D::onCollisionEnter2D(const glm::vec2& resolutionAxis, const std::string& name)
 	{
+		if (m_collisionResolutionMap.find(name) != m_collisionResolutionMap.cend())
+		{
+			return;
+		}
+
+		if (resolutionAxis.y > 0.0f)
+		{
+			m_velocityY				= 0.0f;
+			m_jumpTimer				= 0.0f;
+			m_initialJumpVelocity	= 0.0f;
+
+			m_collisionState |= CollisionState::GROUND;
+		}
+		else if (resolutionAxis.y < 0.0f)
+		{
+			m_velocityY		= 0.0f;
+			m_jumpTimer		= 0.0f;
+		}
+
 		m_collisionResolutionMap.insert({ name, resolutionAxis });
 	}
 
 	void BoxCharacter2D::onCollisionExit2D(const std::string& name)
 	{
+		auto it = m_collisionResolutionMap.find(name);
+		if (it == m_collisionResolutionMap.cend())
+		{
+			return;
+		}
+
+		if (it->second.y > 0.0f)
+		{
+			m_collisionState &= ~CollisionState::GROUND;
+		}
+
 		m_collisionResolutionMap.erase(name);
 	}
 }
