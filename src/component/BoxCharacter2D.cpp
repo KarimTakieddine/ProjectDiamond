@@ -44,14 +44,23 @@ namespace project_diamond
 			m_jumpTimer += deltaTime * (1.0f - m_jumpGravityReduction);
 		}
 
-		m_gravity = 9.8f * (1.0f - m_jumpGravityReduction);
+		m_gravity = 15.0f * (1.0f - m_jumpGravityReduction);
+
+		if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND )
+		{
+			m_accelerationForce		= 2.0f;
+			m_deccelerationForce	= 3.0f;
+			m_turnaroundForce		= 4.0f;
+		}
+		else
+		{
+			m_accelerationForce		= 1.0f;
+			m_deccelerationForce	= 0.0f;
+			m_turnaroundForce		= 2.0f;
+		}
 
 		if ( ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND ) || m_jumpCounter > 0 )
 		{
-			m_accelerationForce		= 1.0f;
-			m_deccelerationForce	= 2.0f;
-			m_turnaroundForce		= 3.0f;
-
 			if ( diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("A") )
 			{
 				m_jumpTimer				= 0.0f;
@@ -59,12 +68,6 @@ namespace project_diamond
 
 				--m_jumpCounter;
 			}
-		}
-		else
-		{
-			m_accelerationForce		= 0.5f;
-			m_deccelerationForce	= 1.0f;
-			m_turnaroundForce		= 1.5f;
 		}
 
 		m_velocityY = ( -m_gravity * m_jumpTimer ) + m_initialJumpVelocity;
@@ -127,7 +130,7 @@ namespace project_diamond
 			m_accelerationInterpolantX += reverseForce * deltaTime;
 			m_deccelerationInterpolantX = 0.0f;
 		}
-		else
+		else if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND )
 		{
 			m_deccelerationInterpolantX += m_deccelerationForce * deltaTime;
 
