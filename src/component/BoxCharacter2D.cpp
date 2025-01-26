@@ -47,14 +47,14 @@ namespace project_diamond
 
 		const float gravityReductionFactor = ( 1.0f - m_jumpData.gravityReduction );
 
-		if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::NONE )
+		if ( ( m_collisionState & CollisionState2D::GROUND ) == CollisionState2D::NONE )
 		{
 			m_jumpData.jumpTimer += deltaTime * gravityReductionFactor;
 		}
 
 		m_jumpData.gravity = m_jumpConfig.gravity * gravityReductionFactor;
 
-		if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND )
+		if ( ( m_collisionState & CollisionState2D::GROUND ) == CollisionState2D::GROUND )
 		{
 			m_moveData.config = m_walkConfig;
 		}
@@ -63,7 +63,7 @@ namespace project_diamond
 			m_moveData.config = m_airConfig;
 		}
 
-		if ( ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND ) || m_jumpData.jumpCounter > 0 )
+		if ( ( ( m_collisionState & CollisionState2D::GROUND ) == CollisionState2D::GROUND ) || m_jumpData.jumpCounter > 0 )
 		{
 			if ( diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("A") )
 			{
@@ -82,7 +82,7 @@ namespace project_diamond
 		{
 			float reverseForce = 0.0f;
 
-			if ( ( m_moveData.state & CharacterMovementState::RIGHT ) == CharacterMovementState::RIGHT )
+			if ( ( m_moveData.state & MovementState2D::RIGHT ) == MovementState2D::RIGHT )
 			{
 				if (m_moveData.accLerp > 1.0f)
 				{
@@ -93,7 +93,7 @@ namespace project_diamond
 
 				if (m_moveData.accLerp < 0.5f)
 				{
-					m_moveData.state &= ~CharacterMovementState::RIGHT;
+					m_moveData.state &= ~MovementState2D::RIGHT;
 				}
 			}
 			else
@@ -101,7 +101,7 @@ namespace project_diamond
 				reverseForce = m_moveData.config.acceleration;
 			}
 
-			m_moveData.state |= CharacterMovementState::LEFT;
+			m_moveData.state |= MovementState2D::LEFT;
 
 			m_moveData.accLerp -= reverseForce * deltaTime;
 			m_moveData.decLerp = 0.0f;
@@ -110,7 +110,7 @@ namespace project_diamond
 		{
 			float reverseForce = 0.0f;
 
-			if ( ( m_moveData.state & CharacterMovementState::LEFT ) == CharacterMovementState::LEFT )
+			if ( ( m_moveData.state & MovementState2D::LEFT ) == MovementState2D::LEFT )
 			{
 				if (m_moveData.accLerp < 0.0f)
 				{
@@ -121,7 +121,7 @@ namespace project_diamond
 
 				if (m_moveData.accLerp > 0.5f)
 				{
-					m_moveData.state &= ~CharacterMovementState::LEFT;
+					m_moveData.state &= ~MovementState2D::LEFT;
 				}
 			}
 			else
@@ -129,12 +129,12 @@ namespace project_diamond
 				reverseForce = m_moveData.config.acceleration;
 			}
 
-			m_moveData.state |= CharacterMovementState::RIGHT;
+			m_moveData.state |= MovementState2D::RIGHT;
 
 			m_moveData.accLerp += reverseForce * deltaTime;
 			m_moveData.decLerp = 0.0f;
 		}
-		else if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND )
+		else if ( ( m_collisionState & CollisionState2D::GROUND ) == CollisionState2D::GROUND )
 		{
 			m_moveData.decLerp += m_moveData.config.decceleration * deltaTime;
 			m_moveData.accLerp = glm::mix(m_moveData.accLerp, 0.5f, glm::clamp(m_moveData.decLerp, 0.0f, 1.0f));
@@ -159,7 +159,7 @@ namespace project_diamond
 			m_jumpData.jumpTimer			= 0.0f;
 			m_jumpData.initialJumpVelocity	= 0.0f;
 
-			m_collisionState |= CollisionState::GROUND;
+			m_collisionState |= CollisionState2D::GROUND;
 
 			m_jumpData.jumpCounter = m_jumpConfig.maxJumpCounter;
 		}
@@ -182,7 +182,7 @@ namespace project_diamond
 
 		if (it->second.y > 0.0f)
 		{
-			m_collisionState &= ~CollisionState::GROUND;
+			m_collisionState &= ~CollisionState2D::GROUND;
 		}
 
 		m_collisionResolutionMap.erase(name);
