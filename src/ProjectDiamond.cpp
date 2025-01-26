@@ -10,31 +10,11 @@
 
 #include "BoxCharacter2D.h"
 #include "BoxCharacter2DConfigParser.h"
-#include "Character2D.h"
-#include "Character2DConfigParser.h"
-#include "DuckCharacter.h"
-#include "DuckCharacterConfigParser.h"
 #include "ScrollingBackground.h"
 #include "ScrollingBackgroundConfigParser.h"
 
 int main(int argc, char** argv) {
 	try {
-		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
-			"Character2D",
-			&project_diamond::Character2DConfigParser::parse);
-
-		diamond_engine::ComponentFactory::registerBehaviourComponent(
-			"Character2D",
-			[]() { return std::make_unique<project_diamond::Character2D>(); });
-
-		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
-			"DuckCharacter",
-			&project_diamond::DuckCharacterConfigParser::parse);
-
-		diamond_engine::ComponentFactory::registerBehaviourComponent(
-			"DuckCharacter",
-			[]() { return std::make_unique<project_diamond::DuckCharacter>(); });
-
 		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
 			"ScrollingBackground",
 			&project_diamond::ScrollingBackgroundConfigParser::parse);
@@ -56,8 +36,8 @@ int main(int argc, char** argv) {
 
 		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
 		gameEngine->initialize(diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml"));
-		gameEngine->addScene("testScene", "./scenes/characterController2DDemoScene.xml");
-		gameEngine->loadScene("testScene");
+		gameEngine->addScene("demoScene", "./scenes/characterController2DDemoScene.xml");
+		gameEngine->loadScene("demoScene");
 		gameEngine->run();
 	}
 	catch (const std::exception& e) {

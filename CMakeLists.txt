@@ -21,16 +21,10 @@ set(SHADERS_DIR shaders)
 
 set(SOURCES
     "${SRC_DIR}/component/BoxCharacter2D.cpp"
-    "${SRC_DIR}/component/Character2D.cpp"
-    "${SRC_DIR}/component/DuckCharacter.cpp"
     "${SRC_DIR}/component/ScrollingBackground.cpp"
     "${SRC_DIR}/config/BoxCharacter2DConfig.cpp"
-    "${SRC_DIR}/config/Character2DConfig.cpp"
-    "${SRC_DIR}/config/DuckCharacterConfig.cpp"
     "${SRC_DIR}/config/ScrollingBackgroundConfig.cpp"
     "${SRC_DIR}/parser/BoxCharacter2DConfigParser.cpp"
-    "${SRC_DIR}/parser/Character2DConfigParser.cpp"
-    "${SRC_DIR}/parser/DuckCharacterConfigParser.cpp"
     "${SRC_DIR}/parser/ScrollingBackgroundConfigParser.cpp"
     "${SRC_DIR}/ProjectDiamond.cpp")
 
