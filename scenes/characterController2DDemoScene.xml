@@ -102,7 +102,11 @@
 			</RenderComponents>
 			<BehaviourComponents>
 				<Collider2D width="1" height="1" type="character"/>
-				<BoxCharacter2D/>
+				<BoxCharacter2D>
+					<Walk maxVelocity="6.5f" acceleration="2.0f" decceleration="3.0f" turnaround="4.0f"/>
+					<Air maxVelocity="6.5f" acceleration="1.0f" decceleration="0.0f" turnaround="2.0f"/>
+					<Jump gravity="15.0f" maxJumpHeight="5.0f" timeToJumpHeight="1.0f" jumpGravityReduction="0.10f" maxJumpCounter="2"/>
+				</BoxCharacter2D>
 			</BehaviourComponents>
 		</Instance>
 	</Instances>

@@ -21,9 +21,15 @@ namespace project_diamond
 		if (!m_transform)
 			return { "BoxCharacter2D::initialize failed. No game instance transform was found", true };
 
-		const BoxCharacter2DConfig* characterConfig = dynamic_cast<const BoxCharacter2DConfig*>(config);
-		if (!characterConfig)
+		const BoxCharacter2DConfig* boxCharacter2DConfig = dynamic_cast<const BoxCharacter2DConfig*>(config);
+		if (!boxCharacter2DConfig)
 			return { "Failed to configure BoxCharacter2D instance. Could not convert to target type", true };
+
+		m_walkConfig	= boxCharacter2DConfig->getWalkConfig();
+		m_airConfig		= boxCharacter2DConfig->getAirConfig();
+		m_jumpConfig	= boxCharacter2DConfig->getJumpConfig();
+
+		m_moveData.accLerp = 0.5f;
 
 		return { };
 	}
@@ -32,45 +38,43 @@ namespace project_diamond
 	{
 		if (diamond_engine::input::StateMonitor::GetInstance().IsButtonPressed("A"))
 		{
-			m_jumpGravityReduction = 0.10f;
+			m_jumpData.gravityReduction = glm::clamp(m_jumpConfig.jumpGravityReduction, 0.0f, 1.0f);
 		}
 		else
 		{
-			m_jumpGravityReduction = 0.0f;
+			m_jumpData.gravityReduction = 0.0f;
 		}
+
+		const float gravityReductionFactor = ( 1.0f - m_jumpData.gravityReduction );
 
 		if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::NONE )
 		{
-			m_jumpTimer += deltaTime * (1.0f - m_jumpGravityReduction);
+			m_jumpData.jumpTimer += deltaTime * gravityReductionFactor;
 		}
 
-		m_gravity = 15.0f * (1.0f - m_jumpGravityReduction);
+		m_jumpData.gravity = m_jumpConfig.gravity * gravityReductionFactor;
 
 		if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND )
 		{
-			m_accelerationForce		= 2.0f;
-			m_deccelerationForce	= 3.0f;
-			m_turnaroundForce		= 4.0f;
+			m_moveData.config = m_walkConfig;
 		}
 		else
 		{
-			m_accelerationForce		= 1.0f;
-			m_deccelerationForce	= 0.0f;
-			m_turnaroundForce		= 2.0f;
+			m_moveData.config = m_airConfig;
 		}
 
-		if ( ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND ) || m_jumpCounter > 0 )
+		if ( ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND ) || m_jumpData.jumpCounter > 0 )
 		{
 			if ( diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("A") )
 			{
-				m_jumpTimer				= 0.0f;
-				m_initialJumpVelocity	= ( ( 2 * m_jumpHeight ) / m_timeToJumpHeight );
+				m_jumpData.jumpTimer			= 0.0f;
+				m_jumpData.initialJumpVelocity	= ( ( 2 * m_jumpConfig.maxJumpHeight ) / m_jumpConfig.timeToJumpHeight );
 
-				--m_jumpCounter;
+				--( m_jumpData.jumpCounter );
 			}
 		}
 
-		m_velocityY = ( -m_gravity * m_jumpTimer ) + m_initialJumpVelocity;
+		m_jumpData.velocity = ( -m_jumpData.gravity * m_jumpData.jumpTimer ) + m_jumpData.initialJumpVelocity;
 
 		const float inputX = diamond_engine::input::StateMonitor::GetInstance().getJoystickInput("LeftStick").x;
 
@@ -78,110 +82,68 @@ namespace project_diamond
 		{
 			float reverseForce = 0.0f;
 
-			if ( ( m_movementState & CharacterMovementState::RIGHT ) == CharacterMovementState::RIGHT )
+			if ( ( m_moveData.state & CharacterMovementState::RIGHT ) == CharacterMovementState::RIGHT )
 			{
-				if (m_accelerationInterpolantX > 1.0f)
+				if (m_moveData.accLerp > 1.0f)
 				{
-					m_accelerationInterpolantX = 1.0f;
+					m_moveData.accLerp = 1.0f;
 				}
 
-				reverseForce = m_turnaroundForce;
+				reverseForce = m_moveData.config.turnaround;
 
-				if (m_accelerationInterpolantX < 0.5f)
+				if (m_moveData.accLerp < 0.5f)
 				{
-					m_movementState &= ~CharacterMovementState::RIGHT;
+					m_moveData.state &= ~CharacterMovementState::RIGHT;
 				}
 			}
 			else
 			{
-				reverseForce = m_accelerationForce;
+				reverseForce = m_moveData.config.acceleration;
 			}
 
-			m_movementState |= CharacterMovementState::LEFT;
+			m_moveData.state |= CharacterMovementState::LEFT;
 
-			m_accelerationInterpolantX -= reverseForce * deltaTime;
-			m_deccelerationInterpolantX = 0.0f;
+			m_moveData.accLerp -= reverseForce * deltaTime;
+			m_moveData.decLerp = 0.0f;
 		}
 		else if (inputX > 0.0f)
 		{
 			float reverseForce = 0.0f;
 
-			if ( ( m_movementState & CharacterMovementState::LEFT ) == CharacterMovementState::LEFT )
+			if ( ( m_moveData.state & CharacterMovementState::LEFT ) == CharacterMovementState::LEFT )
 			{
-				if (m_accelerationInterpolantX < 0.0f)
+				if (m_moveData.accLerp < 0.0f)
 				{
-					m_accelerationInterpolantX = 0.0f;
+					m_moveData.accLerp = 0.0f;
 				}
 
-				reverseForce = m_turnaroundForce;
+				reverseForce = m_moveData.config.turnaround;
 
-				if (m_accelerationInterpolantX > 0.5f)
+				if (m_moveData.accLerp > 0.5f)
 				{
-					m_movementState &= ~CharacterMovementState::LEFT;
+					m_moveData.state &= ~CharacterMovementState::LEFT;
 				}
 			}
 			else
 			{
-				reverseForce = m_accelerationForce;
+				reverseForce = m_moveData.config.acceleration;
 			}
 
-			m_movementState |= CharacterMovementState::RIGHT;
+			m_moveData.state |= CharacterMovementState::RIGHT;
 
-			m_accelerationInterpolantX += reverseForce * deltaTime;
-			m_deccelerationInterpolantX = 0.0f;
+			m_moveData.accLerp += reverseForce * deltaTime;
+			m_moveData.decLerp = 0.0f;
 		}
 		else if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND )
 		{
-			m_deccelerationInterpolantX += m_deccelerationForce * deltaTime;
-
-			m_accelerationInterpolantX = glm::mix(m_accelerationInterpolantX, 0.5f, glm::clamp(m_deccelerationInterpolantX, 0.0f, 1.0f));
+			m_moveData.decLerp += m_moveData.config.decceleration * deltaTime;
+			m_moveData.accLerp = glm::mix(m_moveData.accLerp, 0.5f, glm::clamp(m_moveData.decLerp, 0.0f, 1.0f));
 		}
 
-		m_accelerationX = glm::mix(-1.0f, 1.0f, glm::clamp(m_accelerationInterpolantX, 0.0f, 1.0f));
-		m_velocityX		= m_maxVelocityX * m_accelerationX;
-		
-		m_transform->translate(glm::vec2{ m_velocityX, m_velocityY } * deltaTime);
+		m_moveData.velocity	= m_moveData.config.maxVelocity *
+			glm::mix(-1.0f, 1.0f, glm::clamp(m_moveData.accLerp, 0.0f, 1.0f));
 
-		/*m_velocity.x = m_restingState.xVelocity * diamond_engine::input::StateMonitor::GetInstance().getJoystickInput("LeftStick").x;
-
-		if (diamond_engine::input::StateMonitor::GetInstance().IsButtonDown("A"))
-		{
-			if ((m_state & CharacterState::COLLIDING_WITH_GROUND) == CharacterState::COLLIDING_WITH_GROUND)
-			{
-				m_state |= CharacterState::JUMPING;
-
-				m_dynamicState.gravity = m_restingState.gravity;
-				m_dynamicState.jumpVelocity = m_restingState.jumpVelocity;
-				m_jumpTimer = 0.0f;
-
-				diamond_engine::AudioEngine::getInstance()->playSound2D("jump_character");
-			}
-		}
-
-		if ((m_state & CharacterState::COLLIDING_WITH_LEFT_WALL) == CharacterState::COLLIDING_WITH_LEFT_WALL)
-		{
-			if (m_velocity.x < 0.0f)
-			{
-				m_velocity.x = 0.0f;
-			}
-		}
-
-		if ((m_state & CharacterState::COLLIDING_WITH_RIGHT_WALL) == CharacterState::COLLIDING_WITH_RIGHT_WALL)
-		{
-			if (m_velocity.x > 0.0f)
-			{
-				m_velocity.x = 0.0f;
-			}
-		}
-
-		m_velocity.y = m_jumpTimer * m_dynamicState.gravity + m_dynamicState.jumpVelocity;
-
-		m_transform->translate(m_velocity * deltaTime);
-
-		if ((m_state & CharacterState::JUMPING) == CharacterState::JUMPING)
-		{
-			m_jumpTimer += deltaTime;
-		}*/
+		m_transform->translate(glm::vec2{ m_moveData.velocity, m_jumpData.velocity } * deltaTime);
 	}
 
 	void BoxCharacter2D::onCollisionEnter2D(const glm::vec2& resolutionAxis, const std::string& name)
@@ -193,18 +155,18 @@ namespace project_diamond
 
 		if (resolutionAxis.y > 0.0f)
 		{
-			m_velocityY				= 0.0f;
-			m_jumpTimer				= 0.0f;
-			m_initialJumpVelocity	= 0.0f;
+			m_jumpData.velocity				= 0.0f;
+			m_jumpData.jumpTimer			= 0.0f;
+			m_jumpData.initialJumpVelocity	= 0.0f;
 
 			m_collisionState |= CollisionState::GROUND;
 
-			m_jumpCounter = m_maxJumpCounter;
+			m_jumpData.jumpCounter = m_jumpConfig.maxJumpCounter;
 		}
 		else if (resolutionAxis.y < 0.0f)
 		{
-			m_velocityY		= 0.0f;
-			m_jumpTimer		= 0.0f;
+			m_jumpData.velocity		= 0.0f;
+			m_jumpData.jumpTimer	= 0.0f;
 		}
 
 		m_collisionResolutionMap.insert({ name, resolutionAxis });

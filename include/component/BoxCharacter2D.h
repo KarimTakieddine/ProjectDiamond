@@ -7,8 +7,10 @@
 
 #include <BehaviourComponent.h>
 #include <BehaviourComponentConfig.h>
-#include <SpriteAnimationPlayer.h>
 #include <TransformRenderComponent.h>
+
+#include "JumpConfig.h"
+#include "MoveConfig.h"
 
 namespace project_diamond
 {
@@ -94,6 +96,25 @@ namespace project_diamond
 	class BoxCharacter2D : public diamond_engine::BehaviourComponent
 	{
 	public:
+		struct MoveData
+		{
+			MoveConfig config{ };
+			CharacterMovementState state{ CharacterMovementState::NONE };
+			float velocity;
+			float accLerp;
+			float decLerp;
+		};
+
+		struct JumpData
+		{
+			float velocity				{ 0.0f };
+			float gravity				{ 0.0f };
+			float jumpTimer				{ 0.0f };
+			float gravityReduction		{ 0.0f };
+			float initialJumpVelocity	{ 0.0f };
+			unsigned int jumpCounter	{ 0 };
+		};
+
 		virtual ~BoxCharacter2D() override = default;
 
 		virtual const char* getName() const override;
@@ -106,28 +127,12 @@ namespace project_diamond
 	private:
 		std::unordered_map<std::string, glm::vec2> m_collisionResolutionMap;
 		diamond_engine::TransformRenderComponent* m_transform{ nullptr };
+		MoveConfig m_walkConfig	{ };
+		MoveConfig m_airConfig	{ };
+		JumpConfig m_jumpConfig	{ };
+		MoveData m_moveData{ };
+		JumpData m_jumpData{ };
 
 		CollisionState m_collisionState{ CollisionState::NONE };
-		CharacterMovementState m_movementState{ CharacterMovementState::NONE };
-
-		float m_accelerationX{ 0.0f };
-		float m_velocityX{ 0.0f };
-		float m_accelerationForce{ 0.0f };
-		float m_deccelerationForce{ 0.0f };
-		float m_turnaroundForce{ 0.0f };
-		float m_maxVelocityX{ 6.5f };
-		float m_accelerationInterpolantX{ 0.5f };
-		float m_deccelerationInterpolantX{ 0.0f };
-
-		float m_velocityY{ 0.0f };
-		float m_gravity{ 9.8f };
-		float m_jumpTimer{ 0.0f };
-		float m_timeToJumpHeight{ 1.0f };
-		float m_jumpHeight{ 5.0f };
-		float m_initialJumpVelocity{ 0.0f };
-		float m_jumpGravityReduction{ 0.0f };
-
-		unsigned int m_maxJumpCounter{ 2 };
-		unsigned int m_jumpCounter{ 1 };
 	};
 }
