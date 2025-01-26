@@ -30,7 +30,23 @@ namespace project_diamond
 
 	void BoxCharacter2D::update(GLfloat deltaTime)
 	{
-		if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND )
+		if (diamond_engine::input::StateMonitor::GetInstance().IsButtonPressed("A"))
+		{
+			m_jumpGravityReduction = 0.10f;
+		}
+		else
+		{
+			m_jumpGravityReduction = 0.0f;
+		}
+
+		if ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::NONE )
+		{
+			m_jumpTimer += deltaTime * (1.0f - m_jumpGravityReduction);
+		}
+
+		m_gravity = 9.8f * (1.0f - m_jumpGravityReduction);
+
+		if ( ( ( m_collisionState & CollisionState::GROUND ) == CollisionState::GROUND ) || m_jumpCounter > 0 )
 		{
 			m_accelerationForce		= 1.0f;
 			m_deccelerationForce	= 2.0f;
@@ -40,23 +56,12 @@ namespace project_diamond
 			{
 				m_jumpTimer				= 0.0f;
 				m_initialJumpVelocity	= ( ( 2 * m_jumpHeight ) / m_timeToJumpHeight );
+
+				--m_jumpCounter;
 			}
 		}
 		else
 		{
-			if ( diamond_engine::input::StateMonitor::GetInstance().IsButtonPressed("A") )
-			{
-				m_jumpGravityReduction = 0.10f;
-			}
-			else
-			{
-				m_jumpGravityReduction = 0.0f;
-			}
-
-			m_jumpTimer += deltaTime * ( 1.0f - m_jumpGravityReduction );
-
-			m_gravity = 9.8f * ( 1.0f - m_jumpGravityReduction );
-
 			m_accelerationForce		= 0.5f;
 			m_deccelerationForce	= 1.0f;
 			m_turnaroundForce		= 1.5f;
@@ -190,6 +195,8 @@ namespace project_diamond
 			m_initialJumpVelocity	= 0.0f;
 
 			m_collisionState |= CollisionState::GROUND;
+
+			m_jumpCounter = m_maxJumpCounter;
 		}
 		else if (resolutionAxis.y < 0.0f)
 		{

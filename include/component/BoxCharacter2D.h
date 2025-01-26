@@ -126,5 +126,8 @@ namespace project_diamond
 		float m_jumpHeight{ 5.0f };
 		float m_initialJumpVelocity{ 0.0f };
 		float m_jumpGravityReduction{ 0.0f };
+
+		unsigned int m_maxJumpCounter{ 2 };
+		unsigned int m_jumpCounter{ 1 };
 	};
 }
