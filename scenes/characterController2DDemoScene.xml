@@ -109,5 +109,20 @@
 				</BoxCharacter2D>
 			</BehaviourComponents>
 		</Instance>
+		<Instance type="sprite" name="jump_reset_box">
+			<RenderComponents>
+				<Transform>
+					<Position x="2.0f" y ="0.5f" z="0.0f"/>
+					<LocalScale x="1.0f" y="1.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="white">
+					<Color r="0.0f" g="1.0f" b="0.0f"/>
+				</Material>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="1" height="1" type="obstacle"/>
+				<JumpResetBox jumpResetCount="3"/>
+			</BehaviourComponents>
+		</Instance>
 	</Instances>
 </Scene>

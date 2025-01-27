@@ -1,11 +1,9 @@
-#include <AudioEngine.h>
-#include <GameInstance.h>
-#include <Input.h>
+#include <audio/AudioEngine.h>
+#include <game/GameInstance.h>
+#include <input/Input.h>
 
 #include "BoxCharacter2D.h"
 #include "BoxCharacter2DConfig.h"
-
-#include <iostream>
 
 namespace project_diamond
 {
@@ -165,8 +163,8 @@ namespace project_diamond
 		}
 		else if (resolutionAxis.y < 0.0f)
 		{
-			m_jumpData.velocity		= 0.0f;
-			m_jumpData.jumpTimer	= 0.0f;
+			m_jumpData.velocity				= 0.0f;
+			m_jumpData.initialJumpVelocity	= 0.0f;
 		}
 
 		m_collisionResolutionMap.insert({ name, resolutionAxis });

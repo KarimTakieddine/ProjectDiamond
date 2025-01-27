@@ -5,9 +5,9 @@
 
 #include <glm/vec2.hpp>
 
-#include <BehaviourComponent.h>
-#include <BehaviourComponentConfig.h>
-#include <TransformRenderComponent.h>
+#include <component/BehaviourComponent.h>
+#include <component/TransformRenderComponent.h>
+#include <config/BehaviourComponentConfig.h>
 
 #include "CollisionState2D.h"
 #include "JumpConfig.h"
