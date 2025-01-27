@@ -14,6 +14,8 @@
 #include "MoveConfig.h"
 #include "MovementState2D.h"
 
+namespace diamond_engine { class Collider2DComponent; }
+
 namespace project_diamond
 {
 	class BoxCharacter2D : public diamond_engine::BehaviourComponent
@@ -44,8 +46,10 @@ namespace project_diamond
 		virtual void update(GLfloat deltaTime) override;
 		diamond_engine::EngineStatus initialize(const diamond_engine::BehaviourComponentConfig* config) final override;
 
-		void onCollisionEnter2D(const glm::vec2& resolutionAxis, const std::string& name) final override;
-		void onCollisionExit2D(const std::string& name) final override;
+		void onCollisionEnter2D(const glm::vec2& resolutionAxis, diamond_engine::GameInstance* gameInstance, diamond_engine::Collider2DComponent* collider2D) final override;
+		void onCollisionExit2D(diamond_engine::GameInstance* gameInstance, diamond_engine::Collider2DComponent* collider2D) final override;
+
+		void setMaxJumpCount(unsigned int maxJumpCount);
 
 	private:
 		std::unordered_map<std::string, glm::vec2> m_collisionResolutionMap;

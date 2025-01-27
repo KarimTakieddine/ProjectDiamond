@@ -9,7 +9,7 @@ namespace project_diamond
     {
         std::unique_ptr<JumpResetBoxConfig> config = std::make_unique<JumpResetBoxConfig>();
 
-        pugi::xml_attribute jumpResetCountAttribute = behaviourNode.attribute("jumpResetCountAttribute");
+        pugi::xml_attribute jumpResetCountAttribute = behaviourNode.attribute("jumpResetCount");
         if (jumpResetCountAttribute)
             config->setJumpResetCount(jumpResetCountAttribute.as_uint());
 

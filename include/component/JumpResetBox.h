@@ -2,10 +2,15 @@
 
 #include <component/BehaviourComponent.h>
 
-namespace diamond_engine { class MaterialRenderComponent; }
+namespace diamond_engine
+{
+	class MaterialRenderComponent;
+	class Collider2DComponent;
+}
 
 namespace project_diamond
 {
+	
 	class JumpResetBox : public diamond_engine::BehaviourComponent
 	{
 	public:
@@ -21,7 +26,7 @@ namespace project_diamond
 		void update(GLfloat deltaTime) final override;
 		diamond_engine::EngineStatus initialize(const diamond_engine::BehaviourComponentConfig* config) final override;
 
-		void onCollisionEnter2D(const glm::vec2& resolution, const std::string& name) final override;
+		void onCollisionEnter2D(const glm::vec2& resolution, diamond_engine::GameInstance* gameInstance, diamond_engine::Collider2DComponent* collider2D) final override;
 
 	private:
 		diamond_engine::MaterialRenderComponent* m_materialRenderComponent{ nullptr };
