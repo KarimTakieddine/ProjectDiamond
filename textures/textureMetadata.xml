@@ -7,6 +7,7 @@
 	<Texture name="pink" path="pink.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="white" path="white.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="purple" path="purple.png" wrapModeS="repeat" wrapModeT="repeat"/>
+	<Texture name="blue" path="blue.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="testBackground0" path="testBackground0.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="testBackground1" path="testBackground1.png" wrapModeS="repeat" wrapModeT="repeat"/>
 	<Texture name="testBackground2" path="testBackground2.png" wrapModeS="repeat" wrapModeT="repeat"/>

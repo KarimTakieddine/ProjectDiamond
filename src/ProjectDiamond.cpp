@@ -12,6 +12,8 @@
 
 #include "BoxCharacter2D.h"
 #include "BoxCharacter2DConfigParser.h"
+#include "DeathBlock.h"
+#include "DeathBlockConfigParser.h"
 #include "JumpResetBox.h"
 #include "JumpResetBoxConfigParser.h"
 #include "LevelDoor.h"
@@ -42,6 +44,10 @@ int main(int argc, char** argv) {
 			"LevelDoor",
 			[]() { return std::make_unique<project_diamond::LevelDoor>(); });
 
+		diamond_engine::ComponentFactory::registerBehaviourComponent(
+			"DeathBlock",
+			[]() { return std::make_unique<project_diamond::DeathBlock>(); });
+
 		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
 			"BoxCharacter2D",
 			&project_diamond::BoxCharacter2DConfigParser::parse);
@@ -53,6 +59,10 @@ int main(int argc, char** argv) {
 		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
 			"LevelDoor",
 			&project_diamond::LevelDoorConfigParser::parse);
+
+		diamond_engine::ComponentConfigParser::registerBehaviourConfig(
+			"DeathBlock",
+			&project_diamond::DeathBlockConfigParser::parse);
 
 		auto levelLoadFuture = std::async(
 			std::launch::async,

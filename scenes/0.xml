@@ -120,13 +120,13 @@
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
-					<Position x="-2.0f" y ="4.5f" z="0.0f"/>
-					<LocalScale x="5.0f" y="10.0f" z="1.0f"/>
+					<Position x="-2.0f" y ="4.75f" z="0.0f"/>
+					<LocalScale x="3.0f" y="9.5f" z="1.0f"/>
 				</Transform>
 				<Material texture="purple"/>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="5.0f" height="10.0f" type="obstacle" ignore="up|down"/>
+				<Collider2D width="3.0f" height="9.5f" type="obstacle" ignore="up|down"/>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
@@ -139,6 +139,21 @@
 			</RenderComponents>
 			<BehaviourComponents>
 				<Collider2D width="6.0f" height="16.0f" type="obstacle" ignore="right|down"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
+					<Position x="1.5f" y ="-8.25f" z="0.0f"/>
+					<LocalScale x="27.0f" y="2.5f" z="1.0f"/>
+				</Transform>
+				<Material texture="blue"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="27.0f" height="2.5f" type="obstacle" ignore="left|right|down"/>
+				<DeathBlock>
+					<ResetPosition x="-15.5f" y ="5.0f" z="0.0f"/>
+				</DeathBlock>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite" name="character">
@@ -162,14 +177,14 @@
 			<RenderComponents>
 				<Transform>
 					<Position x="-2.0f" y ="-1.0f" z="0.0f"/>
-					<LocalScale x="5.0f" y="1.0f" z="1.0f"/>
+					<LocalScale x="3.0f" y="2.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="white">
-					<Color r="0.0f" g="1.0f" b="0.0f"/>
+					<Color r="1.0f" g="1.0f" b="0.0f"/>
 				</Material>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="5" height="1" type="obstacle" ignore="up"/>
+				<Collider2D width="3" height="2" type="obstacle" ignore="up"/>
 				<JumpResetBox jumpResetCount="3"/>
 			</BehaviourComponents>
 		</Instance>

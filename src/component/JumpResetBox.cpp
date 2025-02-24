@@ -55,7 +55,7 @@ namespace project_diamond
 
 			boxCharacter2D->setMaxJumpCount(m_jumpResetCount);
 
-			m_materialRenderComponent->setColor(glm::vec3(0.0f, 0.0f, 1.0f));
+			m_materialRenderComponent->setColor(glm::vec3(0.59f, 0.29f, 0.0f));
 
 			m_state = State::INACTIVE;
 		}
