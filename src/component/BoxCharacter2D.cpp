@@ -197,6 +197,11 @@ namespace project_diamond
 		if (it->second.y > 0.0f)
 		{
 			m_collisionState &= ~CollisionState2D::GROUND;
+			
+			if (m_jumpData.initialJumpVelocity <= 0.0f)
+			{
+				--m_jumpData.jumpCounter;
+			}
 		}
 
 		m_collisionResolutionMap.erase(instanceName);
@@ -204,6 +209,6 @@ namespace project_diamond
 
 	void BoxCharacter2D::setMaxJumpCount(unsigned int maxJumpCount)
 	{
-		m_jumpConfig.maxJumpCounter = maxJumpCount;
+		m_jumpData.jumpCounter = maxJumpCount;
 	}
 }
