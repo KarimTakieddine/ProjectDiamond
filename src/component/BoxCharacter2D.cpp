@@ -147,6 +147,11 @@ namespace project_diamond
 
 	void BoxCharacter2D::onCollisionEnter2D(const glm::vec2& resolutionAxis, diamond_engine::GameInstance* gameInstance, diamond_engine::Collider2DComponent* collider2D)
 	{
+		if (collider2D->getType() != diamond_engine::ColliderType::OBSTACLE)
+		{
+			return;
+		}
+
 		const std::string& instanceName = collider2D->getGameInstance()->getInternalName();
 
 		if (m_collisionResolutionMap.find(instanceName) != m_collisionResolutionMap.cend())
@@ -175,6 +180,11 @@ namespace project_diamond
 
 	void BoxCharacter2D::onCollisionExit2D(diamond_engine::GameInstance* gameInstance, diamond_engine::Collider2DComponent* collider2D)
 	{
+		if (collider2D->getType() != diamond_engine::ColliderType::OBSTACLE)
+		{
+			return;
+		}
+
 		const std::string& instanceName = collider2D->getGameInstance()->getInternalName();
 
 		auto it = m_collisionResolutionMap.find(instanceName);

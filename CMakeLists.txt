@@ -25,12 +25,15 @@ set(SHADERS_DIR shaders)
 set(SOURCES
     "${SRC_DIR}/${COMPONENT_DIR}/BoxCharacter2D.cpp"
     "${SRC_DIR}/${COMPONENT_DIR}/JumpResetBox.cpp"
+    "${SRC_DIR}/${COMPONENT_DIR}/LevelDoor.cpp"
     "${SRC_DIR}/${COMPONENT_DIR}/ScrollingBackground.cpp"
     "${SRC_DIR}/${CONFIG_DIR}/BoxCharacter2DConfig.cpp"
     "${SRC_DIR}/${CONFIG_DIR}/JumpResetBoxConfig.cpp"
+    "${SRC_DIR}/${CONFIG_DIR}/LevelDoorConfig.cpp"
     "${SRC_DIR}/${CONFIG_DIR}/ScrollingBackgroundConfig.cpp"
     "${SRC_DIR}/${PARSER_DIR}/BoxCharacter2DConfigParser.cpp"
     "${SRC_DIR}/${PARSER_DIR}/JumpResetBoxConfigParser.cpp"
+    "${SRC_DIR}/${PARSER_DIR}/LevelDoorConfigParser.cpp"
     "${SRC_DIR}/${PARSER_DIR}/ScrollingBackgroundConfigParser.cpp"
     "${SRC_DIR}/ProjectDiamond.cpp")
 
