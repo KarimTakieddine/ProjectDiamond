@@ -171,8 +171,9 @@ namespace project_diamond
 		}
 		else if (resolutionAxis.y < 0.0f)
 		{
+			m_jumpData.initialJumpVelocity	= -m_jumpData.velocity * 0.75f;
+			m_jumpData.jumpTimer			= 0.0f;
 			m_jumpData.velocity				= 0.0f;
-			m_jumpData.initialJumpVelocity	= 0.0f;
 		}
 
 		m_collisionResolutionMap.insert({ instanceName, resolutionAxis });

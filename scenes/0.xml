@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Scene name="0">
-	<BackgroundColor r="1.0f" g="1.0f" b="1.0f"/>
+	<BackgroundColor r="0.0f" g="0.0f" b="0.0f"/>
 	<Instances>
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
 					<Position x="0.0f" y ="0.0f" z="-3.0f"/>
-					<LocalScale x="26.0f" y="12.5f" z="1.0f"/>
+					<LocalScale x="46.0f" y="23.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="testBackground2"/>
 			</RenderComponents>
@@ -20,7 +20,7 @@
 			<RenderComponents>
 				<Transform>
 					<Position x="0.0f" y ="0.0f" z="-2.0f"/>
-					<LocalScale x="24.0f" y="12.5f" z="1.0f"/>
+					<LocalScale x="46.0f" y="23.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="testBackground1"/>
 			</RenderComponents>
@@ -34,7 +34,7 @@
 			<RenderComponents>
 				<Transform>
 					<Position x="0.0f" y ="0.0f" z="-1.0f"/>
-					<LocalScale x="22.0f" y="12.5f" z="1.0f"/>
+					<LocalScale x="44.0f" y="23.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="testBackground0"/>
 			</RenderComponents>
@@ -47,55 +47,55 @@
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
-					<Position x="0.0f" y ="-6.0f" z="0.0f"/>
-					<LocalScale x="21.5f" y="1.0f" z="1.0f"/>
+					<Position x="0.0f" y ="-10.0f" z="0.0f"/>
+					<LocalScale x="37.5f" y="1.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="purple"/>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="21.5f" height="1" type="obstacle"/>
+				<Collider2D width="37.5f" height="1" type="obstacle"/>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
-					<Position x="-10.5f" y ="0.0f" z="0.0f"/>
-					<LocalScale x="1.0f" y="11.0f" z="1.0f"/>
+					<Position x="-18.125f" y ="0.0f" z="0.0f"/>
+					<LocalScale x="1.0f" y="20.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="purple"/>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="1" height="11.0f" type="obstacle"/>
+				<Collider2D width="1" height="20.0f" type="obstacle"/>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
-					<Position x="10.5f" y ="0.0f" z="0.0f"/>
-					<LocalScale x="1.0f" y="11.0f" z="1.0f"/>
+					<Position x="18.125f" y ="0.0f" z="0.0f"/>
+					<LocalScale x="1.0f" y="20.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="purple"/>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="1" height="11.0f" type="obstacle"/>
+				<Collider2D width="1" height="20.0f" type="obstacle"/>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
-					<Position x="0.0f" y ="6.0f" z="0.0f"/>
-					<LocalScale x="21.5f" y="1.0f" z="1.0f"/>
+					<Position x="0.0f" y ="10.0f" z="0.0f"/>
+					<LocalScale x="37.5f" y="1.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="purple"/>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="21.5f" height="1" type="obstacle"/>
+				<Collider2D width="37.5f" height="1" type="obstacle"/>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
-					<Position x="8.0f" y ="-4.5f" z="0.0f"/>
+					<Position x="12.0f" y ="-8.5f" z="0.0f"/>
 					<LocalScale x="1.0f" y="2.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="white"/>
@@ -125,7 +125,7 @@
 		<Instance type="sprite" name="jump_reset_box">
 			<RenderComponents>
 				<Transform>
-					<Position x="2.0f" y ="0.5f" z="0.0f"/>
+					<Position x="2.0f" y ="-1.5f" z="0.0f"/>
 					<LocalScale x="1.0f" y="1.0f" z="1.0f"/>
 				</Transform>
 				<Material texture="white">
