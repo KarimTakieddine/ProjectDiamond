@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Scene>
+<Scene name="characterController2DDemoScene">
 	<BackgroundColor r="1.0f" g="1.0f" b="1.0f"/>
 	<Instances>
 		<Instance type="sprite">

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <future>
+
 #include <AudioEngine.h>
 #include <ComponentFactory.h>
 #include <ComponentConfigParser.h>
@@ -12,6 +14,7 @@
 #include "BoxCharacter2DConfigParser.h"
 #include "JumpResetBox.h"
 #include "JumpResetBoxConfigParser.h"
+#include "LevelLoader.h"
 #include "ScrollingBackground.h"
 #include "ScrollingBackgroundConfigParser.h"
 
@@ -41,19 +44,28 @@ int main(int argc, char** argv) {
 			"JumpResetBox",
 			&project_diamond::JumpResetBoxConfigParser::parse);
 
-		diamond_engine::EngineStatus status;
-		auto sceneConfig = diamond_engine::parseSceneFile("./scenes/testScene.xml", &status);
+		auto levelLoadFuture = std::async(
+			std::launch::async,
+			[]() -> diamond_engine::EngineStatus { return diamond_engine::LevelLoader::getInstance().loadLevels("./scenes"); });
 
 		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
 		gameEngine->initialize(diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml"));
-		gameEngine->addScene("demoScene", "./scenes/characterController2DDemoScene.xml");
-		gameEngine->loadScene("demoScene");
+
+		auto status = levelLoadFuture.get();
+		if (!status)
+		{
+			LOG_ERROR(status.message);
+			std::this_thread::sleep_for(std::chrono::seconds(10));
+			return 1;
+		}
+
+		gameEngine->loadScene(diamond_engine::LevelLoader::getInstance().getLevel("characterController2DDemoScene"));
 		gameEngine->run();
 	}
 	catch (const std::exception& e) {
 		LOG_ERROR(e.what());
-
 		std::this_thread::sleep_for(std::chrono::seconds(10));
+		return 1;
 	}
 
 	return 0;
