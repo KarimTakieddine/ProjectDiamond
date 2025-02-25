@@ -120,6 +120,18 @@
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
+					<Position x="-2.0f" y ="5.75f" z="0.0f"/>
+					<LocalScale x="3.0f" y="7.5f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="3.0f" height="7.5f" type="obstacle" ignore="up"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
 					<Position x="18.0f" y ="-2.0f" z="0.0f"/>
 					<LocalScale x="6.0f" y="16.0f" z="1.0f"/>
 				</Transform>
