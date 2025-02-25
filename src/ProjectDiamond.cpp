@@ -5,11 +5,18 @@
 #include <audio/AudioEngine.h>
 #include <component/ComponentFactory.h>
 #include <engine/GameEngine.h>
-#include <engine/Window.h>
 #include <parser/ComponentConfigParser.h>
 #include <parser/EngineConfigParser.h>
 #include <parser/GameSceneConfigParser.h>
 #include <utility/LogManager.h>
+
+#ifdef BUILD_EDITOR
+#include <QApplication>
+#include <QMainWindow>
+#include "EditorGameWindow.h"
+#else
+#include <engine/GLFWWindow.h>
+#endif
 
 #include "BoxCharacter2D.h"
 #include "BoxCharacter2DConfigParser.h"
@@ -69,15 +76,39 @@ int main(int argc, char** argv) {
 			std::launch::async,
 			[]() -> diamond_engine::EngineStatus { return diamond_engine::LevelLoader::getInstance().loadLevels("./scenes"); });
 
-		const auto engineConfig			= diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml");
-		const auto& windowConfig			= engineConfig.GetWindowConfig();
+		const auto engineConfig	= diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml");
+		const auto& windowConfig	= engineConfig.GetWindowConfig();
 		
-		std::unique_ptr<diamond_engine::GLFWWindow> glfwWindow		= std::make_unique<diamond_engine::GLFWWindow>(windowConfig.GetSize(), windowConfig.GetTitle());
-		std::unique_ptr<diamond_engine::GameEngine> gameEngine	= std::make_unique<diamond_engine::GameEngine>();
-		
+#ifdef BUILD_EDITOR
+		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
+
+		QApplication qApplication(argc, argv);
+
+		project_diamond::EditorGameWindow editorGameWindow;
+		editorGameWindow.setGameEngine(std::move(gameEngine));
+		editorGameWindow.setEngineConfig(engineConfig);
+
+		int status = 0;
+		auto loadStatus = levelLoadFuture.get();
+		if (loadStatus)
+		{
+			editorGameWindow.makeCurrent();
+			editorGameWindow.show();
+
+			status = qApplication.exec();
+		}
+		else
+		{
+			status = 1;
+		}
+
+		return status;
+#else
+		std::unique_ptr<diamond_engine::GLFWWindow> glfwWindow = std::make_unique<diamond_engine::GLFWWindow>(windowConfig.GetSize(), windowConfig.GetTitle());
+		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
+
 		glfwWindow->setResizeHandler(std::bind(&diamond_engine::GameEngine::onWindowResize, gameEngine.get(), std::placeholders::_1));
 		glfwWindow->setUpdateHandler(std::bind(&diamond_engine::GameEngine::onWindowUpdate, gameEngine.get(), std::placeholders::_1));
-
 		gameEngine->initialize(engineConfig);
 		gameEngine->onWindowResize(glfwWindow->getCurrentSize());
 
@@ -94,6 +125,7 @@ int main(int argc, char** argv) {
 			std::this_thread::sleep_for(std::chrono::seconds(10));
 			return 1;
 		}
+#endif
 	}
 	catch (const std::exception& e) {
 		LOG_ERROR(e.what());

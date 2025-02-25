@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 project(ProjectDiamond)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Diamond Engine:
 
@@ -10,17 +11,27 @@ set(DIAMOND_ENGINE_DIR diamondengine)
 
 add_subdirectory(${DIAMOND_ENGINE_DIR} DiamondEngine)
 
+option(BUILD_EDITOR "Build the ProjectDiamond Editor" OFF)
+if (BUILD_EDITOR)
+    set(EDITOR_DIR editor)
+    find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets OpenGL)
+    qt_standard_project_setup()
+endif(BUILD_EDITOR)
+
 set(INCLUDE_DIR include)
 set(LIB_DIR lib)
 set(SRC_DIR src)
 set(AUDIO_DIR audio)
+set(COMMON_DIR common)
 set(COMPONENT_DIR component)
 set(CONFIG_DIR config)
+set(DEBUG_DIR debug)
 set(PARSER_DIR parser)
-set(SPRITE_SHEETS_DIR spriteSheets)
 set(SCENES_DIR scenes)
-set(TEXTURES_DIR textures)
 set(SHADERS_DIR shaders)
+set(SPRITE_SHEETS_DIR spriteSheets)
+set(TEXTURES_DIR textures)
+set(UI_DIR ui)
 
 set(SOURCES
     "${SRC_DIR}/${COMPONENT_DIR}/BoxCharacter2D.cpp"
@@ -40,7 +51,12 @@ set(SOURCES
     "${SRC_DIR}/${PARSER_DIR}/ScrollingBackgroundConfigParser.cpp"
     "${SRC_DIR}/ProjectDiamond.cpp")
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+if (BUILD_EDITOR)
+    add_definitions(-DBUILD_EDITOR)
+    qt_add_executable(${PROJECT_NAME} ${SOURCES} "${INCLUDE_DIR}/${EDITOR_DIR}/EditorCentralWidget.h" "${SRC_DIR}/${EDITOR_DIR}/EditorCentralWidget.ui" "${SRC_DIR}/${EDITOR_DIR}/EditorCentralWidget.cpp" "${SRC_DIR}/${EDITOR_DIR}/EditorGameWindow.cpp")
+else()
+    add_executable(${PROJECT_NAME} ${SOURCES})
+endif(BUILD_EDITOR)
 
 function(collect_files_recursively result directory)
     file(GLOB_RECURSE all_files LIST_DIRECTORIES false "${directory}/*")
@@ -62,19 +78,27 @@ list(APPEND GAME_ASSETS "${TEXTURES_DIR}/textureMetadata.xml")
 add_custom_target(GameAssets ALL DEPENDS ${GAME_ASSETS})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
+    ${AUTOGEN_BUILD_DIR}/include
     ${DIAMOND_ENGINE_DIR}/${INCLUDE_DIR}
+    ${DIAMOND_ENGINE_DIR}/${LIB_DIR}/${COMMON_DIR}/${INCLUDE_DIR}
     ${DIAMOND_ENGINE_DIR}/${LIB_DIR}/${CONFIG_DIR}/${INCLUDE_DIR}
+    ${DIAMOND_ENGINE_DIR}/${LIB_DIR}/${DEBUG_DIR}/${INCLUDE_DIR}
     ${DIAMOND_ENGINE_DIR}/${LIB_DIR}/audio/${INCLUDE_DIR}
     ${DIAMOND_ENGINE_DIR}/${LIB_DIR}/game/${INCLUDE_DIR}
     ${DIAMOND_ENGINE_DIR}/${LIB_DIR}/graphics/${INCLUDE_DIR}
     ${DIAMOND_ENGINE_DIR}/${LIB_DIR}/input/${INCLUDE_DIR}
     ${DIAMOND_ENGINE_DIR}/${LIB_DIR}/${PARSER_DIR}/${INCLUDE_DIR}
     ${INCLUDE_DIR}
-    "${INCLUDE_DIR}/component"
-    "${INCLUDE_DIR}/config"
-    "${INCLUDE_DIR}/parser")
+    "${INCLUDE_DIR}/${COMPONENT_DIR}"
+    "${INCLUDE_DIR}/${CONFIG_DIR}"
+    "${INCLUDE_DIR}/${EDITOR_DIR}"
+    "${INCLUDE_DIR}/${PARSER_DIR}")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE DiamondEngine)
+if (BUILD_EDITOR)
+    target_link_libraries(${PROJECT_NAME} PRIVATE DiamondEngine Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGL)
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE DiamondEngine)
+endif(BUILD_EDITOR)
 
 add_custom_command(TARGET GameAssets POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${DIAMOND_ENGINE_DIR}/${GLEW_BINARY_DIR}/glew32.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
