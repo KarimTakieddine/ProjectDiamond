@@ -1,18 +1,32 @@
 #pragma once
 
+#include <memory>
+
 #include <QWidget>
+
+#include <config/EngineConfig.h>
+#include <engine/GameEngine.h>
+
+#include "EditorGameWindow.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class EditorCentralWidget; };
 QT_END_NAMESPACE
 
-class EditorCentralWidget : public QWidget
+namespace project_diamond
 {
-	Q_OBJECT
+	class EditorCentralWidget : public QWidget
+	{
+		Q_OBJECT
 
-public:
-	EditorCentralWidget(QWidget *parent = nullptr);
-	~EditorCentralWidget();
+	public:
+		EditorCentralWidget(const diamond_engine::EngineConfig& engineConfig, QWidget* parent = nullptr);
 
-private:
-	Ui::EditorCentralWidget *ui;
-};
+		~EditorCentralWidget();
+
+	private:
+		std::unique_ptr<diamond_engine::GameEngine> m_gameEngine{ nullptr };
+		Ui::EditorCentralWidget* m_ui{ nullptr };
+		EditorGameWindow* m_gameWindow{ nullptr };
+	};
+}

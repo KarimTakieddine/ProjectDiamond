@@ -13,7 +13,7 @@
 #ifdef BUILD_EDITOR
 #include <QApplication>
 #include <QMainWindow>
-#include "EditorGameWindow.h"
+#include "EditorCentralWidget.h"
 #else
 #include <engine/GLFWWindow.h>
 #endif
@@ -80,20 +80,15 @@ int main(int argc, char** argv) {
 		const auto& windowConfig	= engineConfig.GetWindowConfig();
 		
 #ifdef BUILD_EDITOR
-		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
-
 		QApplication qApplication(argc, argv);
 
-		project_diamond::EditorGameWindow editorGameWindow;
-		editorGameWindow.setGameEngine(std::move(gameEngine));
-		editorGameWindow.setEngineConfig(engineConfig);
+		project_diamond::EditorCentralWidget editorCentralWidget(engineConfig);
 
 		int status = 0;
 		auto loadStatus = levelLoadFuture.get();
 		if (loadStatus)
 		{
-			editorGameWindow.makeCurrent();
-			editorGameWindow.show();
+			editorCentralWidget.show();
 
 			status = qApplication.exec();
 		}

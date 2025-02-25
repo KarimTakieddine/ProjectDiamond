@@ -28,8 +28,6 @@ namespace project_diamond
 	void EditorGameWindow::setGameEngine(std::unique_ptr<diamond_engine::GameEngine> gameEngine)
 	{
 		m_gameEngine = std::move(gameEngine);
-
-		m_gameEngine->onWindowResize({ width(), height() });
 	}
 
 	void EditorGameWindow::setEngineConfig(const diamond_engine::EngineConfig& config)
@@ -46,6 +44,8 @@ namespace project_diamond
 
 		m_gameEngine->initialize(m_engineConfig);
 		m_gameEngine->loadScene(diamond_engine::LevelLoader::getInstance().getLevel("0"));
+
+		setMinimumSize({ 640, 360 });
 
 		m_deltaTime	= 0.0f;
 	}
