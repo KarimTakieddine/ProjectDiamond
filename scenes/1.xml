@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Scene name="0">
+<Scene name="1">
 	<BackgroundColor r="0.0f" g="0.0f" b="0.0f"/>
 	<Instances>
 		<Instance type="sprite">
@@ -120,18 +120,6 @@
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
-					<Position x="-2.0f" y ="4.75f" z="0.0f"/>
-					<LocalScale x="3.0f" y="9.5f" z="1.0f"/>
-				</Transform>
-				<Material texture="purple"/>
-			</RenderComponents>
-			<BehaviourComponents>
-				<Collider2D width="3.0f" height="9.5f" type="obstacle" ignore="up|down"/>
-			</BehaviourComponents>
-		</Instance>
-		<Instance type="sprite">
-			<RenderComponents>
-				<Transform>
 					<Position x="18.0f" y ="-2.0f" z="0.0f"/>
 					<LocalScale x="6.0f" y="16.0f" z="1.0f"/>
 				</Transform>
@@ -184,7 +172,7 @@
 				</Material>
 			</RenderComponents>
 			<BehaviourComponents>
-				<Collider2D width="3" height="2" type="obstacle" ignore="up"/>
+				<Collider2D width="3" height="2" type="obstacle"/>
 				<JumpResetBox jumpResetCount="3"/>
 			</BehaviourComponents>
 		</Instance>
