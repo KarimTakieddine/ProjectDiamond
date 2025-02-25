@@ -2,13 +2,14 @@
 
 #include <future>
 
-#include <AudioEngine.h>
-#include <ComponentFactory.h>
-#include <ComponentConfigParser.h>
-#include <EngineConfigParser.h>
-#include <GameEngine.h>
-#include <GameSceneConfigParser.h>
-#include <LogManager.h>
+#include <audio/AudioEngine.h>
+#include <component/ComponentFactory.h>
+#include <engine/GameEngine.h>
+#include <engine/Window.h>
+#include <parser/ComponentConfigParser.h>
+#include <parser/EngineConfigParser.h>
+#include <parser/GameSceneConfigParser.h>
+#include <utility/LogManager.h>
 
 #include "BoxCharacter2D.h"
 #include "BoxCharacter2DConfigParser.h"
@@ -68,14 +69,24 @@ int main(int argc, char** argv) {
 			std::launch::async,
 			[]() -> diamond_engine::EngineStatus { return diamond_engine::LevelLoader::getInstance().loadLevels("./scenes"); });
 
-		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
-		gameEngine->initialize(diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml"));
+		const auto engineConfig			= diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml");
+		const auto& windowConfig			= engineConfig.GetWindowConfig();
+		
+		std::unique_ptr<diamond_engine::GLFWWindow> glfwWindow		= std::make_unique<diamond_engine::GLFWWindow>(windowConfig.GetSize(), windowConfig.GetTitle());
+		std::unique_ptr<diamond_engine::GameEngine> gameEngine	= std::make_unique<diamond_engine::GameEngine>();
+		
+		glfwWindow->setResizeHandler(std::bind(&diamond_engine::GameEngine::onWindowResize, gameEngine.get(), std::placeholders::_1));
+		glfwWindow->setUpdateHandler(std::bind(&diamond_engine::GameEngine::onWindowUpdate, gameEngine.get(), std::placeholders::_1));
+
+		gameEngine->initialize(engineConfig);
+		gameEngine->onWindowResize(glfwWindow->getCurrentSize());
 
 		auto status = levelLoadFuture.get();
 		if (status)
 		{
-			gameEngine->loadScene(diamond_engine::LevelLoader::getInstance().getLevel("2"));
-			gameEngine->run();
+			gameEngine->loadScene(diamond_engine::LevelLoader::getInstance().getLevel("0"));
+			glfwWindow->StartUpdateLoop();
+			gameEngine->cleanup();
 		}
 		else
 		{
