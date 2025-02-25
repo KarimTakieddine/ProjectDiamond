@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Scene name="1">
+<Scene name="2">
 	<BackgroundColor r="0.0f" g="0.0f" b="0.0f"/>
 	<Instances>
 		<Instance type="sprite">
@@ -95,6 +95,87 @@
 		<Instance type="sprite">
 			<RenderComponents>
 				<Transform>
+					<Position x="-9.0f" y ="1.5f" z="0.0f"/>
+					<LocalScale x="2.0f" y="16.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="2.0f" height="16.0f" type="obstacle" ignore="up"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
+					<Position x="-7.0f" y ="1.5f" z="0.0f"/>
+					<LocalScale x="2.0f" y="1.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="2.0f" height="1.0f" type="obstacle" ignore="left"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
+					<Position x="3.0f" y ="-1.5f" z="0.0f"/>
+					<LocalScale x="2.0f" y="16.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="2.0f" height="16.0f" type="obstacle" ignore="down"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
+					<Position x="1.0f" y ="-3.5f" z="0.0f"/>
+					<LocalScale x="2.0f" y="1.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="purple"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="2.0f" height="1.0f" type="obstacle" ignore="right"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite" name="jump_reset_box">
+			<RenderComponents>
+				<Transform>
+					<Position x="1.0f" y ="-4.5f" z="0.0f"/>
+					<LocalScale x="2.0f" y="1.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="white">
+					<Color r="1.0f" g="1.0f" b="0.0f"/>
+				</Material>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="2" height="1" type="obstacle"/>
+				<JumpResetBox jumpResetCount="4"/>
+			</BehaviourComponents>
+		</Instance>
+		<Instance type="sprite" name="character">
+			<RenderComponents>
+				<Transform>
+					<Position x="-15.5f" y ="-8.75f" z="0.0f"/>
+					<LocalScale x="1.0f" y="1.0f" z="1.0f"/>
+				</Transform>
+				<Material texture="red"/>
+			</RenderComponents>
+			<BehaviourComponents>
+				<Collider2D width="1" height="1" type="character"/>
+				<BoxCharacter2D>
+					<Walk maxVelocity="6.5f" acceleration="2.0f" decceleration="3.0f" turnaround="4.0f"/>
+					<Air maxVelocity="6.5f" acceleration="1.0f" decceleration="0.0f" turnaround="2.0f"/>
+					<Jump gravity="15.0f" maxJumpHeight="5.0f" timeToJumpHeight="1.0f" jumpGravityReduction="0.10f" maxJumpCounter="2"/>
+				</BoxCharacter2D>
+			</BehaviourComponents>
+		</Instance>
+		<!--
+		<Instance type="sprite">
+			<RenderComponents>
+				<Transform>
 					<Position x="17.125f" y ="7.0f" z="0.0f"/>
 					<LocalScale x="1.0f" y="2.0f" z="1.0f"/>
 				</Transform>
@@ -102,7 +183,7 @@
 			</RenderComponents>
 			<BehaviourComponents>
 				<Collider2D width="1" height="2" type="zone"/>
-				<LevelDoor nextLevel="2"/>
+				<LevelDoor nextLevel="1"/>
 			</BehaviourComponents>
 		</Instance>
 		<Instance type="sprite">
@@ -188,5 +269,6 @@
 				<JumpResetBox jumpResetCount="3"/>
 			</BehaviourComponents>
 		</Instance>
+		-->
 	</Instances>
 </Scene>

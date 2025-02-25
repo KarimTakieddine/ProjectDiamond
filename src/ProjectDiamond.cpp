@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
 		auto status = levelLoadFuture.get();
 		if (status)
 		{
-			gameEngine->loadScene(diamond_engine::LevelLoader::getInstance().getLevel("0"));
+			gameEngine->loadScene(diamond_engine::LevelLoader::getInstance().getLevel("2"));
 			gameEngine->run();
 		}
 		else
