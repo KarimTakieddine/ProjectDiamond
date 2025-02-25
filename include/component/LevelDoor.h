@@ -2,10 +2,11 @@
 
 #include <string>
 
-#include "component/BehaviourComponent.h"
+#include <component/BehaviourComponent.h>
 
 namespace project_diamond
 {
+	class BoxCharacter2D;
 	class LevelDoor : public diamond_engine::BehaviourComponent
 	{
 	public:
@@ -24,6 +25,6 @@ namespace project_diamond
 
 	private:
 		std::string m_nextLevel;
-		bool m_characterPresent{ false };
+		BoxCharacter2D* m_character;
 	};
 }

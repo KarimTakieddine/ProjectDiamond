@@ -1,9 +1,11 @@
-#include "component/Collider2DComponent.h"
-#include "engine/GameEngine.h"
-#include "game/GameInstance.h"
-#include "game/LevelLoader.h"
-#include "input/Input.h"
+#include <component/Collider2DComponent.h>
+#include <engine/EngineStorage.h>
+#include <engine/GameEngine.h>
+#include <game/GameInstance.h>
+#include <game/LevelLoader.h>
+#include <input/Input.h>
 
+#include "BoxCharacter2D.h"
 #include "LevelDoor.h"
 #include "LevelDoorConfig.h"
 
@@ -16,7 +18,7 @@ namespace project_diamond
 
 	void LevelDoor::update(GLfloat deltaTime)
 	{
-		if (m_characterPresent && diamond_engine::input::StateMonitor::GetInstance().IsButtonPressed("DPad_up"))
+		if (m_character && diamond_engine::input::StateMonitor::GetInstance().IsButtonPressed("DPad_up"))
 		{
 			const auto* nextLevel = diamond_engine::LevelLoader::getInstance().getLevel(m_nextLevel);
 
@@ -25,6 +27,20 @@ namespace project_diamond
 				// TODO: Log error
 
 				return;
+			}
+
+			const GLuint totalJumpCount = m_character->getTotalJumpCount();
+
+			diamond_engine::EngineVariant storageValue(totalJumpCount);
+
+			auto* engineStorage = m_character->getGameInstance()->getGameEngine()->getEngineStorage();
+			if (!engineStorage->getVariant("total_jump_count", &storageValue))
+			{
+				engineStorage->setVariant("total_jump_count", totalJumpCount);
+			}
+			else
+			{
+				engineStorage->setVariant("total_jump_count", storageValue.asUInt() + totalJumpCount);
 			}
 
 			m_gameInstance->getGameEngine()->loadScene(nextLevel);
@@ -54,7 +70,7 @@ namespace project_diamond
 			return;
 		}
 
-		m_characterPresent = true;
+		m_character = gameInstance->getBehaviourComponent<BoxCharacter2D>("BoxCharacter2D");
 	}
 
 	void LevelDoor::onCollisionExit2D(
@@ -66,6 +82,6 @@ namespace project_diamond
 			return;
 		}
 
-		m_characterPresent = false;
+		m_character = nullptr;
 	}
 }

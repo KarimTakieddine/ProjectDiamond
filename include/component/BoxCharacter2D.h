@@ -38,6 +38,7 @@ namespace project_diamond
 			float gravityReduction		{ 0.0f };
 			float initialJumpVelocity	{ 0.0f };
 			unsigned int jumpCounter	{ 0 };
+			unsigned int totalJumpCount	{ 0 };
 		};
 
 		virtual ~BoxCharacter2D() override = default;
@@ -50,6 +51,7 @@ namespace project_diamond
 		void onCollisionExit2D(diamond_engine::GameInstance* gameInstance, diamond_engine::Collider2DComponent* collider2D) final override;
 
 		void setMaxJumpCount(unsigned int maxJumpCount);
+		unsigned int getTotalJumpCount() const;
 
 	private:
 		std::unordered_map<std::string, glm::vec2> m_collisionResolutionMap;

@@ -70,6 +70,7 @@ namespace project_diamond
 				m_jumpData.initialJumpVelocity	= ( ( 2 * m_jumpConfig.maxJumpHeight ) / m_jumpConfig.timeToJumpHeight );
 
 				--( m_jumpData.jumpCounter );
+				++( m_jumpData.totalJumpCount );
 			}
 		}
 
@@ -210,5 +211,10 @@ namespace project_diamond
 	void BoxCharacter2D::setMaxJumpCount(unsigned int maxJumpCount)
 	{
 		m_jumpData.jumpCounter = maxJumpCount;
+	}
+
+	unsigned int BoxCharacter2D::getTotalJumpCount() const
+	{
+		return m_jumpData.totalJumpCount;
 	}
 }
