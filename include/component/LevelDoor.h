@@ -25,6 +25,6 @@ namespace project_diamond
 
 	private:
 		std::string m_nextLevel;
-		BoxCharacter2D* m_character;
+		BoxCharacter2D* m_character{ nullptr };
 	};
 }
