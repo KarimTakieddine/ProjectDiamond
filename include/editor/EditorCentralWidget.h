@@ -8,6 +8,7 @@
 #include <engine/GameEngine.h>
 
 #include "EditorGameWindow.h"
+#include "LevelConfigWidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class EditorCentralWidget; };
@@ -28,5 +29,6 @@ namespace project_diamond
 		std::unique_ptr<diamond_engine::GameEngine> m_gameEngine{ nullptr };
 		Ui::EditorCentralWidget* m_ui{ nullptr };
 		EditorGameWindow* m_gameWindow{ nullptr };
+		LevelConfigWidget* m_levelWidget{ nullptr };
 	};
 }

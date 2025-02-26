@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LevelConfigWidget</class>
+ <widget class="QWidget" name="LevelConfigWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>497</width>
+    <height>532</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>LevelConfigWidget</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout" stretch="0,1">
+   <item>
+    <widget class="QGroupBox" name="levelsGroupBox">
+     <property name="title">
+      <string>Levels</string>
+     </property>
+     <layout class="QHBoxLayout" name="levelsLayout">
+      <item>
+       <widget class="QListView" name="levelsListView"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="levelConfigGroupBox">
+     <property name="title">
+      <string>Level Config</string>
+     </property>
+     <layout class="QHBoxLayout" name="levelConfigLayout">
+      <item>
+       <widget class="QTreeView" name="levelConfigTreeView"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
