@@ -14,6 +14,8 @@ namespace project_diamond
 	EditorGameWindow::EditorGameWindow(QWindow* parent /* = nullptr */) :
 		QOpenGLWindow(QOpenGLWindow::UpdateBehavior::NoPartialUpdate, parent)
 	{
+		setMinimumSize({ 640, 360 });
+
 		auto surfaceFormat = format();
 
 		surfaceFormat.setMajorVersion(4);
@@ -45,7 +47,7 @@ namespace project_diamond
 		m_gameEngine->initialize(m_engineConfig);
 		m_gameEngine->loadScene(diamond_engine::LevelLoader::getInstance().getLevel("0"));
 
-		setMinimumSize({ 640, 360 });
+		resizeGL(width(), height());
 
 		m_deltaTime	= 0.0f;
 	}
