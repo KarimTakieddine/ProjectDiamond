@@ -57,11 +57,13 @@ if (BUILD_EDITOR)
         ${PROJECT_NAME}
         ${SOURCES}
         "${INCLUDE_DIR}/${EDITOR_DIR}/EditorCentralWidget.h"
+        "${INCLUDE_DIR}/${EDITOR_DIR}/LevelConfigListModel.h"
         "${INCLUDE_DIR}/${EDITOR_DIR}/LevelConfigWidget.h"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigWidget.ui"
         "${SRC_DIR}/${EDITOR_DIR}/EditorCentralWidget.ui"
         "${SRC_DIR}/${EDITOR_DIR}/EditorCentralWidget.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/EditorGameWindow.cpp"
+        "${SRC_DIR}/${EDITOR_DIR}/LevelConfigListModel.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigWidget.cpp")
 else()
     add_executable(${PROJECT_NAME} ${SOURCES})

@@ -21,7 +21,11 @@
      </property>
      <layout class="QHBoxLayout" name="levelsLayout">
       <item>
-       <widget class="QListView" name="levelsListView"/>
+       <widget class="QTableView" name="levelsTableView">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
