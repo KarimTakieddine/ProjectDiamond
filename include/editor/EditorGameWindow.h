@@ -9,10 +9,14 @@
 #include <QOpenGLWindow>
 #include <QWindow>
 
+#include "LevelConfigModel.h"
+
 namespace project_diamond
 {
 	class EditorGameWindow : public QOpenGLWindow
 	{
+		Q_OBJECT
+
 	public:
 		~EditorGameWindow() final override;
 
@@ -21,12 +25,15 @@ namespace project_diamond
 		void setGameEngine(std::unique_ptr<diamond_engine::GameEngine> gameEngine);
 		void setEngineConfig(const diamond_engine::EngineConfig& config);
 
+	public slots:
+		void onLevelSelectionChanged(LevelConfigModel* model);
+		void onFrameSwapped();
+
 	protected:
 		void initializeGL() final override;
 		void resizeGL(int w, int h) final override;
 		void paintGL() final override;
 		void paintUnderGL() final override;
-		void paintOverGL() final override;
 
 	private:
 		diamond_engine::EngineConfig m_engineConfig;

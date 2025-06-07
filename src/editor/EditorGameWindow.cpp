@@ -21,10 +21,12 @@ namespace project_diamond
 		surfaceFormat.setMajorVersion(4);
 		surfaceFormat.setMinorVersion(6);
 		surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
-		surfaceFormat.setSwapInterval(0);
+		surfaceFormat.setSwapInterval(1);
 		surfaceFormat.setSwapBehavior(QSurfaceFormat::SwapBehavior::DoubleBuffer);
 		
 		setFormat(surfaceFormat);
+
+		connect(this, &EditorGameWindow::frameSwapped, this, &EditorGameWindow::onFrameSwapped);
 	}
 
 	void EditorGameWindow::setGameEngine(std::unique_ptr<diamond_engine::GameEngine> gameEngine)
@@ -37,6 +39,26 @@ namespace project_diamond
 		m_engineConfig = config;
 	}
 
+	void EditorGameWindow::onLevelSelectionChanged(LevelConfigModel* model)
+	{
+		auto* data = model->getData();
+
+		if (!data)
+		{
+			m_gameEngine->unloadCurrentScene();
+			return;
+		}
+
+		m_gameEngine->loadScene(data);
+	}
+
+	void EditorGameWindow::onFrameSwapped()
+	{
+		m_deltaTimer.End();
+
+		m_deltaTime = m_deltaTimer.GetDeltaTimeSeconds();
+	}
+
 	void EditorGameWindow::initializeGL()
 	{
 		if (!m_gameEngine)
@@ -45,7 +67,6 @@ namespace project_diamond
 		}
 
 		m_gameEngine->initialize(m_engineConfig);
-		m_gameEngine->loadScene(diamond_engine::LevelLoader::getInstance().getLevel("0"));
 
 		resizeGL(width(), height());
 
@@ -64,10 +85,9 @@ namespace project_diamond
 
 	void EditorGameWindow::paintGL()
 	{
-		if (m_gameEngine)
+		if (m_gameEngine && m_gameEngine->getCurrentScene() != "Unknown")
 		{
 			DEBUG_EXEC(diamond_engine::Debugger::getInstance()->handleAllEvents());
-
 			m_gameEngine->onWindowUpdate(m_deltaTime);
 		}
 
@@ -77,12 +97,5 @@ namespace project_diamond
 	void EditorGameWindow::paintUnderGL()
 	{
 		m_deltaTimer.Start();
-	}
-
-	void EditorGameWindow::paintOverGL()
-	{
-		m_deltaTimer.End();
-
-		m_deltaTime = m_deltaTimer.GetDeltaTimeSeconds();
 	}
 }

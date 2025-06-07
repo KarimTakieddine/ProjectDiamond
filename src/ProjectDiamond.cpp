@@ -12,8 +12,7 @@
 
 #ifdef BUILD_EDITOR
 #include <QApplication>
-#include <QMainWindow>
-#include "EditorCentralWidget.h"
+#include "EditorMainWindow.h"
 #else
 #include <engine/GLFWWindow.h>
 #endif
@@ -76,30 +75,29 @@ int main(int argc, char** argv) {
 			std::launch::async,
 			[]() -> diamond_engine::EngineStatus { return diamond_engine::LevelLoader::getInstance().loadLevels("./scenes"); });
 
-		const auto engineConfig	= diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml");
-		const auto& windowConfig	= engineConfig.GetWindowConfig();
-		
+		auto configParseFuture = std::async(
+			std::launch::async,
+			[]() -> diamond_engine::EngineConfig { return diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml"); });
+
 #ifdef BUILD_EDITOR
 		QApplication qApplication(argc, argv);
 
-		project_diamond::EditorCentralWidget editorCentralWidget(engineConfig);
+		project_diamond::EditorMainWindow editorMainWindow;
+		editorMainWindow.setupUi();
+		editorMainWindow.connectUi();
 
-		int status = 0;
-		auto loadStatus = levelLoadFuture.get();
-		if (loadStatus)
-		{
-			editorCentralWidget.show();
+		levelLoadFuture.get();
 
-			status = qApplication.exec();
-		}
-		else
-		{
-			status = 1;
-		}
+		editorMainWindow.setEngineConfig(configParseFuture.get());
+		editorMainWindow.show();
 
-		return status;
+		return qApplication.exec();
 #else
-		std::unique_ptr<diamond_engine::GLFWWindow> glfwWindow = std::make_unique<diamond_engine::GLFWWindow>(windowConfig.GetSize(), windowConfig.GetTitle());
+		auto engineConfig = configParseFuture.get();
+
+		std::unique_ptr<diamond_engine::GLFWWindow> glfwWindow = std::make_unique<diamond_engine::GLFWWindow>(
+			engineConfig.GetWindowConfig().GetSize(),
+			engineConfig.GetWindowConfig().GetTitle());
 		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
 
 		glfwWindow->setResizeHandler(std::bind(&diamond_engine::GameEngine::onWindowResize, gameEngine.get(), std::placeholders::_1));
