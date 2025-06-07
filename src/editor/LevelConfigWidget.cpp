@@ -67,12 +67,10 @@ namespace project_diamond
 
 		if (selected.size() == 0)
 		{
-			m_ui->removeCurrentButton->setEnabled(false);
 			return;
 		}
 
 		QModelIndex modelIndex = m_model->index(selected.constLast().bottomRight().row(), 0);
-
 		m_ui->removeCurrentButton->setEnabled(modelIndex.isValid());
 
 		emit levelSelectionChanged(
@@ -153,7 +151,15 @@ namespace project_diamond
 			return;
 		}
 
-		m_ui->clearAllButton->setEnabled(m_model->rowCount() != 0);
+		const int rowCount = m_model->rowCount();
+		m_ui->clearAllButton->setEnabled(rowCount != 0);
+
+		if (rowCount == 0)
+		{
+			m_ui->removeCurrentButton->setEnabled(false);
+		}
+
+		m_ui->levelsTableView->setFocus();
 	}
 
 	void LevelConfigWidget::onRowsInserted(const QModelIndex& parent, int first, int last)
@@ -166,10 +172,11 @@ namespace project_diamond
 			return;
 		}
 
+		QModelIndex lastIndex = m_model->index(last, 0);
+
 		m_ui->clearAllButton->setEnabled(true);
-		m_ui->levelsTableView->selectionModel()->select(
-			m_model->index(last, 0),
-			QItemSelectionModel::ClearAndSelect);
+		m_ui->levelsTableView->selectionModel()->select(lastIndex, QItemSelectionModel::ClearAndSelect);
+		m_ui->levelsTableView->setCurrentIndex(lastIndex);
 
 		m_ui->levelsTableView->setFocus();
 	}
