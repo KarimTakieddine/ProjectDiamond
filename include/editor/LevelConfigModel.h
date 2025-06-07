@@ -32,6 +32,7 @@ namespace project_diamond
 
 	private:
 		std::unique_ptr<diamond_engine::GameSceneConfig> m_data{ nullptr };
+		QString m_name{ };
 		QString m_path{ };
 		QColor m_color{ };
 	};

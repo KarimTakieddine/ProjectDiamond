@@ -35,7 +35,10 @@ namespace
 
 namespace project_diamond
 {
-	LevelConfigModel::LevelConfigModel(QObject* parent /* = nullptr */) : QObject(parent) { }
+	LevelConfigModel::LevelConfigModel(QObject* parent /* = nullptr */) :
+		QObject	(parent),
+		m_data	(std::make_unique<diamond_engine::GameSceneConfig>()),
+		m_name	(QString::fromStdString(m_data->getName())) { }
 
 	diamond_engine::GameSceneConfig* LevelConfigModel::getData() const
 	{
@@ -56,6 +59,7 @@ namespace project_diamond
 		if (m_data)
 		{
 			m_color = ::vec4ToColor(m_data->getBackgroundColor());
+			m_name	= QString::fromStdString(m_data->getName());
 		}
 
 		m_path = path;
@@ -70,24 +74,24 @@ namespace project_diamond
 
 	bool LevelConfigModel::setName(const QString& name)
 	{
-		if (name == getName())
+		if (name == m_name)
 		{
 			return false;
 		}
 
-		if (!m_data)
+		if (m_data)
 		{
-			return false;
+			m_data->setName(name.toStdString());
 		}
 
-		m_data->setName(name.toStdString());
+		m_name = name;
 
 		return true;
 	}
 
 	const QString LevelConfigModel::getName() const
 	{
-		return m_data ? QString::fromStdString(m_data->getName()) : QStringLiteral("null");
+		return m_name;
 	}
 
 	bool LevelConfigModel::setColor(const QColor& color)
@@ -97,12 +101,10 @@ namespace project_diamond
 			return false;
 		}
 
-		if (!m_data)
+		if (m_data)
 		{
-			return false;
+			m_data->setBackgroundColor(::colorToVec4(color));
 		}
-
-		m_data->setBackgroundColor(::colorToVec4(color));
 
 		m_color = color;
 

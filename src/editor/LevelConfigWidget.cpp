@@ -1,4 +1,5 @@
 #include <QFileDialog>
+#include <QPushButton>
 
 #include "LevelConfigListModel.h"
 #include "LevelConfigWidget.h"
@@ -17,12 +18,16 @@ namespace project_diamond
 	{
 		m_ui->setupUi(this);
 		m_ui->levelsTableView->horizontalHeader()->setStretchLastSection(true);
+
+		m_ui->removeCurrentButton->setEnabled(false);
+		m_ui->clearAllButton->setEnabled(false);
 	}
 
 	void LevelConfigWidget::connectUi()
 	{
 		connect(m_ui->levelsTableView, &QTableView::doubleClicked, this, &LevelConfigWidget::onTableDoubleClicked);
-		connect(m_ui->insertNewButton, &QPushButton::clicked, this, &LevelConfigWidget::onInsertNewClicked);
+		connect(m_ui->insertNewBeforeButton, &QPushButton::clicked, this, &LevelConfigWidget::onInsertNewBeforeClicked);
+		connect(m_ui->insertNewAfterButton, &QPushButton::clicked, this, &LevelConfigWidget::onInsertNewAfterClicked);
 		connect(m_ui->removeCurrentButton, &QPushButton::clicked, this, &LevelConfigWidget::onRemoveCurrentClicked);
 		connect(m_ui->clearAllButton, &QPushButton::clicked, this, &LevelConfigWidget::onClearAllClicked);
 	}
@@ -32,6 +37,8 @@ namespace project_diamond
 		if (m_model)
 		{
 			disconnect(m_model, &LevelConfigListModel::dataChanged, this, &LevelConfigWidget::onLevelDataChanged);
+			disconnect(m_model, &LevelConfigListModel::rowsRemoved, this, &LevelConfigWidget::onRowsRemoved);
+			disconnect(m_model, &LevelConfigListModel::rowsInserted, this, &LevelConfigWidget::onRowsInserted);
 		}
 
 		QItemSelectionModel* previousSelectionModel = m_ui->levelsTableView->selectionModel();
@@ -44,6 +51,8 @@ namespace project_diamond
 		delete previousSelectionModel;
 
 		connect(model, &LevelConfigListModel::dataChanged, this, &LevelConfigWidget::onLevelDataChanged);
+		connect(model, &LevelConfigListModel::rowsRemoved, this, &LevelConfigWidget::onRowsRemoved);
+		connect(model, &LevelConfigListModel::rowsInserted, this, &LevelConfigWidget::onRowsInserted);
 		connect(m_ui->levelsTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &LevelConfigWidget::onLevelSelectionChanged);
 
 		m_model = model;
@@ -58,13 +67,16 @@ namespace project_diamond
 
 		if (selected.size() == 0)
 		{
+			m_ui->removeCurrentButton->setEnabled(false);
 			return;
 		}
 
-		const int row = selected.constLast().bottomRight().row();
+		QModelIndex modelIndex = m_model->index(selected.constLast().bottomRight().row(), 0);
+
+		m_ui->removeCurrentButton->setEnabled(modelIndex.isValid());
 
 		emit levelSelectionChanged(
-			qvariant_cast<LevelConfigModel*>(m_model->data(m_model->index(row, 0), Qt::UserRole)));
+			qvariant_cast<LevelConfigModel*>(m_model->data(modelIndex, Qt::UserRole)));
 	}
 
 	void LevelConfigWidget::onLevelDataChanged(const QModelIndex& index)
@@ -88,7 +100,7 @@ namespace project_diamond
 		m_model->setData(index, path);
 	}
 
-	void LevelConfigWidget::onInsertNewClicked()
+	void LevelConfigWidget::onInsertNewBeforeClicked()
 	{
 		if (!m_model)
 		{
@@ -99,14 +111,67 @@ namespace project_diamond
 		m_model->insertRow(currentIndex.isValid() ? currentIndex.row() : 0);
 	}
 
+	void LevelConfigWidget::onInsertNewAfterClicked()
+	{
+		if (!m_model)
+		{
+			return;
+		}
+
+		const QModelIndex& currentIndex = m_ui->levelsTableView->currentIndex();
+		m_model->insertRow(currentIndex.isValid() ? currentIndex.row() + 1 : 0);
+	}
+
 	void LevelConfigWidget::onRemoveCurrentClicked()
 	{
+		const QModelIndex& currentIndex = m_ui->levelsTableView->currentIndex();
 
+		if (!currentIndex.isValid() || !m_model)
+		{
+			return;
+		}
+
+		m_model->removeRow(currentIndex.row());
 	}
 
 	void LevelConfigWidget::onClearAllClicked()
 	{
+		if (!m_model || m_model->rowCount() == 0)
+		{
+			return;
+		}
 
+		m_model->removeRows(0, m_model->rowCount());
+
+		emit levelSelectionChanged(nullptr);
+	}
+
+	void LevelConfigWidget::onRowsRemoved()
+	{
+		if (!m_model)
+		{
+			return;
+		}
+
+		m_ui->clearAllButton->setEnabled(m_model->rowCount() != 0);
+	}
+
+	void LevelConfigWidget::onRowsInserted(const QModelIndex& parent, int first, int last)
+	{
+		Q_UNUSED(parent);
+		Q_UNUSED(first);
+
+		if (!m_model)
+		{
+			return;
+		}
+
+		m_ui->clearAllButton->setEnabled(true);
+		m_ui->levelsTableView->selectionModel()->select(
+			m_model->index(last, 0),
+			QItemSelectionModel::ClearAndSelect);
+
+		m_ui->levelsTableView->setFocus();
 	}
 
 	LevelConfigWidget::~LevelConfigWidget()

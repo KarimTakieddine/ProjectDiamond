@@ -34,9 +34,12 @@ namespace project_diamond
 		void onLevelSelectionChanged(const QItemSelection& selected);
 		void onLevelDataChanged(const QModelIndex& index);
 		void onTableDoubleClicked(const QModelIndex& index);
-		void onInsertNewClicked();
+		void onInsertNewBeforeClicked();
+		void onInsertNewAfterClicked();
 		void onRemoveCurrentClicked();
 		void onClearAllClicked();
+		void onRowsRemoved();
+		void onRowsInserted(const QModelIndex& parent, int first, int last);
 
 	private:
 		Ui::LevelConfigWidget* m_ui		{ nullptr };
