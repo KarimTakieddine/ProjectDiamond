@@ -27,13 +27,17 @@ namespace project_diamond
 		bool setColor(const QColor& color);
 		const QColor& getColor() const;
 
+		bool isDirty() const;
+		void setDirty(bool dirty);
+
 	signals:
 		void parseStatus(const QString&);
 
 	private:
 		std::unique_ptr<diamond_engine::GameSceneConfig> m_data{ nullptr };
-		QString m_name{ };
-		QString m_path{ };
-		QColor m_color{ };
+		QString m_name	{ };
+		QString m_path	{ };
+		QColor m_color	{ };
+		bool m_dirty	{ true };
 	};
 }

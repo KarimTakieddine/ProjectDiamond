@@ -53,16 +53,21 @@ namespace project_diamond
 		}
 
 		diamond_engine::EngineStatus status;
-		m_data = diamond_engine::parseSceneFile(path.toStdString(), &status);
+		auto data = diamond_engine::parseSceneFile(path.toStdString(), &status);
 		emit parseStatus(QString::fromStdString(status.message));
 
-		if (m_data)
+		if (!data)
 		{
-			m_color = ::vec4ToColor(m_data->getBackgroundColor());
-			m_name	= QString::fromStdString(m_data->getName());
+			return false;
 		}
 
-		m_path = path;
+		m_color = ::vec4ToColor(data->getBackgroundColor());
+		m_name	= QString::fromStdString(data->getName());
+		m_path	= path;
+
+		m_data = std::move(data);
+
+		setDirty(false);
 		
 		return true;
 	}
@@ -79,11 +84,7 @@ namespace project_diamond
 			return false;
 		}
 
-		if (m_data)
-		{
-			m_data->setName(name.toStdString());
-		}
-
+		m_data->setName(name.toStdString());
 		m_name = name;
 
 		return true;
@@ -101,11 +102,7 @@ namespace project_diamond
 			return false;
 		}
 
-		if (m_data)
-		{
-			m_data->setBackgroundColor(::colorToVec4(color));
-		}
-
+		m_data->setBackgroundColor(::colorToVec4(color));
 		m_color = color;
 
 		return true;
@@ -114,5 +111,15 @@ namespace project_diamond
 	const QColor& LevelConfigModel::getColor() const
 	{
 		return m_color;
+	}
+
+	bool LevelConfigModel::isDirty() const
+	{
+		return m_dirty;
+	}
+
+	void LevelConfigModel::setDirty(bool dirty)
+	{
+		m_dirty = dirty;
 	}
 }

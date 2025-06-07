@@ -47,6 +47,7 @@ namespace project_diamond
 		m_levelWidget->connectUi();
 
 		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, m_gameWindow, &EditorGameWindow::loadLevel);
+		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, this, &EditorCentralWidget::levelSelectionChanged);
 		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, m_gameWindow, &EditorGameWindow::loadLevel);
 	}
 

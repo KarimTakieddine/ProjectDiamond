@@ -33,6 +33,9 @@ namespace project_diamond
 	public slots:
 		void onLoadLevelsTriggered();
 
+	signals:
+		void levelSelectionChanged(LevelConfigModel* levelConfig);
+
 	private:
 		std::unique_ptr<diamond_engine::GameEngine> m_gameEngine{ nullptr };
 		Ui::EditorCentralWidget* m_ui							{ nullptr };

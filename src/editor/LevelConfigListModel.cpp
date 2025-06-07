@@ -223,6 +223,7 @@ namespace project_diamond
 
 		if (changed)
 		{
+			config->setDirty(true);
 			emit dataChanged(index, index);
 		}
 
@@ -328,12 +329,14 @@ namespace project_diamond
 				return false;
 			}
 
-			auto* levelConfigModel = qvariant_cast<LevelConfigModel*>(data(index(rowCount() - 1, 0), Qt::UserRole));
-			// TODO: Connect parse status
-			levelConfigModel->setPath(QString::fromStdString(child.path().string()));
+			const QModelIndex lastIndex = index(rowCount() - 1, 0);
 
-			diamond_engine::EngineStatus parseStatus;
-			auto sceneConfig = diamond_engine::parseSceneFile(child.path().string(), &parseStatus);
+			auto* levelConfigModel = qvariant_cast<LevelConfigModel*>(data(lastIndex, Qt::UserRole));
+			// TODO: Connect parse status
+			if (levelConfigModel->setPath(QString::fromStdString(child.path().string())))
+			{
+				emit dataChanged(lastIndex, lastIndex);
+			}
 		}
 
 		return true;

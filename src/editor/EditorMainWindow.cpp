@@ -23,6 +23,9 @@ namespace project_diamond
 
 		m_centralWidget->setupUi();
 		setCentralWidget(m_centralWidget);
+
+		m_ui->actionSaveLevel->setEnabled(false);
+		m_ui->actionSaveLevelAs->setEnabled(false);
 	}
 
 	void EditorMainWindow::connectUi()
@@ -30,6 +33,20 @@ namespace project_diamond
 		m_centralWidget->connectUi();
 
 		connect(m_ui->actionLoadLevels, &QAction::triggered, m_centralWidget, &EditorCentralWidget::onLoadLevelsTriggered);
+		connect(m_centralWidget, &EditorCentralWidget::levelSelectionChanged, this, &EditorMainWindow::onLevelSelectionChanged);
+	}
+
+	void EditorMainWindow::onLevelSelectionChanged(LevelConfigModel* levelConfig)
+	{
+		if (!levelConfig)
+		{
+			m_ui->actionSaveLevel->setEnabled(false);
+			m_ui->actionSaveLevelAs->setEnabled(false);
+			return;
+		}
+
+		m_ui->actionSaveLevel->setEnabled(levelConfig->isDirty() && !levelConfig->getPath().isEmpty());
+		m_ui->actionSaveLevelAs->setEnabled(true);
 	}
 
 	EditorMainWindow::~EditorMainWindow()

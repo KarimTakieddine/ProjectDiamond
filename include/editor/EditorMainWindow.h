@@ -7,6 +7,8 @@ QT_END_NAMESPACE
 
 #include <config/EngineConfig.h>
 
+#include "LevelConfigModel.h"
+
 namespace project_diamond
 {
 	class EditorCentralWidget;
@@ -23,6 +25,9 @@ namespace project_diamond
 		void connectUi();
 
 		~EditorMainWindow();
+
+	private slots:
+		void onLevelSelectionChanged(LevelConfigModel* levelConfig);
 
 	private:
 		Ui::EditorMainWindow* m_ui{ nullptr };

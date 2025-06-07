@@ -140,8 +140,6 @@ namespace project_diamond
 		}
 
 		m_model->removeRows(0, m_model->rowCount());
-
-		emit levelSelectionChanged(nullptr);
 	}
 
 	void LevelConfigWidget::onRowsRemoved()
@@ -157,6 +155,7 @@ namespace project_diamond
 		if (rowCount == 0)
 		{
 			m_ui->removeCurrentButton->setEnabled(false);
+			emit levelSelectionChanged(nullptr);
 		}
 
 		m_ui->levelsTableView->setFocus();
