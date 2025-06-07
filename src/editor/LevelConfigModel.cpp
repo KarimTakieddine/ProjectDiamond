@@ -35,44 +35,32 @@ namespace
 
 namespace project_diamond
 {
-	LevelConfigModel::LevelConfigModel(QObject* parent /* = nullptr */) : QObject(parent)
-	{
-		connect(this, &LevelConfigModel::pathChanged, this, &LevelConfigModel::onPathChanged);
-		connect(this, &LevelConfigModel::colorChanged, this, &LevelConfigModel::onColorChanged);
-	}
+	LevelConfigModel::LevelConfigModel(QObject* parent /* = nullptr */) : QObject(parent) { }
 
 	diamond_engine::GameSceneConfig* LevelConfigModel::getData() const
 	{
 		return m_data.get();
 	}
 
-	void LevelConfigModel::setData(std::unique_ptr<diamond_engine::GameSceneConfig> data)
+	bool LevelConfigModel::setPath(const QString& path)
 	{
-		if (data == m_data)
+		if (path == m_path)
 		{
-			return;
+			return false;
 		}
 
-		m_data = std::move(data);
+		diamond_engine::EngineStatus status;
+		m_data = diamond_engine::parseSceneFile(path.toStdString(), &status);
+		emit parseStatus(QString::fromStdString(status.message));
 
 		if (m_data)
 		{
 			m_color = ::vec4ToColor(m_data->getBackgroundColor());
 		}
 
-		emit dataChanged();
-	}
-
-	void LevelConfigModel::setPath(const QString& path)
-	{
-		if (path == m_path)
-		{
-			return;
-		}
-
 		m_path = path;
-
-		emit pathChanged(path);
+		
+		return true;
 	}
 
 	const QString& LevelConfigModel::getPath() const
@@ -80,40 +68,21 @@ namespace project_diamond
 		return m_path;
 	}
 
-	void LevelConfigModel::onPathChanged(const QString& path)
-	{
-		diamond_engine::EngineStatus status;
-		setData(diamond_engine::parseSceneFile(path.toStdString(), &status));
-		emit parseStatus(QString::fromStdString(status.message));
-	}
-
-	void LevelConfigModel::onColorChanged(const QColor& color)
-	{
-		if (!m_data)
-		{
-			return;
-		}
-
-		m_data->setBackgroundColor(::colorToVec4(color));
-
-		emit dataChanged();
-	}
-
-	void LevelConfigModel::setName(const QString& name)
+	bool LevelConfigModel::setName(const QString& name)
 	{
 		if (name == getName())
 		{
-			return;
+			return false;
 		}
 
 		if (!m_data)
 		{
-			return;
+			return false;
 		}
 
 		m_data->setName(name.toStdString());
 
-		emit nameChanged(name);
+		return true;
 	}
 
 	const QString LevelConfigModel::getName() const
@@ -121,16 +90,23 @@ namespace project_diamond
 		return m_data ? QString::fromStdString(m_data->getName()) : QStringLiteral("null");
 	}
 
-	void LevelConfigModel::setColor(const QColor& color)
+	bool LevelConfigModel::setColor(const QColor& color)
 	{
 		if (color == m_color)
 		{
-			return;
+			return false;
 		}
+
+		if (!m_data)
+		{
+			return false;
+		}
+
+		m_data->setBackgroundColor(::colorToVec4(color));
 
 		m_color = color;
 
-		emit colorChanged(color);
+		return true;
 	}
 
 	const QColor& LevelConfigModel::getColor() const

@@ -39,17 +39,24 @@ namespace project_diamond
 		m_engineConfig = config;
 	}
 
-	void EditorGameWindow::onLevelSelectionChanged(LevelConfigModel* model)
+	void EditorGameWindow::loadLevel(LevelConfigModel* config)
 	{
-		auto* data = model->getData();
+		unloadCurrentLevel();
+
+		if (!config)
+		{
+			return;
+		}
+
+		auto* data = config->getData();
 
 		if (!data)
 		{
-			m_gameEngine->unloadCurrentScene();
 			return;
 		}
 
 		m_gameEngine->loadScene(data);
+		m_deltaTime = 0.0f;
 	}
 
 	void EditorGameWindow::onFrameSwapped()
@@ -69,8 +76,6 @@ namespace project_diamond
 		m_gameEngine->initialize(m_engineConfig);
 
 		resizeGL(width(), height());
-
-		m_deltaTime	= 0.0f;
 	}
 
 	void EditorGameWindow::resizeGL(int w, int h)
@@ -97,5 +102,11 @@ namespace project_diamond
 	void EditorGameWindow::paintUnderGL()
 	{
 		m_deltaTimer.Start();
+	}
+
+	void EditorGameWindow::unloadCurrentLevel()
+	{
+		DEBUG_EXEC(diamond_engine::Debugger::getInstance()->purgeOutstandingEvents());
+		m_gameEngine->unloadCurrentScene();
 	}
 }

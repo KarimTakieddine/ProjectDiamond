@@ -44,7 +44,10 @@ namespace project_diamond
 
 	void EditorCentralWidget::connectUi()
 	{
-		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, m_gameWindow, &EditorGameWindow::onLevelSelectionChanged);
+		m_levelWidget->connectUi();
+
+		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, m_gameWindow, &EditorGameWindow::loadLevel);
+		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, m_gameWindow, &EditorGameWindow::loadLevel);
 	}
 
 	void EditorCentralWidget::setEngineConfig(const diamond_engine::EngineConfig& config)

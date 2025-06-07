@@ -6,43 +6,112 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
-    <height>532</height>
+    <width>316</width>
+    <height>285</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>LevelConfigWidget</string>
   </property>
-  <layout class="QVBoxLayout" name="layout" stretch="0,1">
+  <layout class="QVBoxLayout" name="layout">
    <item>
-    <widget class="QGroupBox" name="levelsGroupBox">
-     <property name="title">
-      <string>Levels</string>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <layout class="QHBoxLayout" name="levelsLayout">
-      <item>
-       <widget class="QTableView" name="levelsTableView">
-        <property name="editTriggers">
-         <set>QAbstractItemView::DoubleClicked</set>
-        </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::SingleSelection</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="levelConfigGroupBox">
-     <property name="title">
-      <string>Level Config</string>
-     </property>
-     <layout class="QHBoxLayout" name="levelConfigLayout">
-      <item>
-       <widget class="QTreeView" name="levelConfigTreeView"/>
-      </item>
-     </layout>
+     <widget class="QGroupBox" name="levelsGroupBox">
+      <property name="title">
+       <string>Levels</string>
+      </property>
+      <layout class="QVBoxLayout" name="levelsLayout">
+       <property name="spacing">
+        <number>7</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="optionsGroupBox">
+         <property name="title">
+          <string>Options</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <layout class="QHBoxLayout" name="optionsLayout">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="insertNewButton">
+            <property name="minimumSize">
+             <size>
+              <width>75</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Insert New</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="removeCurrentButton">
+            <property name="minimumSize">
+             <size>
+              <width>101</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Remove Current</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clearAllButton">
+            <property name="minimumSize">
+             <size>
+              <width>70</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Clear All</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableView" name="levelsTableView">
+         <property name="editTriggers">
+          <set>QAbstractItemView::DoubleClicked</set>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="levelConfigGroupBox">
+      <property name="title">
+       <string>Level Config</string>
+      </property>
+      <layout class="QHBoxLayout" name="levelConfigLayout">
+       <property name="leftMargin">
+        <number>9</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTreeView" name="levelConfigTreeView"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

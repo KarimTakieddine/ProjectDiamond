@@ -20,6 +20,7 @@ namespace project_diamond
 		LevelConfigWidget(QWidget* parent = nullptr);
 
 		void setupUi();
+		void connectUi();
 
 		void setModel(LevelConfigListModel* model);
 
@@ -27,9 +28,15 @@ namespace project_diamond
 
 	signals:
 		void levelSelectionChanged(LevelConfigModel*);
+		void levelDataChanged(LevelConfigModel*);
 
 	private slots:
 		void onLevelSelectionChanged(const QItemSelection& selected);
+		void onLevelDataChanged(const QModelIndex& index);
+		void onTableDoubleClicked(const QModelIndex& index);
+		void onInsertNewClicked();
+		void onRemoveCurrentClicked();
+		void onClearAllClicked();
 
 	private:
 		Ui::LevelConfigWidget* m_ui		{ nullptr };

@@ -32,7 +32,7 @@ namespace project_diamond
 
 	int LevelConfigListModel::columnCount(const QModelIndex& parent) const
 	{
-		return 4;
+		return 3;
 	}
 
 	QVariant LevelConfigListModel::data(const QModelIndex& index, int role /* = Qt::DisplayRole */) const
@@ -90,7 +90,7 @@ namespace project_diamond
 
 				break;
 			}
-			case 3:
+			case 2:
 			{
 				switch (role)
 				{
@@ -132,8 +132,6 @@ namespace project_diamond
 			case 1:
 				return QStringLiteral("Path");
 			case 2:
-				return QStringLiteral("");
-			case 3:
 				return QStringLiteral("BG Color");
 			default:
 				break;
@@ -193,7 +191,7 @@ namespace project_diamond
 					break;
 				}
 
-				config->setName(name);
+				changed = config->setName(name);
 				break;
 			}
 			case 1:
@@ -206,12 +204,12 @@ namespace project_diamond
 					break;
 				}
 
-				config->setPath(path);
+				changed = config->setPath(path);
 				break;
 			}
-			case 3:
+			case 2:
 			{
-				config->setColor(value.value<QColor>());
+				changed = config->setColor(value.value<QColor>());
 				break;
 			}
 			default:

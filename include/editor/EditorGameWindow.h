@@ -26,7 +26,7 @@ namespace project_diamond
 		void setEngineConfig(const diamond_engine::EngineConfig& config);
 
 	public slots:
-		void onLevelSelectionChanged(LevelConfigModel* model);
+		void loadLevel(LevelConfigModel* config);
 		void onFrameSwapped();
 
 	protected:
@@ -36,9 +36,11 @@ namespace project_diamond
 		void paintUnderGL() final override;
 
 	private:
+		void unloadCurrentLevel();
+
 		diamond_engine::EngineConfig m_engineConfig;
 		std::unique_ptr<diamond_engine::GameEngine> m_gameEngine{ nullptr };
-		diamond_engine::DeltaTimer m_deltaTimer{ };
-		float m_deltaTime{ 0.0f };
+		diamond_engine::DeltaTimer m_deltaTimer					{ };
+		float m_deltaTime										{ 0.0f };
 	};
 }
