@@ -39,7 +39,7 @@ namespace project_diamond
 		connect(m_centralWidget, &EditorCentralWidget::levelDataChanged, this, &EditorMainWindow::onLevelChanged);
 	}
 
-	void EditorMainWindow::onLevelChanged(LevelConfigModel* levelConfig)
+	void EditorMainWindow::onLevelChanged(const LevelConfigModel* levelConfig)
 	{
 		if (!levelConfig)
 		{

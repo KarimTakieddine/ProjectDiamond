@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>487</width>
-    <height>277</height>
+    <height>296</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -111,17 +111,46 @@
      </widget>
      <widget class="QGroupBox" name="levelConfigGroupBox">
       <property name="title">
-       <string>Level Config</string>
+       <string>Level</string>
       </property>
       <layout class="QHBoxLayout" name="levelConfigLayout">
-       <property name="leftMargin">
-        <number>9</number>
-       </property>
        <property name="topMargin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QTreeView" name="levelConfigTreeView"/>
+        <widget class="QSplitter" name="levelConfigSplitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QTreeView" name="levelConfigTreeView">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <attribute name="headerVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
+         <widget class="QGroupBox" name="componentConfigGroupBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>90</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Component</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+          </property>
+         </widget>
+        </widget>
        </item>
       </layout>
      </widget>

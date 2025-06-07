@@ -42,7 +42,7 @@ namespace project_diamond
 		m_data	(std::make_unique<diamond_engine::GameSceneConfig>()),
 		m_name	(QString::fromStdString(m_data->getName())) { }
 
-	diamond_engine::GameSceneConfig* LevelConfigModel::getData() const
+	const diamond_engine::GameSceneConfig* LevelConfigModel::getData() const
 	{
 		return m_data.get();
 	}

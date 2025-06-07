@@ -12,6 +12,7 @@ QT_END_NAMESPACE
 namespace project_diamond
 {
 	class LevelConfigListModel;
+	class LevelConfigTreeModel;
 	class LevelConfigWidget : public QWidget
 	{
 		Q_OBJECT
@@ -22,7 +23,8 @@ namespace project_diamond
 		void setupUi();
 		void connectUi();
 
-		void setModel(LevelConfigListModel* model);
+		void setListModel(LevelConfigListModel* model);
+		void setTreeModel(LevelConfigTreeModel* model);
 
 		~LevelConfigWidget();
 
@@ -31,8 +33,8 @@ namespace project_diamond
 		void saveCurrentLevelAs();
 
 	signals:
-		void levelSelectionChanged(LevelConfigModel*);
-		void levelDataChanged(LevelConfigModel*);
+		void levelSelectionChanged(const LevelConfigModel*);
+		void levelDataChanged(const LevelConfigModel*);
 
 	private slots:
 		void onLevelSelectionChanged(const QItemSelection& selected);
@@ -44,9 +46,12 @@ namespace project_diamond
 		void onClearAllClicked();
 		void onRowsRemoved();
 		void onRowsInserted(const QModelIndex& parent, int first, int last);
+		void onRenderConfigSelected(int componentIndex, int instanceIndex);
+		void onBehaviourConfigSelected(int componentIndex, int instanceIndex);
 
 	private:
-		Ui::LevelConfigWidget* m_ui		{ nullptr };
-		LevelConfigListModel* m_model	{ nullptr };
+		Ui::LevelConfigWidget* m_ui			{ nullptr };
+		LevelConfigListModel* m_listModel	{ nullptr };
+		LevelConfigTreeModel* m_treeModel	{ nullptr };
 	};
 }

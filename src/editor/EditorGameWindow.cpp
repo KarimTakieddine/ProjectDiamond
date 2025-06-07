@@ -39,7 +39,7 @@ namespace project_diamond
 		m_engineConfig = config;
 	}
 
-	void EditorGameWindow::loadLevel(LevelConfigModel* config)
+	void EditorGameWindow::loadLevel(const LevelConfigModel* config)
 	{
 		unloadCurrentLevel();
 

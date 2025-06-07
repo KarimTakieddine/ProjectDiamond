@@ -5,6 +5,7 @@
 #include "EditorCentralWidget.h"
 #include "ui_EditorCentralWidget.h"
 #include "LevelConfigListModel.h"
+#include "LevelConfigTreeModel.h"
 
 namespace project_diamond
 {
@@ -13,6 +14,7 @@ namespace project_diamond
 		, m_gameEngine(std::make_unique<diamond_engine::GameEngine>())
 		, m_ui(new Ui::EditorCentralWidget())
 		, m_levelListModel(new LevelConfigListModel(this))
+		, m_levelTreeModel(new LevelConfigTreeModel(this))
 		, m_gameWindow(new EditorGameWindow())
 		, m_levelWidget(new LevelConfigWidget())
 	{
@@ -22,7 +24,8 @@ namespace project_diamond
 	{
 		m_ui->setupUi(this);
 		m_levelWidget->setupUi();
-		m_levelWidget->setModel(m_levelListModel);
+		m_levelWidget->setListModel(m_levelListModel);
+		m_levelWidget->setTreeModel(m_levelTreeModel);
 
 		QSplitter* splitter = new QSplitter();
 		splitter->addWidget(m_levelWidget);
@@ -48,8 +51,10 @@ namespace project_diamond
 
 		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, m_gameWindow, &EditorGameWindow::loadLevel);
 		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, this, &EditorCentralWidget::levelSelectionChanged);
+		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, this, &EditorCentralWidget::onLevelChanged);
 		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, m_gameWindow, &EditorGameWindow::loadLevel);
 		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, this, &EditorCentralWidget::levelDataChanged);
+		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, this, &EditorCentralWidget::onLevelChanged);
 		connect(this, &EditorCentralWidget::saveLevelTriggered, m_levelWidget, &LevelConfigWidget::saveCurrentLevel);
 		connect(this, &EditorCentralWidget::saveLevelAsTriggered, m_levelWidget, &LevelConfigWidget::saveCurrentLevelAs);
 	}
@@ -72,6 +77,12 @@ namespace project_diamond
 		}
 
 		m_levelListModel->loadLevels(directory);
+	}
+
+	void EditorCentralWidget::onLevelChanged(const LevelConfigModel* levelConfig)
+	{
+		// TODO: Error reporting
+		m_levelTreeModel->loadLevelConfig(levelConfig);
 	}
 
 	EditorCentralWidget::~EditorCentralWidget()

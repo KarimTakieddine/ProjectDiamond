@@ -26,7 +26,7 @@ namespace project_diamond
 		void setEngineConfig(const diamond_engine::EngineConfig& config);
 
 	public slots:
-		void loadLevel(LevelConfigModel* config);
+		void loadLevel(const LevelConfigModel* config);
 		void onFrameSwapped();
 
 	protected:

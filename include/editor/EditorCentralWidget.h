@@ -17,6 +17,7 @@ QT_END_NAMESPACE
 namespace project_diamond
 {
 	class LevelConfigListModel;
+	class LevelConfigTreeModel;
 	class EditorCentralWidget : public QWidget
 	{
 		Q_OBJECT
@@ -34,15 +35,19 @@ namespace project_diamond
 		void onLoadLevelsTriggered();
 
 	signals:
-		void levelSelectionChanged(LevelConfigModel* levelConfig);
-		void levelDataChanged(LevelConfigModel* levelConfig);
+		void levelSelectionChanged(const LevelConfigModel* levelConfig);
+		void levelDataChanged(const LevelConfigModel* levelConfig);
 		void saveLevelTriggered();
 		void saveLevelAsTriggered();
+
+	private slots:
+		void onLevelChanged(const LevelConfigModel* levelConfig);
 
 	private:
 		std::unique_ptr<diamond_engine::GameEngine> m_gameEngine{ nullptr };
 		Ui::EditorCentralWidget* m_ui							{ nullptr };
 		LevelConfigListModel* m_levelListModel					{ nullptr };
+		LevelConfigTreeModel* m_levelTreeModel					{ nullptr };
 		EditorGameWindow* m_gameWindow							{ nullptr };
 		LevelConfigWidget* m_levelWidget						{ nullptr };
 	};

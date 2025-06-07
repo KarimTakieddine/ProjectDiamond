@@ -16,7 +16,7 @@ namespace project_diamond
 	public:
 		LevelConfigModel(QObject* parent = nullptr);
 
-		diamond_engine::GameSceneConfig* getData() const;
+		const diamond_engine::GameSceneConfig* getData() const;
 
 		bool setPath(const QString& path);
 		const QString& getPath() const;
