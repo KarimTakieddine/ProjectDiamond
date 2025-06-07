@@ -26,6 +26,10 @@ namespace project_diamond
 
 		~LevelConfigWidget();
 
+	public slots:
+		void saveCurrentLevel();
+		void saveCurrentLevelAs();
+
 	signals:
 		void levelSelectionChanged(LevelConfigModel*);
 		void levelDataChanged(LevelConfigModel*);

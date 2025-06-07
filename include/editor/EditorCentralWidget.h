@@ -35,6 +35,9 @@ namespace project_diamond
 
 	signals:
 		void levelSelectionChanged(LevelConfigModel* levelConfig);
+		void levelDataChanged(LevelConfigModel* levelConfig);
+		void saveLevelTriggered();
+		void saveLevelAsTriggered();
 
 	private:
 		std::unique_ptr<diamond_engine::GameEngine> m_gameEngine{ nullptr };

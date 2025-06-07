@@ -27,7 +27,7 @@ namespace project_diamond
 		~EditorMainWindow();
 
 	private slots:
-		void onLevelSelectionChanged(LevelConfigModel* levelConfig);
+		void onLevelChanged(LevelConfigModel* levelConfig);
 
 	private:
 		Ui::EditorMainWindow* m_ui{ nullptr };

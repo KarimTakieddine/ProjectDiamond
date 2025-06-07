@@ -49,6 +49,9 @@ namespace project_diamond
 		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, m_gameWindow, &EditorGameWindow::loadLevel);
 		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, this, &EditorCentralWidget::levelSelectionChanged);
 		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, m_gameWindow, &EditorGameWindow::loadLevel);
+		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, this, &EditorCentralWidget::levelDataChanged);
+		connect(this, &EditorCentralWidget::saveLevelTriggered, m_levelWidget, &LevelConfigWidget::saveCurrentLevel);
+		connect(this, &EditorCentralWidget::saveLevelAsTriggered, m_levelWidget, &LevelConfigWidget::saveCurrentLevelAs);
 	}
 
 	void EditorCentralWidget::setEngineConfig(const diamond_engine::EngineConfig& config)
@@ -59,9 +62,16 @@ namespace project_diamond
 
 	void EditorCentralWidget::onLoadLevelsTriggered()
 	{
-		m_levelListModel->loadLevels(QFileDialog::getExistingDirectory(
+		const QString directory = QFileDialog::getExistingDirectory(
 			nullptr,
-			QStringLiteral("Load Levels from Folder")));
+			QStringLiteral("Load Levels from Folder"));
+
+		if (directory.isNull())
+		{
+			return;
+		}
+
+		m_levelListModel->loadLevels(directory);
 	}
 
 	EditorCentralWidget::~EditorCentralWidget()

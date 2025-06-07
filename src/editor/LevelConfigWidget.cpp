@@ -95,6 +95,11 @@ namespace project_diamond
 			QStringLiteral("Select Level Config File (.xml)"),
 			QStringLiteral("*.xml"));
 
+		if (path.isNull())
+		{
+			return;
+		}
+
 		m_model->setData(index, path);
 	}
 
@@ -183,5 +188,58 @@ namespace project_diamond
 	LevelConfigWidget::~LevelConfigWidget()
 	{
 		delete m_ui;
+	}
+
+	void LevelConfigWidget::saveCurrentLevel()
+	{
+		const QModelIndex& currentIndex = m_ui->levelsTableView->currentIndex();
+
+		if (!currentIndex.isValid() || !m_model)
+		{
+			return;
+		}
+
+		auto* levelConfigData = qvariant_cast<LevelConfigModel*>(m_model->data(currentIndex, Qt::UserRole));
+		if (!levelConfigData)
+		{
+			return;
+		}
+
+		if (levelConfigData->serialize(levelConfigData->getPath()))
+		{
+			emit levelSelectionChanged(levelConfigData);
+		}
+	}
+
+	void LevelConfigWidget::saveCurrentLevelAs()
+	{
+		const QModelIndex& currentIndex = m_ui->levelsTableView->currentIndex();
+
+		if (!currentIndex.isValid() || !m_model)
+		{
+			return;
+		}
+
+		auto* levelConfigData = qvariant_cast<LevelConfigModel*>(m_model->data(currentIndex, Qt::UserRole));
+		if (!levelConfigData)
+		{
+			return;
+		}
+
+		const QString file = QFileDialog::getSaveFileName(
+			nullptr,
+			QStringLiteral("Save Level As..."),
+			QDir::currentPath(),
+			"*.xml");
+
+		if (file.isNull())
+		{
+			return;
+		}
+
+		if (levelConfigData->serialize(file))
+		{
+			emit levelSelectionChanged(levelConfigData);
+		}
 	}
 }

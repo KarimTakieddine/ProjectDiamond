@@ -30,6 +30,8 @@ namespace project_diamond
 		bool isDirty() const;
 		void setDirty(bool dirty);
 
+		bool serialize(const QString& file);
+
 	signals:
 		void parseStatus(const QString&);
 

@@ -1,3 +1,5 @@
+#include <pugixml.hpp>
+
 #include <glm/vec4.hpp>
 
 #include <parser/GameSceneConfigParser.h>
@@ -121,5 +123,27 @@ namespace project_diamond
 	void LevelConfigModel::setDirty(bool dirty)
 	{
 		m_dirty = dirty;
+	}
+
+	bool LevelConfigModel::serialize(const QString& file)
+	{
+		pugi::xml_document document;
+		const std::string path = file.toStdString();
+
+		pugi::xml_node rootNode = document.root().append_child("Scene");
+
+		// TODO: More error handling
+
+		rootNode.append_attribute("name").set_value(getName().toStdString().c_str());
+
+		if (!document.save_file(path.c_str(), "\t", pugi::format_indent, pugi::encoding_utf8))
+		{
+			emit parseStatus(QStringLiteral("Failed to serialise level: ") + m_name + QStringLiteral(" to: ") + file);
+			return false;
+		}
+
+		m_path = file;
+		setDirty(false);
+		return true;
 	}
 }
