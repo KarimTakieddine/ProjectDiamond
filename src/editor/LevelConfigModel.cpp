@@ -2,9 +2,13 @@
 
 #include <glm/vec4.hpp>
 
+#include <QHash>
+#include <QSignalMapper>
+
 #include <parser/GameSceneConfigParser.h>
 
 #include "LevelConfigModel.h"
+#include "TransformComponentModel.h"
 
 namespace
 {
@@ -33,14 +37,33 @@ namespace
 			static_cast<int>(color.a * kFloatToQColor)
 		};
 	}
+
+	using project_diamond::LevelConfigModel;
+	using project_diamond::RenderComponentModel;
+	using project_diamond::TransformComponentModel;
+
+	QSharedPointer<RenderComponentModel> createTransformComponentModel()
+	{
+		auto result = QSharedPointer<TransformComponentModel>::create();
+		return result.staticCast<RenderComponentModel>();
+	}
+
+	const QHash<QString, project_diamond::LevelConfigModel::RComponentCreateFunc> renderComponentCreators =
+	{
+		{ QStringLiteral("Transform"), createTransformComponentModel }
+	};
 }
 
 namespace project_diamond
 {
 	LevelConfigModel::LevelConfigModel(QObject* parent /* = nullptr */) :
 		QObject	(parent),
-		m_data	(std::make_unique<diamond_engine::GameSceneConfig>()),
-		m_name	(QString::fromStdString(m_data->getName())) { }
+		m_signalMapper	(new QSignalMapper(this)),
+		m_data			(std::make_unique<diamond_engine::GameSceneConfig>()),
+		m_name			(QString::fromStdString(m_data->getName()))
+	{
+		connect(m_signalMapper, &QSignalMapper::mappedInt, this, &LevelConfigModel::instanceDataChanged);
+	}
 
 	const diamond_engine::GameSceneConfig* LevelConfigModel::getData() const
 	{
@@ -66,6 +89,34 @@ namespace project_diamond
 		m_color = ::vec4ToColor(data->getBackgroundColor());
 		m_name	= QString::fromStdString(data->getName());
 		m_path	= path;
+
+		for (const auto& instance : data->getInstanceConfigs())
+		{
+			if (!instance)
+			{
+				// TODO: Handle error(s)
+				continue;
+			}
+
+			auto instanceModel = QSharedPointer<GameInstanceModel>::create();
+			
+			for (const auto& renderComponent : instance->getRenderConfigs())
+			{
+				auto it = ::renderComponentCreators.constFind(QString::fromStdString(renderComponent->getName()));
+				if (it == ::renderComponentCreators.constEnd())
+				{
+					continue;
+				}
+
+				auto componentModel = (*it)();
+				componentModel->setData(renderComponent.get());
+				instanceModel->insertRenderComponent(instanceModel->getRenderComponents().count(), componentModel);
+			}
+
+			// TODO: Behaviour components!
+
+			insertGameInstance(m_instances.count(), instanceModel);
+		}
 
 		m_data = std::move(data);
 
@@ -142,8 +193,66 @@ namespace project_diamond
 			return false;
 		}
 
+		// TODO: Serialize components
+
 		m_path = file;
 		setDirty(false);
 		return true;
+	}
+
+	const QVector<QSharedPointer<GameInstanceModel>>& LevelConfigModel::getInstances() const
+	{
+		return m_instances;
+	}
+
+	void LevelConfigModel::insertGameInstance(qsizetype index, const QSharedPointer<GameInstanceModel>& instance)
+	{
+		const qsizetype currentCount = m_instances.count();
+		if (index < 0 || index > currentCount)
+		{
+			return;
+		}
+
+		m_signalMapper->setMapping(instance.get(), index);
+
+		connect(
+			instance.get(),
+			&GameInstanceModel::renderComponentDataChanged,
+			m_signalMapper,
+			qOverload<>(&QSignalMapper::map));
+
+		connect(
+			instance.get(),
+			&GameInstanceModel::behaviourComponentDataChanged,
+			m_signalMapper,
+			qOverload<>(&QSignalMapper::map));
+
+		// TODO: Connect component inserts / removes to a local slot
+		// emitting a signal based on the mapping dictated by signal
+		// mapper indicating for which game instance this was performed
+
+		m_instances.insert(index, instance);
+
+		if (index < currentCount)
+		{
+			for (int i = 0; i < m_instances.count(); ++i)
+			{
+				m_signalMapper->setMapping(m_instances.at(i).get(), i);
+			}
+		}
+
+		emit gameInstanceInserted(index);
+	}
+
+	void LevelConfigModel::removeGameInstance(qsizetype index)
+	{
+		if (index < 0 || index >= m_instances.count())
+		{
+			return;
+		}
+
+		m_instances.removeAt(index);
+
+		emit gameInstanceRemoved(index);
 	}
 }

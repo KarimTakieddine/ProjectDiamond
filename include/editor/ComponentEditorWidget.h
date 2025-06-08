@@ -5,14 +5,19 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class ComponentEditorWidget; };
 QT_END_NAMESPACE
 
-class ComponentEditorWidget : public QWidget
+namespace project_diamond
 {
-	Q_OBJECT
+	class ComponentEditorWidget : public QWidget
+	{
+		Q_OBJECT
 
-public:
-	ComponentEditorWidget(QWidget *parent = nullptr);
-	~ComponentEditorWidget();
+	public:
+		ComponentEditorWidget(QWidget* parent = nullptr);
 
-private:
-	Ui::ComponentEditorWidget *ui;
-};
+		void setupUi();
+		void connectUi();
+
+	private:
+
+	};
+}

@@ -228,34 +228,40 @@ namespace project_diamond
 			return;
 		}
 
-		auto* levelData = levelConfig->getData();
-		if (!levelData)
+		const auto& gameInstances = levelConfig->getInstances();
+		if (instanceIndex < 0 || instanceIndex >= gameInstances.count())
 		{
 			// TODO
 			return;
 		}
 
-		const auto& instanceConfig = levelData->getInstanceConfigs().at(static_cast<size_t>(instanceIndex));
-		if (!instanceConfig)
+		const auto& gameInstance = gameInstances.at(instanceIndex);
+		if (!gameInstance)
 		{
 			// TODO
 			return;
 		}
 
-		const auto& renderComponent = instanceConfig->getRenderConfigs().at(static_cast<size_t>(componentIndex));
+		const auto& renderComponents = gameInstance->getRenderComponents();
+		if (componentIndex < 0 || componentIndex >= renderComponents.size())
+		{
+			// TODO
+			return;
+		}
+
+		const auto& renderComponent = renderComponents.at(componentIndex);
 		if (!renderComponent)
 		{
 			// TODO
 			return;
 		}
 
-		qDebug() << QString::fromStdString(renderComponent->getName());
+		qDebug() << QString::fromStdString(renderComponent->getData()->getName());
 	}
 
 	void LevelConfigWidget::onBehaviourConfigSelected(int componentIndex, int instanceIndex)
 	{
 		const QModelIndex currentIndex = m_ui->levelsTableView->currentIndex();
-
 		if (!currentIndex.isValid())
 		{
 			// TODO

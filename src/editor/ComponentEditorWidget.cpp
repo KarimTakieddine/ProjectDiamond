@@ -1,14 +1,6 @@
 #include "ComponentEditorWidget.h"
-#include "ui_ComponentEditorWidget.h"
 
-ComponentEditorWidget::ComponentEditorWidget(QWidget *parent)
-	: QWidget(parent)
-	, ui(new Ui::ComponentEditorWidget())
+namespace project_diamond
 {
-	ui->setupUi(this);
-}
-
-ComponentEditorWidget::~ComponentEditorWidget()
-{
-	delete ui;
+	ComponentEditorWidget::ComponentEditorWidget(QWidget* parent) : QWidget(parent) { }
 }

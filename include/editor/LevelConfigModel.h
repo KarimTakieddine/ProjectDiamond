@@ -7,6 +7,9 @@
 
 #include <config/GameSceneConfig.h>
 
+#include "GameInstanceModel.h"
+
+class QSignalMapper;
 namespace project_diamond
 {
 	class LevelConfigModel : public QObject
@@ -14,6 +17,8 @@ namespace project_diamond
 		Q_OBJECT
 
 	public:
+		using RComponentCreateFunc = std::function<QSharedPointer<RenderComponentModel>(void)>;
+
 		LevelConfigModel(QObject* parent = nullptr);
 
 		const diamond_engine::GameSceneConfig* getData() const;
@@ -32,14 +37,23 @@ namespace project_diamond
 
 		bool serialize(const QString& file);
 
+		const QVector<QSharedPointer<GameInstanceModel>>& getInstances() const;
+		void insertGameInstance(qsizetype index, const QSharedPointer<GameInstanceModel>& instance);
+		void removeGameInstance(qsizetype index);
+
 	signals:
 		void parseStatus(const QString&);
+		void gameInstanceInserted(qsizetype index);
+		void gameInstanceRemoved(qsizetype index);
+		void instanceDataChanged(int);
 
 	private:
-		std::unique_ptr<diamond_engine::GameSceneConfig> m_data{ nullptr };
-		QString m_name	{ };
-		QString m_path	{ };
-		QColor m_color	{ };
-		bool m_dirty	{ true };
+		QVector<QSharedPointer<GameInstanceModel>> m_instances;
+		std::unique_ptr<diamond_engine::GameSceneConfig> m_data	{ nullptr };
+		QSignalMapper* m_signalMapper							{ nullptr };
+		QString m_name											{ };
+		QString m_path											{ };
+		QColor m_color											{ };
+		bool m_dirty											{ true };
 	};
 }

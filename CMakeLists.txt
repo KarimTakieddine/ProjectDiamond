@@ -64,19 +64,25 @@ if (BUILD_EDITOR)
         "${INCLUDE_DIR}/${EDITOR_DIR}/LevelConfigTreeModel.h"
         "${INCLUDE_DIR}/${EDITOR_DIR}/LevelConfigWidget.h"
         "${INCLUDE_DIR}/${EDITOR_DIR}/ComponentEditorWidget.h"
+        "${INCLUDE_DIR}/${EDITOR_DIR}/GameInstanceModel.h"
+        "${INCLUDE_DIR}/${EDITOR_DIR}/TransformComponentModel.h"
+        "${INCLUDE_DIR}/${EDITOR_DIR}/Vector4EditorWidget.h"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigWidget.ui"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigWidget.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/EditorCentralWidget.ui"
         "${SRC_DIR}/${EDITOR_DIR}/EditorMainWindow.ui"
         "${SRC_DIR}/${EDITOR_DIR}/EditorCentralWidget.cpp"
-        "${SRC_DIR}/${EDITOR_DIR}/ComponentEditorWidget.ui"
         "${SRC_DIR}/${EDITOR_DIR}/ComponentEditorWidget.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/EditorGameWindow.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/EditorMainWindow.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigListModel.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigModel.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigTreeModel.cpp"
-        "${SRC_DIR}/${EDITOR_DIR}/LevelConfigWidget.cpp")
+        "${SRC_DIR}/${EDITOR_DIR}/LevelConfigWidget.cpp"
+        "${SRC_DIR}/${EDITOR_DIR}/GameInstanceModel.cpp"
+        "${SRC_DIR}/${EDITOR_DIR}/TransformComponentModel.cpp"
+        "${SRC_DIR}/${EDITOR_DIR}/EngineMetaTypeRegistry.cpp"
+        "${SRC_DIR}/${EDITOR_DIR}/Vector4EditorWidget.cpp")
 else()
     add_executable(${PROJECT_NAME} ${SOURCES})
 endif(BUILD_EDITOR)

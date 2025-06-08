@@ -13,6 +13,7 @@
 #ifdef BUILD_EDITOR
 #include <QApplication>
 #include "EditorMainWindow.h"
+#include "EngineMetaTypeRegistry.h"
 #else
 #include <engine/GLFWWindow.h>
 #endif
@@ -81,6 +82,8 @@ int main(int argc, char** argv) {
 
 #ifdef BUILD_EDITOR
 		QApplication qApplication(argc, argv);
+
+		project_diamond::registerEngineMetaTypes();
 
 		project_diamond::EditorMainWindow editorMainWindow;
 		editorMainWindow.setupUi();
