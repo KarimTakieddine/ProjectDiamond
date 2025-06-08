@@ -1,22 +1,18 @@
 #pragma once
 
-#include <QGroupBox>
-#include <QDoubleSpinBox>
-#include <QHBoxLayout>
-
-#include "EngineMetaTypeRegistry.h"
+#include "Vector3EditorWidget.h"
 
 namespace project_diamond
 {
-	class Vector4EditorWidget : public QGroupBox
+	class Vector4EditorWidget : public Vector3EditorWidget
 	{
 		Q_OBJECT
 
 	public:
 		Vector4EditorWidget(QWidget* parent = nullptr);
 
-		void setupUi();
-		void connectUi();
+		void setupUi() final override;
+		void connectUi() final override;
 
 	public slots:
 		void setData(const glm::vec4& data);
@@ -24,18 +20,13 @@ namespace project_diamond
 	signals:
 		void dataChanged(const glm::vec4& data);
 
-	private slots:
-		void onXChanged(double x);
-		void onYChanged(double y);
-		void onZChanged(double z);
+	protected slots:
+		void onXChanged(double x) final override;
+		void onYChanged(double y) final override;
+		void onZChanged(double z) final override;
 		void onWChanged(double w);
 
-	private:
-		QHBoxLayout* m_layout		{ nullptr };
-		QDoubleSpinBox* m_xSpinBox	{ nullptr };
-		QDoubleSpinBox* m_ySpinBox	{ nullptr };
-		QDoubleSpinBox* m_zSpinBox	{ nullptr };
-		QDoubleSpinBox* m_wSpinBox	{ nullptr };
-		glm::vec4 m_data			{ 0.0f, 0.0f, 0.0f, 0.0f };
+	protected:
+		QDoubleSpinBox* m_wSpinBox{ nullptr };
 	};
 }

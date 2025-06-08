@@ -66,6 +66,8 @@ if (BUILD_EDITOR)
         "${INCLUDE_DIR}/${EDITOR_DIR}/ComponentEditorWidget.h"
         "${INCLUDE_DIR}/${EDITOR_DIR}/GameInstanceModel.h"
         "${INCLUDE_DIR}/${EDITOR_DIR}/TransformComponentModel.h"
+        "${INCLUDE_DIR}/${EDITOR_DIR}/Vector2EditorWidget.h"
+        "${INCLUDE_DIR}/${EDITOR_DIR}/Vector3EditorWidget.h"
         "${INCLUDE_DIR}/${EDITOR_DIR}/Vector4EditorWidget.h"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigWidget.ui"
         "${SRC_DIR}/${EDITOR_DIR}/LevelConfigWidget.cpp"
@@ -82,6 +84,8 @@ if (BUILD_EDITOR)
         "${SRC_DIR}/${EDITOR_DIR}/GameInstanceModel.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/TransformComponentModel.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/EngineMetaTypeRegistry.cpp"
+        "${SRC_DIR}/${EDITOR_DIR}/Vector2EditorWidget.cpp"
+        "${SRC_DIR}/${EDITOR_DIR}/Vector3EditorWidget.cpp"
         "${SRC_DIR}/${EDITOR_DIR}/Vector4EditorWidget.cpp")
 else()
     add_executable(${PROJECT_NAME} ${SOURCES})
