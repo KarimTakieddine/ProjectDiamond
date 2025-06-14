@@ -39,6 +39,11 @@ namespace project_diamond
 		connect(m_centralWidget, &EditorCentralWidget::levelDataChanged, this, &EditorMainWindow::onLevelChanged);
 	}
 
+	void EditorMainWindow::setTextureModel(TextureModel* textureModel)
+	{
+		m_centralWidget->setTextureModel(textureModel);
+	}
+
 	void EditorMainWindow::onLevelChanged(const LevelConfigModel* levelConfig)
 	{
 		if (!levelConfig)

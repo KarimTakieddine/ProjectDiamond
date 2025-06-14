@@ -1,6 +1,8 @@
 #include "ComponentEditorWidget.h"
 #include "MaterialComponentModel.h"
 #include "TransformComponentModel.h"
+#include "TextureEditorWidget.h"
+#include "TextureModel.h"
 #include "Vector2EditorWidget.h"
 #include "Vector3EditorWidget.h"
 #include "Vector4EditorWidget.h"
@@ -67,6 +69,11 @@ namespace project_diamond
 		return (*configureIt)(component);
 	}
 
+	void ComponentEditorWidget::setTextureModel(TextureModel* model)
+	{
+		m_textureModel = model;
+	}
+
 	bool ComponentEditorWidget::configureTransformComponent(RenderComponentModel* component)
 	{
 		auto* model = dynamic_cast<TransformComponentModel*>(component);
@@ -120,7 +127,14 @@ namespace project_diamond
 		connect(textureOffsetEditorWidget, &Vector2EditorWidget::dataChanged, model, &MaterialComponentModel::setTextureOffset);
 		insertWidget(textureOffsetEditorWidget, 1);
 
-		// TODO: Texture widget?
+		auto* textureEditorWidget = ::createComponentWidget<TextureEditorWidget>();
+		textureEditorWidget->setTitle(QStringLiteral("Texture"));
+		textureEditorWidget->setName(model->getTextureName());
+		connect(this, &ComponentEditorWidget::imageChanged, textureEditorWidget, &TextureEditorWidget::setImage);
+		connect(textureEditorWidget, &TextureEditorWidget::nameChanged, m_textureModel, &TextureModel::findImage);
+		connect(textureEditorWidget, &TextureEditorWidget::nameChanged, model, &MaterialComponentModel::setTextureName);
+		m_textureModel->findImage(model->getTextureName());
+		insertWidget(textureEditorWidget, 2);
 
 		m_layout->setStretch(m_layout->count() - 1, 1);
 

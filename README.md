@@ -12,11 +12,15 @@ Being a fan of 2D platformers, the current idea at the time of writing is to bui
 
 ![](demo/characterController2DDemo2.gif)
 
-- A fully functional level editor developed with the binaries for the [Qt Open Source UI library](https://www.qt.io/download-open-source)
+- A custom level editor developed with the binaries for the [Qt Open Source UI library](https://www.qt.io/download-open-source)
 
 ![](demo/editorLevelNavigationDemo.gif)
 
+- Complete with hot-reload functionality!
+
 ![](demo/editorLevelModificationDemo.gif)
+
+![](demo/editorTextureChangeDemo.gif)
 
 ## Build Requirements
 

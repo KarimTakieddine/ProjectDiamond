@@ -11,9 +11,13 @@
 #include <utility/LogManager.h>
 
 #ifdef BUILD_EDITOR
+
 #include <QApplication>
+#include <QSharedPointer>
+
 #include "EditorMainWindow.h"
 #include "EngineMetaTypeRegistry.h"
+#include "TextureModel.h"
 #else
 #include <engine/GLFWWindow.h>
 #endif
@@ -85,9 +89,14 @@ int main(int argc, char** argv) {
 
 		project_diamond::registerEngineMetaTypes();
 
+		QSharedPointer<project_diamond::TextureModel> textureModel = QSharedPointer<project_diamond::TextureModel>::create();
+		
 		project_diamond::EditorMainWindow editorMainWindow;
 		editorMainWindow.setupUi();
 		editorMainWindow.connectUi();
+		editorMainWindow.setTextureModel(textureModel.get());
+		
+		textureModel->load(QStringLiteral("textures"));
 
 		levelLoadFuture.get();
 

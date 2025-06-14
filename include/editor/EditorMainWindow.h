@@ -12,6 +12,7 @@ QT_END_NAMESPACE
 namespace project_diamond
 {
 	class EditorCentralWidget;
+	class TextureModel;
 	class EditorMainWindow : public QMainWindow
 	{
 		Q_OBJECT
@@ -23,6 +24,7 @@ namespace project_diamond
 
 		void setupUi();
 		void connectUi();
+		void setTextureModel(TextureModel* textureModel);
 
 		~EditorMainWindow();
 

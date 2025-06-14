@@ -18,6 +18,7 @@ namespace project_diamond
 {
 	class LevelConfigListModel;
 	class LevelConfigTreeModel;
+	class TextureModel;
 	class EditorCentralWidget : public QWidget
 	{
 		Q_OBJECT
@@ -28,6 +29,7 @@ namespace project_diamond
 		void setupUi();
 		void connectUi();
 		void setEngineConfig(const diamond_engine::EngineConfig& config);
+		void setTextureModel(TextureModel* model);
 
 		~EditorCentralWidget();
 

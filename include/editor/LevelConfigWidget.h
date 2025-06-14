@@ -14,6 +14,7 @@ namespace project_diamond
 	class LevelConfigListModel;
 	class LevelConfigTreeModel;
 	class ComponentEditorWidget;
+	class TextureModel;
 	class LevelConfigWidget : public QWidget
 	{
 		Q_OBJECT
@@ -26,6 +27,7 @@ namespace project_diamond
 
 		void setListModel(LevelConfigListModel* model);
 		void setTreeModel(LevelConfigTreeModel* model);
+		void setTextureModel(TextureModel* model);
 
 		~LevelConfigWidget();
 
@@ -55,5 +57,6 @@ namespace project_diamond
 		ComponentEditorWidget* m_componentEditor{ nullptr };
 		LevelConfigListModel* m_listModel		{ nullptr };
 		LevelConfigTreeModel* m_treeModel		{ nullptr };
+		TextureModel* m_textureModel			{ nullptr };
 	};
 }

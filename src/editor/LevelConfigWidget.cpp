@@ -5,6 +5,7 @@
 #include "LevelConfigListModel.h"
 #include "LevelConfigTreeModel.h"
 #include "LevelConfigWidget.h"
+#include "TextureModel.h"
 #include "ui_LevelConfigWidget.h"
 
 namespace project_diamond
@@ -91,6 +92,24 @@ namespace project_diamond
 		connect(model, &LevelConfigTreeModel::behaviourConfigSelected, this, &LevelConfigWidget::onBehaviourConfigSelected);
 
 		m_treeModel = model;
+	}
+
+	void LevelConfigWidget::setTextureModel(TextureModel* model)
+	{
+		if (m_textureModel)
+		{
+			// TODO
+
+			disconnect(m_textureModel, &TextureModel::imageChanged, m_componentEditor, &ComponentEditorWidget::imageChanged);
+		}
+
+		// TODO
+
+		connect(model, &TextureModel::imageChanged, m_componentEditor, &ComponentEditorWidget::imageChanged);
+
+		m_componentEditor->setTextureModel(model);
+
+		m_textureModel = model;
 	}
 
 	void LevelConfigWidget::onLevelSelectionChanged(const QItemSelection& selected)

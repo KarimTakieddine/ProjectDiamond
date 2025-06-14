@@ -65,6 +65,11 @@ namespace project_diamond
 		m_gameWindow->makeCurrent();
 	}
 
+	void EditorCentralWidget::setTextureModel(TextureModel* model)
+	{
+		m_levelWidget->setTextureModel(model);
+	}
+
 	void EditorCentralWidget::onLoadLevelsTriggered()
 	{
 		const QString directory = QFileDialog::getExistingDirectory(
