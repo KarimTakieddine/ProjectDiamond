@@ -14,6 +14,9 @@ namespace project_diamond
 		virtual void setupUi() override;
 		virtual void connectUi() override;
 
+		void setMinimum(const glm::vec3& minimum);
+		void setMaximum(const glm::vec3& maximum);
+
 	public slots:
 		void setData(const glm::vec3& data);
 

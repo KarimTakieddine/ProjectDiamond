@@ -13,15 +13,13 @@ namespace project_diamond
 	{
 		Vector3EditorWidget::setupUi();
 
-		m_wSpinBox->setMinimum(-10000.0);
-		m_wSpinBox->setMaximum(10000.0);
-
 		m_layout->addWidget(m_wSpinBox);
 	}
 
 	void Vector4EditorWidget::connectUi()
 	{
 		Vector3EditorWidget::connectUi();
+
 		connect(m_wSpinBox, &QDoubleSpinBox::valueChanged, this, &Vector4EditorWidget::onWChanged);
 	}
 
@@ -69,9 +67,24 @@ namespace project_diamond
 			});
 	}
 
+	void Vector4EditorWidget::setMinimum(const glm::vec4& minimum)
+	{
+		Vector3EditorWidget::setMinimum(minimum.xyz);
+
+		m_wSpinBox->setMinimum(static_cast<double>(minimum.w));
+	}
+
+	void Vector4EditorWidget::setMaximum(const glm::vec4& maximum)
+	{
+		Vector3EditorWidget::setMaximum(maximum.xyz);
+
+		m_wSpinBox->setMaximum(static_cast<double>(maximum.w));
+	}
+
 	void Vector4EditorWidget::setData(const glm::vec4& data)
 	{
 		Vector3EditorWidget::setData(data.xyz);
+
 		m_wSpinBox->setValue(data.w);
 	}
 }

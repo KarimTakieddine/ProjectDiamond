@@ -75,12 +75,16 @@ namespace project_diamond
 
 		auto* positionEditorWidget = ::createComponentWidget<Vector3EditorWidget>();
 		positionEditorWidget->setTitle(QStringLiteral("Position"));
+		positionEditorWidget->setMinimum({ -10000.0f, -10000.0f, -10000.0f });
+		positionEditorWidget->setMaximum({ 10000.0f, 10000.0f, 10000.0f });
 		positionEditorWidget->setData(model->getPosition());
 		connect(positionEditorWidget, &Vector3EditorWidget::dataChanged, model, &TransformComponentModel::setPosition);
 		insertWidget(positionEditorWidget, 0);
 
 		auto* localScaleEditorWidget = ::createComponentWidget<Vector3EditorWidget>();
 		localScaleEditorWidget->setTitle(QStringLiteral("Local Scale"));
+		localScaleEditorWidget->setMinimum({ 0.0f, 0.0f, 0.0f });
+		localScaleEditorWidget->setMaximum({ 10000.0f, 10000.0f, 10000.0f });
 		localScaleEditorWidget->setData(model->getLocalScale());
 		connect(localScaleEditorWidget, &Vector3EditorWidget::dataChanged, model, &TransformComponentModel::setLocalScale);
 		insertWidget(localScaleEditorWidget, 1);

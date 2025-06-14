@@ -13,12 +13,6 @@ namespace project_diamond
 
 	void Vector2EditorWidget::setupUi()
 	{
-		m_xSpinBox->setMinimum(-10000.0);
-		m_xSpinBox->setMaximum(10000.0);
-
-		m_ySpinBox->setMinimum(-10000.0);
-		m_ySpinBox->setMaximum(10000.0);
-
 		m_layout->addWidget(m_xSpinBox);
 		m_layout->addWidget(m_ySpinBox);
 
@@ -26,6 +20,18 @@ namespace project_diamond
 
 		setMinimumSize(256, 64);
 		setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	}
+
+	void Vector2EditorWidget::setMinimum(const glm::vec2& minimum)
+	{
+		m_xSpinBox->setMinimum(static_cast<double>(minimum.x));
+		m_ySpinBox->setMinimum(static_cast<double>(minimum.y));
+	}
+
+	void Vector2EditorWidget::setMaximum(const glm::vec2& maximum)
+	{
+		m_xSpinBox->setMaximum(static_cast<double>(maximum.x));
+		m_ySpinBox->setMaximum(static_cast<double>(maximum.y));
 	}
 
 	void Vector2EditorWidget::connectUi()

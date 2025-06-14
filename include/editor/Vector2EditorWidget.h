@@ -20,6 +20,9 @@ namespace project_diamond
 		virtual void setupUi();
 		virtual void connectUi();
 
+		void setMinimum(const glm::vec2& minimum);
+		void setMaximum(const glm::vec2& maximum);
+
 	public slots:
 		void setData(const glm::vec2& data);
 
