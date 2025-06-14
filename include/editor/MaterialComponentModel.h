@@ -16,10 +16,11 @@ namespace project_diamond
 
 		void setData(diamond_engine::RenderComponentConfig* data) final override;
 		const diamond_engine::RenderComponentConfig* getData() const final override;
+		bool unparse(pugi::xml_node& node) const final override;
 
 		const glm::vec3& getColor() const;
 		const glm::vec2& getTextureOffset() const;
-		const QString& getTextureName() const;
+		QString getTextureName() const;
 
 	signals:
 		void colorChanged(const glm::vec3&);

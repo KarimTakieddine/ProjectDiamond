@@ -108,7 +108,9 @@ namespace project_diamond
 			}
 
 			auto instanceModel = QSharedPointer<GameInstanceModel>::create();
-			
+			instanceModel->setName(QString::fromStdString(instance->getName()));
+			instanceModel->setType(instance->getType());
+
 			for (const auto& renderComponent : instance->getRenderConfigs())
 			{
 				auto it = ::renderComponentCreators.constFind(QString::fromStdString(renderComponent->getName()));
@@ -196,13 +198,28 @@ namespace project_diamond
 
 		rootNode.append_attribute("name").set_value(getName().toStdString().c_str());
 
+		pugi::xml_node instancesNode = rootNode.append_child("Instances");
+		if (!instancesNode)
+		{
+			return false;
+		}
+
+		for (const auto& instance : m_instances)
+		{
+			pugi::xml_node instanceNode = instancesNode.append_child("Instance");
+			if (!instanceNode)
+			{
+				return false;
+			}
+
+			instance->unparse(instanceNode);
+		}
+
 		if (!document.save_file(path.c_str(), "\t", pugi::format_indent, pugi::encoding_utf8))
 		{
 			emit parseStatus(QStringLiteral("Failed to serialise level: ") + m_name + QStringLiteral(" to: ") + file);
 			return false;
 		}
-
-		// TODO: Serialize components
 
 		m_path = file;
 		setDirty(false);
@@ -223,6 +240,12 @@ namespace project_diamond
 		}
 
 		m_signalMapper->setMapping(instance.get(), index);
+
+		connect(
+			instance.get(),
+			&GameInstanceModel::instanceTypeChanged,
+			m_signalMapper,
+			qOverload<>(&QSignalMapper::map));
 
 		connect(
 			instance.get(),

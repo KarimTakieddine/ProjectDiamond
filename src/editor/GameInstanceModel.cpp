@@ -74,14 +74,31 @@ namespace
 		{ QStringLiteral("Transform"), connectTransformComponent },
 		{ QStringLiteral("Material"), connectMaterialomponent }
 	};
+
+	using diamond_engine::GameInstanceType;
+
+	QString getTypeString(diamond_engine::GameInstanceType type)
+	{
+		switch (type)
+		{
+		case diamond_engine::GameInstanceType::SPRITE:
+			return QStringLiteral("sprite");
+		case diamond_engine::GameInstanceType::COLLIDER_2D:
+			return QStringLiteral("collider2D");
+		default:
+			break;
+		}
+
+		return QString();
+	}
 }
 
 namespace project_diamond
 {
 	GameInstanceModel::GameInstanceModel(QObject* parent /* = nullptr */) :
-		QObject					(parent),
-		m_renderSignalMapper	(new QSignalMapper(this)),
-		m_behaviourSignalMapper	(new QSignalMapper(this))
+		QObject(parent),
+		m_renderSignalMapper(new QSignalMapper(this)),
+		m_behaviourSignalMapper(new QSignalMapper(this))
 	{
 		connect(m_renderSignalMapper, &QSignalMapper::mappedInt, this, &GameInstanceModel::renderComponentDataChanged);
 		connect(m_behaviourSignalMapper, &QSignalMapper::mappedInt, this, &GameInstanceModel::behaviourComponentDataChanged);
@@ -90,6 +107,16 @@ namespace project_diamond
 	QSignalMapper* GameInstanceModel::getRenderSignalMapper() const
 	{
 		return m_renderSignalMapper;
+	}
+
+	diamond_engine::GameInstanceType GameInstanceModel::getType() const
+	{
+		return m_type;
+	}
+
+	const QString& GameInstanceModel::getName() const
+	{
+		return m_name;
 	}
 
 	void GameInstanceModel::insertRenderComponent(qsizetype index, const QSharedPointer<RenderComponentModel>& component)
@@ -146,5 +173,51 @@ namespace project_diamond
 	const QVector<QSharedPointer<RenderComponentModel>>& GameInstanceModel::getRenderComponents() const
 	{
 		return m_renderComponents;
+	}
+
+	bool GameInstanceModel::unparse(pugi::xml_node& node) const
+	{
+		// TODO name and type
+
+		node.append_attribute("name").set_value(m_name.toStdString().c_str());
+		node.append_attribute("type").set_value(::getTypeString(m_type).toStdString().c_str());
+
+		pugi::xml_node renderComponentsNode = node.append_child("RenderComponents");
+		for (const auto& renderComponent : m_renderComponents)
+		{
+			pugi::xml_node componentNode = node.append_child();
+			if (!componentNode)
+			{
+				return false;
+			}
+
+			renderComponent->unparse(componentNode);
+		}
+
+		return true;
+	}
+
+	void GameInstanceModel::setType(diamond_engine::GameInstanceType type)
+	{
+		if (type == m_type)
+		{
+			return;
+		}
+
+		m_type = type;
+
+		emit instanceTypeChanged(type);
+	}
+
+	void GameInstanceModel::setName(const QString& name)
+	{
+		if (name == m_name)
+		{
+			return;
+		}
+
+		m_name = name;
+
+		emit nameChanged(name);
 	}
 }

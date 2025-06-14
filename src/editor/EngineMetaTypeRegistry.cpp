@@ -12,6 +12,8 @@ namespace project_diamond
 			qRegisterMetaType<glm::vec3>();
 			qRegisterMetaType<glm::vec4>();
 
+			qRegisterMetaType<diamond_engine::GameInstanceType>();
+
 			registered = true;
 		}
 	}
