@@ -95,6 +95,9 @@ namespace project_diamond
 
 	void LevelConfigWidget::onLevelSelectionChanged(const QItemSelection& selected)
 	{
+		m_componentEditor->clear();
+		m_componentEditor->setEnabled(false);
+
 		if (!m_listModel)
 		{
 			return;
