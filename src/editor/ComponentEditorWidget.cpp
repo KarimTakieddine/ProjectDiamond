@@ -85,6 +85,8 @@ namespace project_diamond
 		connect(localScaleEditorWidget, &Vector3EditorWidget::dataChanged, model, &TransformComponentModel::setLocalScale);
 		insertWidget(localScaleEditorWidget, 1);
 
+		m_layout->setStretch(m_layout->count() - 1, 1);
+
 		return true;
 	}
 

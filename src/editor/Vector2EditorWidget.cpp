@@ -18,7 +18,7 @@ namespace project_diamond
 
 		setLayout(m_layout);
 
-		setMinimumSize(128, 64);
+		setMinimumSize(256, 64);
 		setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 	}
 

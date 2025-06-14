@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>487</width>
-    <height>296</height>
+    <width>715</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -123,6 +123,18 @@
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <widget class="QTreeView" name="levelConfigTreeView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>160</width>
+            <height>128</height>
+           </size>
+          </property>
           <property name="editTriggers">
            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
           </property>
@@ -139,8 +151,8 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>120</width>
-            <height>90</height>
+            <width>512</width>
+            <height>256</height>
            </size>
           </property>
           <property name="title">
