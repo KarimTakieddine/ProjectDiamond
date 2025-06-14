@@ -13,6 +13,7 @@ namespace project_diamond
 {
 	class LevelConfigListModel;
 	class LevelConfigTreeModel;
+	class ComponentEditorWidget;
 	class LevelConfigWidget : public QWidget
 	{
 		Q_OBJECT
@@ -50,8 +51,9 @@ namespace project_diamond
 		void onBehaviourConfigSelected(int componentIndex, int instanceIndex);
 
 	private:
-		Ui::LevelConfigWidget* m_ui			{ nullptr };
-		LevelConfigListModel* m_listModel	{ nullptr };
-		LevelConfigTreeModel* m_treeModel	{ nullptr };
+		Ui::LevelConfigWidget* m_ui				{ nullptr };
+		ComponentEditorWidget* m_componentEditor{ nullptr };
+		LevelConfigListModel* m_listModel		{ nullptr };
+		LevelConfigTreeModel* m_treeModel		{ nullptr };
 	};
 }

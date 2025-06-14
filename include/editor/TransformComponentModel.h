@@ -17,6 +17,9 @@ namespace project_diamond
 		void setData(diamond_engine::RenderComponentConfig* data) final override;
 		const diamond_engine::RenderComponentConfig* getData() const final override;
 
+		const glm::vec3& getPosition() const;
+		const glm::vec3& getLocalScale() const;
+
 	signals:
 		void positionChanged(const glm::vec3&);
 		void localScaleChanged(const glm::vec3&);

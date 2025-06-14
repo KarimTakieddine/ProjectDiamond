@@ -1,6 +1,7 @@
 #include <QFileDialog>
 #include <QPushButton>
 
+#include "ComponentEditorWidget.h"
 #include "LevelConfigListModel.h"
 #include "LevelConfigTreeModel.h"
 #include "LevelConfigWidget.h"
@@ -10,7 +11,8 @@ namespace project_diamond
 {
 	LevelConfigWidget::LevelConfigWidget(QWidget* parent)
 		: QWidget(parent)
-		, m_ui(new Ui::LevelConfigWidget())
+		, m_ui				(new Ui::LevelConfigWidget())
+		, m_componentEditor	(new ComponentEditorWidget())
 	{
 
 	}
@@ -22,10 +24,16 @@ namespace project_diamond
 
 		m_ui->removeCurrentButton->setEnabled(false);
 		m_ui->clearAllButton->setEnabled(false);
+
+		m_componentEditor->setupUi();
+		m_ui->componentConfigLayout->addWidget(m_componentEditor);
+		m_componentEditor->setEnabled(false);
 	}
 
 	void LevelConfigWidget::connectUi()
 	{
+		m_componentEditor->connectUi();
+
 		connect(m_ui->levelsTableView, &QTableView::doubleClicked, this, &LevelConfigWidget::onTableDoubleClicked);
 		connect(m_ui->insertNewBeforeButton, &QPushButton::clicked, this, &LevelConfigWidget::onInsertNewBeforeClicked);
 		connect(m_ui->insertNewAfterButton, &QPushButton::clicked, this, &LevelConfigWidget::onInsertNewAfterClicked);
@@ -214,49 +222,63 @@ namespace project_diamond
 
 	void LevelConfigWidget::onRenderConfigSelected(int componentIndex, int instanceIndex)
 	{
+		if (componentIndex < 0 || instanceIndex < 0)
+		{
+			m_componentEditor->clear();
+			m_componentEditor->setEnabled(false);
+			return;
+		}
+
 		const QModelIndex currentIndex = m_ui->levelsTableView->currentIndex();
 		if (!currentIndex.isValid())
 		{
-			// TODO
+			m_componentEditor->clear();
+			m_componentEditor->setEnabled(false);
 			return;
 		}
 
 		auto* levelConfig = qvariant_cast<const LevelConfigModel*>(m_listModel->data(currentIndex, Qt::UserRole));
 		if (!levelConfig)
 		{
-			// TODO
+			m_componentEditor->clear();
+			m_componentEditor->setEnabled(false);
 			return;
 		}
 
 		const auto& gameInstances = levelConfig->getInstances();
-		if (instanceIndex < 0 || instanceIndex >= gameInstances.count())
+		if (instanceIndex >= gameInstances.count())
 		{
-			// TODO
+			m_componentEditor->clear();
+			m_componentEditor->setEnabled(false);
 			return;
 		}
 
 		const auto& gameInstance = gameInstances.at(instanceIndex);
 		if (!gameInstance)
 		{
-			// TODO
+			m_componentEditor->clear();
+			m_componentEditor->setEnabled(false);
 			return;
 		}
 
 		const auto& renderComponents = gameInstance->getRenderComponents();
-		if (componentIndex < 0 || componentIndex >= renderComponents.size())
+		if (componentIndex >= renderComponents.size())
 		{
-			// TODO
+			m_componentEditor->clear();
+			m_componentEditor->setEnabled(false);
 			return;
 		}
 
 		const auto& renderComponent = renderComponents.at(componentIndex);
 		if (!renderComponent)
 		{
-			// TODO
+			m_componentEditor->clear();
+			m_componentEditor->setEnabled(false);
 			return;
 		}
 
-		qDebug() << QString::fromStdString(renderComponent->getData()->getName());
+		m_componentEditor->setEnabled(
+			m_componentEditor->configureComponent(renderComponent.get(), renderComponent->getData()->getName()));
 	}
 
 	void LevelConfigWidget::onBehaviourConfigSelected(int componentIndex, int instanceIndex)

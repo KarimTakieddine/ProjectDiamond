@@ -4,7 +4,7 @@
 
 namespace project_diamond
 {
-	TransformComponentModel::TransformComponentModel(QObject* parent /* = nullptr */) : RenderComponentModel(parent) { }
+	TransformComponentModel::TransformComponentModel(QObject* parent /* = nullptr */) : RenderComponentModel(parent) {}
 
 	void TransformComponentModel::setData(diamond_engine::RenderComponentConfig* data)
 	{
@@ -14,6 +14,16 @@ namespace project_diamond
 	const diamond_engine::RenderComponentConfig* TransformComponentModel::getData() const
 	{
 		return m_data;
+	}
+
+	const glm::vec3& TransformComponentModel::getPosition() const
+	{
+		return m_data->getPosition();
+	}
+
+	const glm::vec3& TransformComponentModel::getLocalScale() const
+	{
+		return m_data->getLocalScale();
 	}
 
 	void TransformComponentModel::setPosition(const glm::vec3& position)

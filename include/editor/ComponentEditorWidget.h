@@ -1,12 +1,18 @@
 #pragma once
 
+#include <functional>
+
+#include <QHash>
 #include <QWidget>
+#include <QVBoxLayout>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class ComponentEditorWidget; };
 QT_END_NAMESPACE
 
 namespace project_diamond
 {
+	class RenderComponentModel;
 	class ComponentEditorWidget : public QWidget
 	{
 		Q_OBJECT
@@ -16,8 +22,16 @@ namespace project_diamond
 
 		void setupUi();
 		void connectUi();
+		void clear();
+
+		bool configureComponent(RenderComponentModel* component, const QString& name);
 
 	private:
+		void insertWidget(QWidget* widget, int index);
+		bool configureTransformComponent(RenderComponentModel* component);
 
+		QHash<QString, std::function<bool(RenderComponentModel*)>> m_configureFunctions;
+		QVector<QWidget*> m_childWidgets;
+		QVBoxLayout* m_layout{ nullptr };
 	};
 }

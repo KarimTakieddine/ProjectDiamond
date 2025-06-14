@@ -11,7 +11,10 @@
 
 namespace project_diamond
 {
-	LevelConfigListModel::LevelConfigListModel(QObject* parent) : QAbstractItemModel(parent) { }
+	LevelConfigListModel::LevelConfigListModel(QObject* parent) : QAbstractItemModel(parent), m_signalMapper(new QSignalMapper(this))
+	{
+		connect(m_signalMapper, &QSignalMapper::mappedInt, this, &LevelConfigListModel::onInstanceDataChanged);
+	}
 
 	QModelIndex LevelConfigListModel::index(int row, int column, const QModelIndex& parent) const
 	{
@@ -248,6 +251,8 @@ namespace project_diamond
 		for (size_t i = row; i <= static_cast<size_t>(lastIndex); ++i)
 		{
 			auto config = QSharedPointer<LevelConfigModel>::create();
+			m_signalMapper->setMapping(config.get(), i);
+			connect(config.get(), &LevelConfigModel::instanceDataChanged, m_signalMapper, qOverload<>(&QSignalMapper::map));
 			m_data.insert(std::next(m_data.begin(), i), config);
 		}
 
@@ -340,5 +345,11 @@ namespace project_diamond
 		}
 
 		return true;
+	}
+
+	void LevelConfigListModel::onInstanceDataChanged(int levelIndex)
+	{
+		const QModelIndex modelIndex = index(levelIndex, 0);
+		emit dataChanged(modelIndex, modelIndex);
 	}
 }

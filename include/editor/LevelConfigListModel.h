@@ -2,6 +2,7 @@
 
 #include <QAbstractItemModel>
 #include <QSharedPointer>
+#include <QSignalMapper>
 #include <QVector>
 
 #include "LevelConfigModel.h"
@@ -28,7 +29,11 @@ namespace project_diamond
 
 		bool loadLevels(const QString& sceneDirectory);
 
+	private slots:
+		void onInstanceDataChanged(int levelIndex);
+
 	private:
 		QVector<QSharedPointer<LevelConfigModel>> m_data;
+		QSignalMapper* m_signalMapper{ nullptr };
 	};
 }

@@ -61,19 +61,26 @@ namespace project_diamond
 	{
 		if (!selectedIndex.isValid())
 		{
-			// TODO
+			emit renderConfigSelected(-1, -1);
+			emit behaviourConfigSelected(-1, -1);
 			return;
 		}
+
+		const int row = selectedIndex.row();
 
 		const QModelIndex parentIndex = selectedIndex.parent();
 		if (!parentIndex.isValid())
 		{
+			emit renderConfigSelected(row, -1);
+			emit behaviourConfigSelected(row, -1);
 			return;
 		}
 
 		auto* item = itemFromIndex(parentIndex);
 		if (!item)
 		{
+			emit renderConfigSelected(row, -1);
+			emit behaviourConfigSelected(row, -1);
 			return;
 		}
 
@@ -86,6 +93,8 @@ namespace project_diamond
 		const QModelIndex grandParentIndex = parentIndex.parent();
 		if (!grandParentIndex.isValid())
 		{
+			emit renderConfigSelected(row, -1);
+			emit behaviourConfigSelected(row, -1);
 			return;
 		}
 

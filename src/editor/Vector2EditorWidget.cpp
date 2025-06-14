@@ -17,6 +17,9 @@ namespace project_diamond
 		m_layout->addWidget(m_ySpinBox);
 
 		setLayout(m_layout);
+
+		setMinimumSize(128, 64);
+		setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 	}
 
 	void Vector2EditorWidget::connectUi()
