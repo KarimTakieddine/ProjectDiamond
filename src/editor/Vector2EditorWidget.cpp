@@ -8,11 +8,17 @@ namespace project_diamond
 		m_xSpinBox	(new QDoubleSpinBox()),
 		m_ySpinBox	(new QDoubleSpinBox())
 	{
-
+		
 	}
 
 	void Vector2EditorWidget::setupUi()
 	{
+		m_xSpinBox->setMinimum(-10000.0);
+		m_xSpinBox->setMaximum(10000.0);
+
+		m_ySpinBox->setMinimum(-10000.0);
+		m_ySpinBox->setMaximum(10000.0);
+
 		m_layout->addWidget(m_xSpinBox);
 		m_layout->addWidget(m_ySpinBox);
 

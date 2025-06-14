@@ -12,6 +12,10 @@ namespace project_diamond
 	void Vector4EditorWidget::setupUi()
 	{
 		Vector3EditorWidget::setupUi();
+
+		m_wSpinBox->setMinimum(-10000.0);
+		m_wSpinBox->setMaximum(10000.0);
+
 		m_layout->addWidget(m_wSpinBox);
 	}
 
