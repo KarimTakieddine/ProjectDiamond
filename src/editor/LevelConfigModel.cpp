@@ -8,6 +8,7 @@
 #include <parser/GameSceneConfigParser.h>
 
 #include "LevelConfigModel.h"
+#include "MaterialComponentModel.h"
 #include "TransformComponentModel.h"
 
 namespace
@@ -41,6 +42,7 @@ namespace
 	using project_diamond::LevelConfigModel;
 	using project_diamond::RenderComponentModel;
 	using project_diamond::TransformComponentModel;
+	using project_diamond::MaterialComponentModel;
 
 	QSharedPointer<RenderComponentModel> createTransformComponentModel()
 	{
@@ -48,9 +50,16 @@ namespace
 		return result.staticCast<RenderComponentModel>();
 	}
 
+	QSharedPointer<RenderComponentModel> createMaterialComponentModel()
+	{
+		auto result = QSharedPointer<MaterialComponentModel>::create();
+		return result.staticCast<RenderComponentModel>();
+	}
+
 	const QHash<QString, project_diamond::LevelConfigModel::RComponentCreateFunc> renderComponentCreators =
 	{
-		{ QStringLiteral("Transform"), createTransformComponentModel }
+		{ QStringLiteral("Transform"),	createTransformComponentModel	},
+		{ QStringLiteral("Material"),	createMaterialComponentModel	}
 	};
 }
 
@@ -252,6 +261,11 @@ namespace project_diamond
 		}
 
 		m_instances.removeAt(index);
+
+		for (int i = 0; i < m_instances.size(); ++i)
+		{
+			m_signalMapper->setMapping(m_instances.at(i).get(), i);
+		}
 
 		emit gameInstanceRemoved(index);
 	}

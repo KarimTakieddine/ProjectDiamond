@@ -350,6 +350,13 @@ namespace project_diamond
 	void LevelConfigListModel::onInstanceDataChanged(int levelIndex)
 	{
 		const QModelIndex modelIndex = index(levelIndex, 0);
+		if (!modelIndex.isValid() || levelIndex < 0 || levelIndex >= m_data.count())
+		{
+			return;
+		}
+
+		m_data.at(levelIndex)->setDirty(true);
+
 		emit dataChanged(modelIndex, modelIndex);
 	}
 }

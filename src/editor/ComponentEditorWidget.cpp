@@ -1,4 +1,5 @@
 #include "ComponentEditorWidget.h"
+#include "MaterialComponentModel.h"
 #include "TransformComponentModel.h"
 #include "Vector2EditorWidget.h"
 #include "Vector3EditorWidget.h"
@@ -25,7 +26,8 @@ namespace project_diamond
 	{
 		m_configureFunctions =
 		{
-			{ QStringLiteral("Transform"), std::bind(&ComponentEditorWidget::configureTransformComponent, this, std::placeholders::_1) }
+			{ QStringLiteral("Transform"), std::bind(&ComponentEditorWidget::configureTransformComponent, this, std::placeholders::_1) },
+			{ QStringLiteral("Material"), std::bind(&ComponentEditorWidget::configureMaterialComponent, this, std::placeholders::_1) }
 		};
 	}
 
@@ -88,6 +90,37 @@ namespace project_diamond
 		localScaleEditorWidget->setData(model->getLocalScale());
 		connect(localScaleEditorWidget, &Vector3EditorWidget::dataChanged, model, &TransformComponentModel::setLocalScale);
 		insertWidget(localScaleEditorWidget, 1);
+
+		m_layout->setStretch(m_layout->count() - 1, 1);
+
+		return true;
+	}
+
+	bool ComponentEditorWidget::configureMaterialComponent(RenderComponentModel* component)
+	{
+		auto* model = dynamic_cast<MaterialComponentModel*>(component);
+		if (!model)
+		{
+			return false;
+		}
+
+		auto* colorEditorWidget = ::createComponentWidget<Vector3EditorWidget>();
+		colorEditorWidget->setTitle(QStringLiteral("Color"));
+		colorEditorWidget->setMinimum({ 0.0f, 0.0f, 0.0f });
+		colorEditorWidget->setMaximum({ 1.0f, 1.0f, 1.0f });
+		colorEditorWidget->setData(model->getColor());
+		connect(colorEditorWidget, &Vector3EditorWidget::dataChanged, model, &MaterialComponentModel::setColor);
+		insertWidget(colorEditorWidget, 0);
+
+		auto* textureOffsetEditorWidget = ::createComponentWidget<Vector2EditorWidget>();
+		textureOffsetEditorWidget->setTitle(QStringLiteral("Texture Offset"));
+		textureOffsetEditorWidget->setMinimum({ 0.0f, 0.0f });
+		textureOffsetEditorWidget->setMaximum({ 100.0f, 100.0f });
+		textureOffsetEditorWidget->setData(model->getTextureOffset());
+		connect(textureOffsetEditorWidget, &Vector2EditorWidget::dataChanged, model, &MaterialComponentModel::setTextureOffset);
+		insertWidget(textureOffsetEditorWidget, 1);
+
+		// TODO: Texture widget?
 
 		m_layout->setStretch(m_layout->count() - 1, 1);
 

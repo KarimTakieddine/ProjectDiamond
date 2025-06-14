@@ -28,7 +28,9 @@ namespace project_diamond
 
 	private:
 		void insertWidget(QWidget* widget, int index);
+		
 		bool configureTransformComponent(RenderComponentModel* component);
+		bool configureMaterialComponent(RenderComponentModel* component);
 
 		QHash<QString, std::function<bool(RenderComponentModel*)>> m_configureFunctions;
 		QVector<QWidget*> m_childWidgets;

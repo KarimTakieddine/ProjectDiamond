@@ -3,12 +3,14 @@
 #include <config/RenderComponentConfig.h>
 
 #include "GameInstanceModel.h"
+#include "MaterialComponentModel.h"
 #include "TransformComponentModel.h"
 
 namespace
 {
 	using project_diamond::RenderComponentModel;
 	using project_diamond::TransformComponentModel;
+	using project_diamond::MaterialComponentModel;
 	using project_diamond::GameInstanceModel;
 
 	void connectTransformComponent(GameInstanceModel* instance, const QSharedPointer<RenderComponentModel>& model, qsizetype index)
@@ -36,9 +38,41 @@ namespace
 		signalMapper->setMapping(componentModel, static_cast<int>(index));
 	}
 
+	void connectMaterialomponent(GameInstanceModel* instance, const QSharedPointer<RenderComponentModel>& model, qsizetype index)
+	{
+		auto* componentModel = dynamic_cast<MaterialComponentModel*>(model.get());
+		if (!componentModel)
+		{
+			return;
+		}
+
+		auto* signalMapper = instance->getRenderSignalMapper();
+
+		QObject::connect(
+			componentModel,
+			&MaterialComponentModel::colorChanged,
+			signalMapper,
+			qOverload<>(&QSignalMapper::map));
+
+		QObject::connect(
+			componentModel,
+			&MaterialComponentModel::textureOffsetChanged,
+			signalMapper,
+			qOverload<>(&QSignalMapper::map));
+
+		QObject::connect(
+			componentModel,
+			&MaterialComponentModel::textureNameChanged,
+			signalMapper,
+			qOverload<>(&QSignalMapper::map));
+
+		signalMapper->setMapping(componentModel, static_cast<int>(index));
+	}
+
 	const QHash<QString, GameInstanceModel::RComponentConnectFunc> componentConnectFunctions =
 	{
-		{ QStringLiteral("Transform"), connectTransformComponent }
+		{ QStringLiteral("Transform"), connectTransformComponent },
+		{ QStringLiteral("Material"), connectMaterialomponent }
 	};
 }
 
