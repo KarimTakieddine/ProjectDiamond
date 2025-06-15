@@ -47,6 +47,7 @@ namespace project_diamond
 		void onRemoveCurrentClicked();
 		void onClearAllClicked();
 		void onRowsRemoved();
+		void onRowsAboutToBeRemoved(const QModelIndex& parent, int first, int last);
 		void onRowsInserted(const QModelIndex& parent, int first, int last);
 		void onRenderConfigSelected(int componentIndex, int instanceIndex);
 		void onBehaviourConfigSelected(int componentIndex, int instanceIndex);

@@ -39,9 +39,10 @@ namespace project_diamond
 
 		m_ui->levelsTableView->setModel(m_listModel);
 
-		connect(m_listModel, &LevelConfigListModel::dataChanged,	this, &LevelConfigWidget::onLevelDataChanged);
-		connect(m_listModel, &LevelConfigListModel::rowsRemoved,	this, &LevelConfigWidget::onRowsRemoved);
-		connect(m_listModel, &LevelConfigListModel::rowsInserted,	this, &LevelConfigWidget::onRowsInserted);
+		connect(m_listModel, &LevelConfigListModel::dataChanged,			this, &LevelConfigWidget::onLevelDataChanged);
+		connect(m_listModel, &LevelConfigListModel::rowsAboutToBeRemoved,	this, &LevelConfigWidget::onRowsAboutToBeRemoved);
+		connect(m_listModel, &LevelConfigListModel::rowsRemoved,			this, &LevelConfigWidget::onRowsRemoved);
+		connect(m_listModel, &LevelConfigListModel::rowsInserted,			this, &LevelConfigWidget::onRowsInserted);
 
 		connect(m_ui->levelsTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &LevelConfigWidget::onLevelSelectionChanged);
 
@@ -80,8 +81,10 @@ namespace project_diamond
 			return;
 		}
 
+		QTreeView* const treeView = m_ui->levelConfigTreeView;
 		if (selected.size() == 0)
 		{
+			treeView->setEnabled(false);
 			return;
 		}
 
@@ -92,10 +95,9 @@ namespace project_diamond
 		if (!configModel)
 		{
 			// TODO
+			treeView->setEnabled(false);
 			return;
 		}
-
-		QTreeView* const treeView = m_ui->levelConfigTreeView;
 
 		QAbstractItemModel* const previousTreeModel = treeView->model();
 		if (previousTreeModel)
@@ -106,6 +108,8 @@ namespace project_diamond
 		LevelConfigTreeModel* treeModel = m_treeContainer->getTreeModel(configModel->getUuid());
 		if (treeModel)
 		{
+			treeView->setEnabled(true);
+
 			QItemSelectionModel* previousSelectionModel = treeView->selectionModel();
 			treeView->setModel(treeModel);
 			delete previousSelectionModel;
@@ -195,11 +199,6 @@ namespace project_diamond
 
 	void LevelConfigWidget::onRowsRemoved()
 	{
-		if (!m_listModel)
-		{
-			return;
-		}
-
 		const int rowCount = m_listModel->rowCount();
 		m_ui->clearAllButton->setEnabled(rowCount != 0);
 
@@ -212,14 +211,32 @@ namespace project_diamond
 		m_ui->levelsTableView->setFocus();
 	}
 
-	void LevelConfigWidget::onRowsInserted(const QModelIndex& parent, int first, int last)
+	void LevelConfigWidget::onRowsAboutToBeRemoved(const QModelIndex& parent, int first, int last)
 	{
 		Q_UNUSED(parent);
 
-		if (!m_listModel)
+		for (int i = first; i <= last; ++i)
 		{
-			return;
+			auto* configModel = qvariant_cast<const LevelConfigModel*>(m_listModel->data(m_listModel->index(i, 0), Qt::UserRole));
+			if (!configModel)
+			{
+				// TODO
+				continue;
+			}
+
+			m_treeContainer->removeTreeModel(configModel->getUuid());
 		}
+
+		if (m_listModel->rowCount() == 0)
+		{
+			m_ui->levelConfigTreeView->setModel(nullptr);
+			m_ui->levelConfigTreeView->setEnabled(false);
+		}
+	}
+
+	void LevelConfigWidget::onRowsInserted(const QModelIndex& parent, int first, int last)
+	{
+		Q_UNUSED(parent);
 
 		for (int i = first; i <= last; ++i)
 		{
