@@ -27,7 +27,9 @@ namespace project_diamond
 		const QString& getPath() const;
 
 		bool setName(const QString& name);
-		const QString getName() const;
+		const QString& getName() const;
+
+		const QString& getUuid() const;
 
 		bool setColor(const QColor& color);
 		const QColor& getColor() const;
@@ -43,16 +45,26 @@ namespace project_diamond
 
 	signals:
 		void parseStatus(const QString&);
-		void gameInstanceInserted(qsizetype index);
-		void gameInstanceRemoved(qsizetype index);
+		void gameInstanceInserted(qsizetype, const QString&);
+		void gameInstanceRemoved(qsizetype);
 		void instanceDataChanged(int);
+		void renderComponentInserted(int, int, const QString&);
+		void renderComponentRemoved(int, int);
+		void pathChanged(const QString&);
+
+	private slots:
+		void onRenderComponentInserted(qsizetype index, const QString& name);
+		void onRenderComponentRemoved(qsizetype index);
 
 	private:
+		int getInstanceIndex(QObject* sender) const;
+
 		QVector<QSharedPointer<GameInstanceModel>> m_instances;
 		std::unique_ptr<diamond_engine::GameSceneConfig> m_data	{ nullptr };
 		QSignalMapper* m_signalMapper							{ nullptr };
 		QString m_name											{ };
 		QString m_path											{ };
+		QString m_uuid											{ };
 		QColor m_color											{ };
 		bool m_dirty											{ true };
 	};

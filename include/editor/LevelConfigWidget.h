@@ -12,7 +12,7 @@ QT_END_NAMESPACE
 namespace project_diamond
 {
 	class LevelConfigListModel;
-	class LevelConfigTreeModel;
+	class LevelConfigTreeContainer;
 	class ComponentEditorWidget;
 	class TextureModel;
 	class LevelConfigWidget : public QWidget
@@ -25,13 +25,12 @@ namespace project_diamond
 		void setupUi();
 		void connectUi();
 
-		void setListModel(LevelConfigListModel* model);
-		void setTreeModel(LevelConfigTreeModel* model);
 		void setTextureModel(TextureModel* model);
 
 		~LevelConfigWidget();
 
 	public slots:
+		void loadLevels();
 		void saveCurrentLevel();
 		void saveCurrentLevelAs();
 
@@ -53,10 +52,10 @@ namespace project_diamond
 		void onBehaviourConfigSelected(int componentIndex, int instanceIndex);
 
 	private:
-		Ui::LevelConfigWidget* m_ui				{ nullptr };
-		ComponentEditorWidget* m_componentEditor{ nullptr };
-		LevelConfigListModel* m_listModel		{ nullptr };
-		LevelConfigTreeModel* m_treeModel		{ nullptr };
-		TextureModel* m_textureModel			{ nullptr };
+		Ui::LevelConfigWidget* m_ui					{ nullptr };
+		ComponentEditorWidget* m_componentEditor	{ nullptr };
+		LevelConfigListModel* m_listModel			{ nullptr };
+		LevelConfigTreeContainer* m_treeContainer	{ nullptr };
+		TextureModel* m_textureModel				{ nullptr };
 	};
 }

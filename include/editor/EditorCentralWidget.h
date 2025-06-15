@@ -33,23 +33,16 @@ namespace project_diamond
 
 		~EditorCentralWidget();
 
-	public slots:
-		void onLoadLevelsTriggered();
-
 	signals:
 		void levelSelectionChanged(const LevelConfigModel* levelConfig);
 		void levelDataChanged(const LevelConfigModel* levelConfig);
 		void saveLevelTriggered();
 		void saveLevelAsTriggered();
-
-	private slots:
-		void onLevelChanged(const LevelConfigModel* levelConfig);
+		void loadLevelsTriggered();
 
 	private:
 		std::unique_ptr<diamond_engine::GameEngine> m_gameEngine{ nullptr };
 		Ui::EditorCentralWidget* m_ui							{ nullptr };
-		LevelConfigListModel* m_levelListModel					{ nullptr };
-		LevelConfigTreeModel* m_levelTreeModel					{ nullptr };
 		EditorGameWindow* m_gameWindow							{ nullptr };
 		LevelConfigWidget* m_levelWidget						{ nullptr };
 	};

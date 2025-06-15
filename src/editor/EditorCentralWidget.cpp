@@ -10,13 +10,11 @@
 namespace project_diamond
 {
 	EditorCentralWidget::EditorCentralWidget(QWidget* parent /* = nullptr */)
-		: QWidget(parent)
-		, m_gameEngine(std::make_unique<diamond_engine::GameEngine>())
-		, m_ui(new Ui::EditorCentralWidget())
-		, m_levelListModel(new LevelConfigListModel(this))
-		, m_levelTreeModel(new LevelConfigTreeModel(this))
-		, m_gameWindow(new EditorGameWindow())
-		, m_levelWidget(new LevelConfigWidget())
+		: QWidget		(parent)
+		, m_gameEngine	(std::make_unique<diamond_engine::GameEngine>())
+		, m_ui			(new Ui::EditorCentralWidget())
+		, m_gameWindow	(new EditorGameWindow())
+		, m_levelWidget	(new LevelConfigWidget())
 	{
 	}
 
@@ -24,8 +22,6 @@ namespace project_diamond
 	{
 		m_ui->setupUi(this);
 		m_levelWidget->setupUi();
-		m_levelWidget->setListModel(m_levelListModel);
-		m_levelWidget->setTreeModel(m_levelTreeModel);
 
 		QSplitter* splitter = new QSplitter();
 		splitter->addWidget(m_levelWidget);
@@ -49,14 +45,15 @@ namespace project_diamond
 	{
 		m_levelWidget->connectUi();
 
-		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, m_gameWindow, &EditorGameWindow::loadLevel);
-		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, this, &EditorCentralWidget::levelSelectionChanged);
-		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged, this, &EditorCentralWidget::onLevelChanged);
-		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, m_gameWindow, &EditorGameWindow::loadLevel);
-		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, this, &EditorCentralWidget::levelDataChanged);
-		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged, this, &EditorCentralWidget::onLevelChanged);
-		connect(this, &EditorCentralWidget::saveLevelTriggered, m_levelWidget, &LevelConfigWidget::saveCurrentLevel);
-		connect(this, &EditorCentralWidget::saveLevelAsTriggered, m_levelWidget, &LevelConfigWidget::saveCurrentLevelAs);
+		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged,	m_gameWindow, &EditorGameWindow::loadLevel);
+		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged,		m_gameWindow, &EditorGameWindow::loadLevel);
+
+		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged,		this, &EditorCentralWidget::levelDataChanged);
+		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged,	this, &EditorCentralWidget::levelSelectionChanged);
+
+		connect(this, &EditorCentralWidget::loadLevelsTriggered,	m_levelWidget, &LevelConfigWidget::loadLevels);
+		connect(this, &EditorCentralWidget::saveLevelTriggered,		m_levelWidget, &LevelConfigWidget::saveCurrentLevel);
+		connect(this, &EditorCentralWidget::saveLevelAsTriggered,	m_levelWidget, &LevelConfigWidget::saveCurrentLevelAs);
 	}
 
 	void EditorCentralWidget::setEngineConfig(const diamond_engine::EngineConfig& config)
@@ -68,26 +65,6 @@ namespace project_diamond
 	void EditorCentralWidget::setTextureModel(TextureModel* model)
 	{
 		m_levelWidget->setTextureModel(model);
-	}
-
-	void EditorCentralWidget::onLoadLevelsTriggered()
-	{
-		const QString directory = QFileDialog::getExistingDirectory(
-			nullptr,
-			QStringLiteral("Load Levels from Folder"));
-
-		if (directory.isNull())
-		{
-			return;
-		}
-
-		m_levelListModel->loadLevels(directory);
-	}
-
-	void EditorCentralWidget::onLevelChanged(const LevelConfigModel* levelConfig)
-	{
-		// TODO: Error reporting
-		m_levelTreeModel->loadLevelConfig(levelConfig);
 	}
 
 	EditorCentralWidget::~EditorCentralWidget()

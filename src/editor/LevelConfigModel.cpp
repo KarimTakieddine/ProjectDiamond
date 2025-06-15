@@ -4,6 +4,7 @@
 
 #include <QHash>
 #include <QSignalMapper>
+#include <QUuid>
 
 #include <parser/GameSceneConfigParser.h>
 
@@ -66,10 +67,11 @@ namespace
 namespace project_diamond
 {
 	LevelConfigModel::LevelConfigModel(QObject* parent /* = nullptr */) :
-		QObject	(parent),
+		QObject			(parent),
 		m_signalMapper	(new QSignalMapper(this)),
 		m_data			(std::make_unique<diamond_engine::GameSceneConfig>()),
-		m_name			(QString::fromStdString(m_data->getName()))
+		m_name			(QString::fromStdString(m_data->getName())),
+		m_uuid			(QUuid::createUuid().toString())
 	{
 		connect(m_signalMapper, &QSignalMapper::mappedInt, this, &LevelConfigModel::instanceDataChanged);
 	}
@@ -86,6 +88,9 @@ namespace project_diamond
 			return false;
 		}
 
+		m_path = path;
+		emit pathChanged(path);
+
 		diamond_engine::EngineStatus status;
 		auto data = diamond_engine::parseSceneFile(path.toStdString(), &status);
 		emit parseStatus(QString::fromStdString(status.message));
@@ -96,8 +101,7 @@ namespace project_diamond
 		}
 
 		m_color = ::vec4ToColor(data->getBackgroundColor());
-		m_name	= QString::fromStdString(data->getName());
-		m_path	= path;
+		m_name = QString::fromStdString(data->getName());
 
 		for (const auto& instance : data->getInstanceConfigs())
 		{
@@ -110,6 +114,8 @@ namespace project_diamond
 			auto instanceModel = QSharedPointer<GameInstanceModel>::create();
 			instanceModel->setName(QString::fromStdString(instance->getName()));
 			instanceModel->setType(instance->getType());
+
+			insertGameInstance(m_instances.count(), instanceModel);
 
 			for (const auto& renderComponent : instance->getRenderConfigs())
 			{
@@ -125,14 +131,12 @@ namespace project_diamond
 			}
 
 			// TODO: Behaviour components!
-
-			insertGameInstance(m_instances.count(), instanceModel);
 		}
 
 		m_data = std::move(data);
 
 		setDirty(false);
-		
+
 		return true;
 	}
 
@@ -154,9 +158,14 @@ namespace project_diamond
 		return true;
 	}
 
-	const QString LevelConfigModel::getName() const
+	const QString& LevelConfigModel::getName() const
 	{
 		return m_name;
+	}
+
+	const QString& LevelConfigModel::getUuid() const
+	{
+		return m_uuid;
 	}
 
 	bool LevelConfigModel::setColor(const QColor& color)
@@ -259,6 +268,18 @@ namespace project_diamond
 			m_signalMapper,
 			qOverload<>(&QSignalMapper::map));
 
+		connect(
+			instance.get(),
+			&GameInstanceModel::renderComponentInserted,
+			this,
+			&LevelConfigModel::onRenderComponentInserted);
+
+		connect(
+			instance.get(),
+			&GameInstanceModel::renderComponentRemoved,
+			this,
+			&LevelConfigModel::onRenderComponentRemoved);
+
 		// TODO: Connect component inserts / removes to a local slot
 		// emitting a signal based on the mapping dictated by signal
 		// mapper indicating for which game instance this was performed
@@ -273,7 +294,7 @@ namespace project_diamond
 			}
 		}
 
-		emit gameInstanceInserted(index);
+		emit gameInstanceInserted(index, instance->getName());
 	}
 
 	void LevelConfigModel::removeGameInstance(qsizetype index)
@@ -291,5 +312,53 @@ namespace project_diamond
 		}
 
 		emit gameInstanceRemoved(index);
+	}
+
+	int LevelConfigModel::getInstanceIndex(QObject* sender) const
+	{
+		for (int i = 0; i < m_instances.count(); ++i)
+		{
+			if (sender == m_signalMapper->mapping(i))
+			{
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	void LevelConfigModel::onRenderComponentInserted(qsizetype index, const QString& name)
+	{
+		const int componentIndex = static_cast<int>(index);
+		if (componentIndex < 0)
+		{
+			return;
+		}
+
+		const int instanceIndex = getInstanceIndex(sender());
+		if (instanceIndex == -1)
+		{
+			return;
+		}
+
+		emit renderComponentInserted(instanceIndex, componentIndex, name);
+	}
+
+	void LevelConfigModel::onRenderComponentRemoved(qsizetype index)
+	{
+		const int componentIndex = static_cast<int>(index);
+		if (componentIndex < 0)
+		{
+			return;
+		}
+
+		const int instanceIndex = getInstanceIndex(sender());
+
+		if (instanceIndex == -1)
+		{
+			return;
+		}
+
+		emit renderComponentRemoved(instanceIndex, componentIndex);
 	}
 }

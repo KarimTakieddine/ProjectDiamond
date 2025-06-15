@@ -156,10 +156,6 @@ namespace project_diamond
 			return;
 		}
 
-		const auto& component = m_renderComponents.at(index);
-		const auto* data = component->getData();
-		const QString name = data ? QString::fromStdString(data->getName()) : QStringLiteral("null");
-
 		m_renderComponents.removeAt(index);
 
 		for (int i = 0; i < m_renderComponents.size(); ++i)
@@ -167,7 +163,7 @@ namespace project_diamond
 			m_renderSignalMapper->setMapping(m_renderComponents.at(i).get(), i);
 		}
 
-		emit renderComponentRemoved(index, name);
+		emit renderComponentRemoved(index);
 	}
 
 	const QVector<QSharedPointer<RenderComponentModel>>& GameInstanceModel::getRenderComponents() const

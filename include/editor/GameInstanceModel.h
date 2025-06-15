@@ -40,7 +40,7 @@ namespace project_diamond
 
 	signals:
 		void renderComponentInserted(qsizetype, const QString&);
-		void renderComponentRemoved(qsizetype, const QString&);
+		void renderComponentRemoved(qsizetype);
 		void renderComponentDataChanged(int);
 		void behaviourComponentDataChanged(int);
 		void instanceTypeChanged(diamond_engine::GameInstanceType type);

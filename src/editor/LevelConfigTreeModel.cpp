@@ -11,50 +11,57 @@ namespace project_diamond
 
 	LevelConfigTreeModel::LevelConfigTreeModel(QObject* parent /* = nullptr */) : QStandardItemModel(parent) { }
 
-	void LevelConfigTreeModel::loadLevelConfig(const LevelConfigModel* levelConfig)
+	void LevelConfigTreeModel::onGameInstanceInserted(int index, const QString& name)
 	{
-		clear();
+		QStandardItem* instanceItem = new QStandardItem(name);
 
-		if (!levelConfig)
+		instanceItem->appendRow(new QStandardItem(QStringLiteral("Render")));
+		instanceItem->appendRow(new QStandardItem(QStringLiteral("Behaviour")));
+
+		appendRow(instanceItem);
+	}
+
+	void LevelConfigTreeModel::onGameInstanceRemoved(int index)
+	{
+		removeRow(index);
+	}
+
+	void LevelConfigTreeModel::onRenderComponentInserted(int instanceIndex, int componentIndex, const QString& name)
+	{
+		QStandardItem* instanceItem = itemFromIndex(index(instanceIndex, 0));
+		if (!instanceItem)
 		{
 			// TODO
 			return;
 		}
 
-		const auto* data = levelConfig->getData();
-		if (!data)
+		QStandardItem* renderItem = instanceItem->child(0);
+		if (!renderItem)
 		{
 			// TODO
 			return;
 		}
 
-		const auto& gameInstances = data->getInstanceConfigs();
-		for (size_t i = 0; i < gameInstances.size(); ++i)
+		renderItem->insertRow(componentIndex, new QStandardItem(name));
+	}
+
+	void LevelConfigTreeModel::onRenderComponentRemoved(int instanceIndex, int componentIndex)
+	{
+		QStandardItem* instanceItem = itemFromIndex(index(instanceIndex, 0));
+		if (!instanceItem)
 		{
-			const auto& gameInstance = gameInstances.at(i);
-
-			QStandardItem* instanceItem = new QStandardItem(QString::fromStdString(gameInstance->getName()));
-
-			QStandardItem* renderComponentsParent = new QStandardItem(QStringLiteral("Render"));
-			const auto& renderComponents = gameInstance->getRenderConfigs();
-			for (size_t j = 0; j < renderComponents.size(); ++j)
-			{
-				renderComponentsParent->appendRow(new QStandardItem(renderComponents[j]->getName()));
-			}
-			
-			instanceItem->appendRow(renderComponentsParent);
-
-			QStandardItem* behaviourComponentsParent = new QStandardItem(QStringLiteral("Behaviour"));
-			const auto& behaviourComponents = gameInstance->getBehaviourConfigs();
-			for (size_t j = 0; j < behaviourComponents.size(); ++j)
-			{
-				behaviourComponentsParent->appendRow(new QStandardItem(behaviourComponents[j]->getName()));
-			}
-
-			instanceItem->appendRow(behaviourComponentsParent);
-			
-			setItem(static_cast<int>(i), instanceItem);
+			// TODO
+			return;
 		}
+
+		QStandardItem* renderItem = instanceItem->child(0);
+		if (!renderItem)
+		{
+			// TODO
+			return;
+		}
+
+		renderItem->removeRow(componentIndex);
 	}
 
 	void LevelConfigTreeModel::onIndexSelected(const QModelIndex& selectedIndex)

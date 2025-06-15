@@ -32,7 +32,7 @@ namespace project_diamond
 	{
 		m_centralWidget->connectUi();
 
-		connect(m_ui->actionLoadLevels, &QAction::triggered, m_centralWidget, &EditorCentralWidget::onLoadLevelsTriggered);
+		connect(m_ui->actionLoadLevels, &QAction::triggered, m_centralWidget, &EditorCentralWidget::loadLevelsTriggered);
 		connect(m_ui->actionSaveLevel, &QAction::triggered, m_centralWidget, &EditorCentralWidget::saveLevelTriggered);
 		connect(m_ui->actionSaveLevelAs, &QAction::triggered, m_centralWidget, &EditorCentralWidget::saveLevelAsTriggered);
 		connect(m_centralWidget, &EditorCentralWidget::levelSelectionChanged, this, &EditorMainWindow::onLevelChanged);

@@ -251,8 +251,11 @@ namespace project_diamond
 		for (size_t i = row; i <= static_cast<size_t>(lastIndex); ++i)
 		{
 			auto config = QSharedPointer<LevelConfigModel>::create();
+
 			m_signalMapper->setMapping(config.get(), i);
+
 			connect(config.get(), &LevelConfigModel::instanceDataChanged, m_signalMapper, qOverload<>(&QSignalMapper::map));
+
 			m_data.insert(std::next(m_data.begin(), i), config);
 		}
 

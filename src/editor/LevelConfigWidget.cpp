@@ -3,7 +3,7 @@
 
 #include "ComponentEditorWidget.h"
 #include "LevelConfigListModel.h"
-#include "LevelConfigTreeModel.h"
+#include "LevelConfigTreeContainer.h"
 #include "LevelConfigWidget.h"
 #include "TextureModel.h"
 #include "ui_LevelConfigWidget.h"
@@ -14,6 +14,8 @@ namespace project_diamond
 		: QWidget(parent)
 		, m_ui				(new Ui::LevelConfigWidget())
 		, m_componentEditor	(new ComponentEditorWidget())
+		, m_listModel		(new LevelConfigListModel(this))
+		, m_treeContainer	(new LevelConfigTreeContainer(this))
 	{
 
 	}
@@ -35,63 +37,19 @@ namespace project_diamond
 	{
 		m_componentEditor->connectUi();
 
-		connect(m_ui->levelsTableView, &QTableView::doubleClicked, this, &LevelConfigWidget::onTableDoubleClicked);
-		connect(m_ui->insertNewBeforeButton, &QPushButton::clicked, this, &LevelConfigWidget::onInsertNewBeforeClicked);
-		connect(m_ui->insertNewAfterButton, &QPushButton::clicked, this, &LevelConfigWidget::onInsertNewAfterClicked);
-		connect(m_ui->removeCurrentButton, &QPushButton::clicked, this, &LevelConfigWidget::onRemoveCurrentClicked);
-		connect(m_ui->clearAllButton, &QPushButton::clicked, this, &LevelConfigWidget::onClearAllClicked);
-	}
+		m_ui->levelsTableView->setModel(m_listModel);
 
-	void LevelConfigWidget::setListModel(LevelConfigListModel* model)
-	{
-		if (m_listModel)
-		{
-			disconnect(m_listModel, &LevelConfigListModel::dataChanged, this, &LevelConfigWidget::onLevelDataChanged);
-			disconnect(m_listModel, &LevelConfigListModel::rowsRemoved, this, &LevelConfigWidget::onRowsRemoved);
-			disconnect(m_listModel, &LevelConfigListModel::rowsInserted, this, &LevelConfigWidget::onRowsInserted);
-		}
+		connect(m_listModel, &LevelConfigListModel::dataChanged,	this, &LevelConfigWidget::onLevelDataChanged);
+		connect(m_listModel, &LevelConfigListModel::rowsRemoved,	this, &LevelConfigWidget::onRowsRemoved);
+		connect(m_listModel, &LevelConfigListModel::rowsInserted,	this, &LevelConfigWidget::onRowsInserted);
 
-		QItemSelectionModel* previousSelectionModel = m_ui->levelsTableView->selectionModel();
-		if (previousSelectionModel)
-		{
-			disconnect(previousSelectionModel, &QItemSelectionModel::selectionChanged, this, &LevelConfigWidget::onLevelSelectionChanged);
-		}
-
-		m_ui->levelsTableView->setModel(model);
-		delete previousSelectionModel;
-
-		connect(model, &LevelConfigListModel::dataChanged, this, &LevelConfigWidget::onLevelDataChanged);
-		connect(model, &LevelConfigListModel::rowsRemoved, this, &LevelConfigWidget::onRowsRemoved);
-		connect(model, &LevelConfigListModel::rowsInserted, this, &LevelConfigWidget::onRowsInserted);
 		connect(m_ui->levelsTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &LevelConfigWidget::onLevelSelectionChanged);
 
-		m_listModel = model;
-	}
-
-	void LevelConfigWidget::setTreeModel(LevelConfigTreeModel* model)
-	{
-		if (m_treeModel)
-		{
-			// TODO
-			disconnect(m_ui->levelConfigTreeView, &QTreeView::clicked, m_treeModel, &LevelConfigTreeModel::onIndexSelected);
-			disconnect(m_treeModel, &LevelConfigTreeModel::renderConfigSelected, this, &LevelConfigWidget::onRenderConfigSelected);
-			disconnect(m_treeModel, &LevelConfigTreeModel::behaviourConfigSelected, this, &LevelConfigWidget::onBehaviourConfigSelected);
-		}
-
-		QItemSelectionModel* previousSelectionModel = m_ui->levelConfigTreeView->selectionModel();
-		if (previousSelectionModel)
-		{
-			// TODO
-		}
-
-		m_ui->levelConfigTreeView->setModel(model);
-		delete previousSelectionModel;
-
-		connect(m_ui->levelConfigTreeView, &QTreeView::clicked, model, &LevelConfigTreeModel::onIndexSelected);
-		connect(model, &LevelConfigTreeModel::renderConfigSelected, this, &LevelConfigWidget::onRenderConfigSelected);
-		connect(model, &LevelConfigTreeModel::behaviourConfigSelected, this, &LevelConfigWidget::onBehaviourConfigSelected);
-
-		m_treeModel = model;
+		connect(m_ui->levelsTableView, &QTableView::doubleClicked,	this, &LevelConfigWidget::onTableDoubleClicked);
+		connect(m_ui->insertNewBeforeButton, &QPushButton::clicked, this, &LevelConfigWidget::onInsertNewBeforeClicked);
+		connect(m_ui->insertNewAfterButton, &QPushButton::clicked,	this, &LevelConfigWidget::onInsertNewAfterClicked);
+		connect(m_ui->removeCurrentButton, &QPushButton::clicked,	this, &LevelConfigWidget::onRemoveCurrentClicked);
+		connect(m_ui->clearAllButton, &QPushButton::clicked,		this, &LevelConfigWidget::onClearAllClicked);
 	}
 
 	void LevelConfigWidget::setTextureModel(TextureModel* model)
@@ -130,8 +88,37 @@ namespace project_diamond
 		QModelIndex modelIndex = m_listModel->index(selected.constLast().bottomRight().row(), 0);
 		m_ui->removeCurrentButton->setEnabled(modelIndex.isValid());
 
-		emit levelSelectionChanged(
-			qvariant_cast<const LevelConfigModel*>(m_listModel->data(modelIndex, Qt::UserRole)));
+		auto* configModel = qvariant_cast<const LevelConfigModel*>(m_listModel->data(modelIndex, Qt::UserRole));
+		if (!configModel)
+		{
+			// TODO
+			return;
+		}
+
+		QTreeView* const treeView = m_ui->levelConfigTreeView;
+
+		QAbstractItemModel* const previousTreeModel = treeView->model();
+		if (previousTreeModel)
+		{
+			disconnect(treeView, &QTreeView::clicked, dynamic_cast<LevelConfigTreeModel*>(previousTreeModel), &LevelConfigTreeModel::onIndexSelected); // TODO: More error handling here
+		}
+
+		LevelConfigTreeModel* treeModel = m_treeContainer->getTreeModel(configModel->getUuid());
+		if (treeModel)
+		{
+			QItemSelectionModel* previousSelectionModel = treeView->selectionModel();
+			treeView->setModel(treeModel);
+			delete previousSelectionModel;
+			treeView->update();
+
+			connect(treeView, &QTreeView::clicked, treeModel, &LevelConfigTreeModel::onIndexSelected);
+		}
+		else
+		{
+			// TODO
+		}
+
+		emit levelSelectionChanged(configModel);
 	}
 
 	void LevelConfigWidget::onLevelDataChanged(const QModelIndex& index)
@@ -204,6 +191,8 @@ namespace project_diamond
 		m_listModel->removeRows(0, m_listModel->rowCount());
 	}
 
+	// TODO: On rows about to be removed - remove entry in tree map for that UUID
+
 	void LevelConfigWidget::onRowsRemoved()
 	{
 		if (!m_listModel)
@@ -226,11 +215,36 @@ namespace project_diamond
 	void LevelConfigWidget::onRowsInserted(const QModelIndex& parent, int first, int last)
 	{
 		Q_UNUSED(parent);
-		Q_UNUSED(first);
 
 		if (!m_listModel)
 		{
 			return;
+		}
+
+		for (int i = first; i <= last; ++i)
+		{
+			auto* configModel = qvariant_cast<const LevelConfigModel*>(m_listModel->data(m_listModel->index(i, 0), Qt::UserRole));
+			if (!configModel)
+			{
+				// TODO
+				continue;
+			}
+
+			LevelConfigTreeModel* treeModel = m_treeContainer->insertTreeModel(configModel->getUuid());
+			if (!treeModel)
+			{
+				// TODO
+				continue;
+			}
+
+			connect(treeModel, &LevelConfigTreeModel::renderConfigSelected,		this, &LevelConfigWidget::onRenderConfigSelected);
+			connect(treeModel, &LevelConfigTreeModel::behaviourConfigSelected,	this, &LevelConfigWidget::onBehaviourConfigSelected);
+
+			connect(configModel, &LevelConfigModel::pathChanged,				treeModel, &LevelConfigTreeModel::clear);
+			connect(configModel, &LevelConfigModel::gameInstanceInserted,		treeModel, &LevelConfigTreeModel::onGameInstanceInserted);
+			connect(configModel, &LevelConfigModel::gameInstanceRemoved,		treeModel, &LevelConfigTreeModel::onGameInstanceRemoved);
+			connect(configModel, &LevelConfigModel::renderComponentInserted,	treeModel, &LevelConfigTreeModel::onRenderComponentInserted);
+			connect(configModel, &LevelConfigModel::renderComponentRemoved,		treeModel, &LevelConfigTreeModel::onRenderComponentRemoved);
 		}
 
 		QModelIndex lastIndex = m_listModel->index(last, 0);
@@ -312,12 +326,26 @@ namespace project_diamond
 			return;
 		}
 
-		
+		// TODO
 	}
 
 	LevelConfigWidget::~LevelConfigWidget()
 	{
 		delete m_ui;
+	}
+
+	void LevelConfigWidget::loadLevels()
+	{
+		const QString directory = QFileDialog::getExistingDirectory(
+			nullptr,
+			QStringLiteral("Load Levels from Folder"));
+
+		if (directory.isNull())
+		{
+			return;
+		}
+
+		m_listModel->loadLevels(directory);
 	}
 
 	void LevelConfigWidget::saveCurrentLevel()

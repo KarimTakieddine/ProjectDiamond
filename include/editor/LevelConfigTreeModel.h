@@ -17,13 +17,16 @@ namespace project_diamond
 
 		LevelConfigTreeModel(QObject* parent = nullptr);
 
-		void loadLevelConfig(const LevelConfigModel* levelConfig);
-
 	signals:
 		void renderConfigSelected(int componentIndex, int instanceIndex);
 		void behaviourConfigSelected(int componentIndex, int instanceIndex);
 
 	public slots:
+		void onGameInstanceInserted(int index, const QString& name);
+		void onGameInstanceRemoved(int index);
+		void onRenderComponentInserted(int instanceIndex, int componentIndex, const QString& name);
+		void onRenderComponentRemoved(int instanceIndex, int componentIndex);
+
 		void onIndexSelected(const QModelIndex& selectedIndex);
 
 	private:
