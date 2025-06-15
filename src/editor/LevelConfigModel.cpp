@@ -100,8 +100,10 @@ namespace project_diamond
 			return false;
 		}
 
+		m_instances.clear();
+
 		m_color = ::vec4ToColor(data->getBackgroundColor());
-		m_name = QString::fromStdString(data->getName());
+		m_name	= QString::fromStdString(data->getName());
 
 		const auto& instanceConfigs = data->getInstanceConfigs();
 
