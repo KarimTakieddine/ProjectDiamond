@@ -43,6 +43,8 @@ namespace project_diamond
 		connect(m_listModel, &LevelConfigListModel::rowsAboutToBeRemoved,	this, &LevelConfigWidget::onRowsAboutToBeRemoved);
 		connect(m_listModel, &LevelConfigListModel::rowsRemoved,			this, &LevelConfigWidget::onRowsRemoved);
 		connect(m_listModel, &LevelConfigListModel::rowsInserted,			this, &LevelConfigWidget::onRowsInserted);
+		connect(m_listModel, &LevelConfigListModel::levelLoadMaximum,		this, &LevelConfigWidget::levelLoadMaximum);
+		connect(m_listModel, &LevelConfigListModel::levelLoadProgress,		this, &LevelConfigWidget::levelLoadProgress);
 
 		connect(m_ui->levelsTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &LevelConfigWidget::onLevelSelectionChanged);
 
@@ -99,21 +101,17 @@ namespace project_diamond
 			return;
 		}
 
-		QAbstractItemModel* const previousTreeModel = treeView->model();
-		if (previousTreeModel)
+		auto* previousModel = dynamic_cast<LevelConfigTreeModel*>(treeView->model());
+		if (previousModel)
 		{
-			disconnect(treeView, &QTreeView::clicked, dynamic_cast<LevelConfigTreeModel*>(previousTreeModel), &LevelConfigTreeModel::onIndexSelected); // TODO: More error handling here
+			disconnect(treeView, &QTreeView::clicked, previousModel, &LevelConfigTreeModel::onIndexSelected);
 		}
 
 		LevelConfigTreeModel* treeModel = m_treeContainer->getTreeModel(configModel->getUuid());
 		if (treeModel)
 		{
-			treeView->setEnabled(true);
-
-			QItemSelectionModel* previousSelectionModel = treeView->selectionModel();
 			treeView->setModel(treeModel);
-			delete previousSelectionModel;
-			treeView->update();
+			treeView->setEnabled(true);
 
 			connect(treeView, &QTreeView::clicked, treeModel, &LevelConfigTreeModel::onIndexSelected);
 		}

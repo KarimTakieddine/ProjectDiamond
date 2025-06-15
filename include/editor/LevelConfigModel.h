@@ -51,6 +51,8 @@ namespace project_diamond
 		void renderComponentInserted(int, int, const QString&);
 		void renderComponentRemoved(int, int);
 		void pathChanged(const QString&);
+		void loadMaximum(int);
+		void loadProgress(int);
 
 	private slots:
 		void onRenderComponentInserted(qsizetype index, const QString& name);

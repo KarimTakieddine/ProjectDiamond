@@ -103,8 +103,13 @@ namespace project_diamond
 		m_color = ::vec4ToColor(data->getBackgroundColor());
 		m_name = QString::fromStdString(data->getName());
 
-		for (const auto& instance : data->getInstanceConfigs())
+		const auto& instanceConfigs = data->getInstanceConfigs();
+
+		emit loadMaximum(static_cast<int>(instanceConfigs.size()) - 1);
+
+		for (size_t i = 0; i < instanceConfigs.size(); ++i)
 		{
+			const auto& instance = instanceConfigs.at(i);
 			if (!instance)
 			{
 				// TODO: Handle error(s)
@@ -131,6 +136,8 @@ namespace project_diamond
 			}
 
 			// TODO: Behaviour components!
+
+			emit loadProgress(i);
 		}
 
 		m_data = std::move(data);

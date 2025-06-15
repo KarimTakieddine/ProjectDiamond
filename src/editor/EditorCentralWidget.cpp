@@ -15,6 +15,7 @@ namespace project_diamond
 		, m_ui			(new Ui::EditorCentralWidget())
 		, m_gameWindow	(new EditorGameWindow())
 		, m_levelWidget	(new LevelConfigWidget())
+		, m_progressBar (new QProgressBar())
 	{
 	}
 
@@ -39,6 +40,7 @@ namespace project_diamond
 		splitter->setStyleSheet(QStringLiteral("QSplitter::handle { background-color: #333; }"));
 
 		m_ui->layout->addWidget(splitter);
+		m_ui->layout->addWidget(m_progressBar);
 	}
 
 	void EditorCentralWidget::connectUi()
@@ -50,6 +52,8 @@ namespace project_diamond
 
 		connect(m_levelWidget, &LevelConfigWidget::levelDataChanged,		this, &EditorCentralWidget::levelDataChanged);
 		connect(m_levelWidget, &LevelConfigWidget::levelSelectionChanged,	this, &EditorCentralWidget::levelSelectionChanged);
+		connect(m_levelWidget, &LevelConfigWidget::levelLoadMaximum,		this, &EditorCentralWidget::onLevelLoadMaximum);
+		connect(m_levelWidget, &LevelConfigWidget::levelLoadProgress,		this, &EditorCentralWidget::onLevelLoadProgress);
 
 		connect(this, &EditorCentralWidget::loadLevelsTriggered,	m_levelWidget, &LevelConfigWidget::loadLevels);
 		connect(this, &EditorCentralWidget::saveLevelTriggered,		m_levelWidget, &LevelConfigWidget::saveCurrentLevel);
@@ -71,5 +75,30 @@ namespace project_diamond
 	{
 		delete m_gameWindow;
 		delete m_ui;
+	}
+
+	void EditorCentralWidget::onLevelLoadMaximum(int maximum)
+	{
+		m_progressBar->setMaximum(maximum);
+
+		if (maximum > 0)
+		{
+			m_progressBar->setValue(0);
+			m_progressBar->show();
+		}
+		else
+		{
+			m_progressBar->hide();
+		}
+	}
+
+	void EditorCentralWidget::onLevelLoadProgress(int progress)
+	{
+		m_progressBar->setValue(progress);
+
+		if (progress == m_progressBar->maximum())
+		{
+			m_progressBar->hide();
+		}
 	}
 }

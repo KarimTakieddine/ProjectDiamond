@@ -29,6 +29,10 @@ namespace project_diamond
 
 		bool loadLevels(const QString& sceneDirectory);
 
+	signals:
+		void levelLoadMaximum(int);
+		void levelLoadProgress(int);
+
 	private slots:
 		void onInstanceDataChanged(int levelIndex);
 

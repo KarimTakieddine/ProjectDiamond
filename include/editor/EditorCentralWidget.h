@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include <QProgressBar>
 #include <QWidget>
 
 #include <config/EngineConfig.h>
@@ -40,9 +41,14 @@ namespace project_diamond
 		void saveLevelAsTriggered();
 		void loadLevelsTriggered();
 
+	private slots:
+		void onLevelLoadMaximum(int maximum);
+		void onLevelLoadProgress(int progress);
+
 	private:
 		std::unique_ptr<diamond_engine::GameEngine> m_gameEngine{ nullptr };
 		Ui::EditorCentralWidget* m_ui							{ nullptr };
+		QProgressBar* m_progressBar								{ nullptr };
 		EditorGameWindow* m_gameWindow							{ nullptr };
 		LevelConfigWidget* m_levelWidget						{ nullptr };
 	};

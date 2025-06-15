@@ -37,6 +37,8 @@ namespace project_diamond
 	signals:
 		void levelSelectionChanged(const LevelConfigModel*);
 		void levelDataChanged(const LevelConfigModel*);
+		void levelLoadMaximum(int);
+		void levelLoadProgress(int);
 
 	private slots:
 		void onLevelSelectionChanged(const QItemSelection& selected);

@@ -340,7 +340,11 @@ namespace project_diamond
 			const QModelIndex lastIndex = index(rowCount() - 1, 0);
 
 			auto* levelConfigModel = qvariant_cast<LevelConfigModel*>(data(lastIndex, Qt::UserRole));
+
 			// TODO: Connect parse status
+			connect(levelConfigModel, &LevelConfigModel::loadMaximum, this, &LevelConfigListModel::levelLoadMaximum);
+			connect(levelConfigModel, &LevelConfigModel::loadProgress, this, &LevelConfigListModel::levelLoadProgress);
+
 			if (levelConfigModel->setPath(QString::fromStdString(child.path().string())))
 			{
 				emit dataChanged(lastIndex, lastIndex);
