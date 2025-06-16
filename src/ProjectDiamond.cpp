@@ -5,11 +5,22 @@
 #include <audio/AudioEngine.h>
 #include <component/ComponentFactory.h>
 #include <engine/GameEngine.h>
-#include <engine/Window.h>
 #include <parser/ComponentConfigParser.h>
 #include <parser/EngineConfigParser.h>
 #include <parser/GameSceneConfigParser.h>
 #include <utility/LogManager.h>
+
+#ifdef BUILD_EDITOR
+
+#include <QApplication>
+#include <QSharedPointer>
+
+#include "EditorMainWindow.h"
+#include "EngineMetaTypeRegistry.h"
+#include "TextureModel.h"
+#else
+#include <engine/GLFWWindow.h>
+#endif
 
 #include "BoxCharacter2D.h"
 #include "BoxCharacter2DConfigParser.h"
@@ -69,15 +80,40 @@ int main(int argc, char** argv) {
 			std::launch::async,
 			[]() -> diamond_engine::EngineStatus { return diamond_engine::LevelLoader::getInstance().loadLevels("./scenes"); });
 
-		const auto engineConfig			= diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml");
-		const auto& windowConfig			= engineConfig.GetWindowConfig();
+		auto configParseFuture = std::async(
+			std::launch::async,
+			[]() -> diamond_engine::EngineConfig { return diamond_engine::EngineConfigParser::ParseFromFile("./config/engineConfig.xml"); });
+
+#ifdef BUILD_EDITOR
+		QApplication qApplication(argc, argv);
+
+		project_diamond::registerEngineMetaTypes();
+
+		QSharedPointer<project_diamond::TextureModel> textureModel = QSharedPointer<project_diamond::TextureModel>::create();
 		
-		std::unique_ptr<diamond_engine::GLFWWindow> glfwWindow		= std::make_unique<diamond_engine::GLFWWindow>(windowConfig.GetSize(), windowConfig.GetTitle());
-		std::unique_ptr<diamond_engine::GameEngine> gameEngine	= std::make_unique<diamond_engine::GameEngine>();
+		project_diamond::EditorMainWindow editorMainWindow;
+		editorMainWindow.setupUi();
+		editorMainWindow.connectUi();
+		editorMainWindow.setTextureModel(textureModel.get());
 		
+		textureModel->load(QStringLiteral("textures"));
+
+		levelLoadFuture.get();
+
+		editorMainWindow.setEngineConfig(configParseFuture.get());
+		editorMainWindow.show();
+
+		return qApplication.exec();
+#else
+		auto engineConfig = configParseFuture.get();
+
+		std::unique_ptr<diamond_engine::GLFWWindow> glfwWindow = std::make_unique<diamond_engine::GLFWWindow>(
+			engineConfig.GetWindowConfig().GetSize(),
+			engineConfig.GetWindowConfig().GetTitle());
+		std::unique_ptr<diamond_engine::GameEngine> gameEngine = std::make_unique<diamond_engine::GameEngine>();
+
 		glfwWindow->setResizeHandler(std::bind(&diamond_engine::GameEngine::onWindowResize, gameEngine.get(), std::placeholders::_1));
 		glfwWindow->setUpdateHandler(std::bind(&diamond_engine::GameEngine::onWindowUpdate, gameEngine.get(), std::placeholders::_1));
-
 		gameEngine->initialize(engineConfig);
 		gameEngine->onWindowResize(glfwWindow->getCurrentSize());
 
@@ -94,6 +130,7 @@ int main(int argc, char** argv) {
 			std::this_thread::sleep_for(std::chrono::seconds(10));
 			return 1;
 		}
+#endif
 	}
 	catch (const std::exception& e) {
 		LOG_ERROR(e.what());
